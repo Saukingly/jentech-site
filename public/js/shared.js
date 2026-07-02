@@ -148,6 +148,7 @@ function renderNavbar(activePage = '') {
         { href: '/pages/services/index.html', label: 'Services' },
         { href: '/pages/projects/index.html', label: 'Projects' },
         { href: '/pages/team/index.html', label: 'Team' },
+        { href: '/pages/contact/index.html', label: 'Contact' },
     ];
 
     const links = [
@@ -222,9 +223,9 @@ function renderFooter() {
             </div>
             <div class="footer-col">
               <h5>Contact</h5>
-              <a href="/#contact">Get in touch</a>
-              <a href="/">Jamaica Office</a>
-              <a href="/">US — Americanos</a>
+              <a href="/pages/contact/index.html">Get in touch</a>
+              <a href="/pages/contact/index.html#jamaica-office">Jamaica Office</a>
+              <a href="/pages/contact/index.html#us-office">US — Americanos</a>
             </div>
           </div>
         </div>
@@ -244,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // A reusable function to generate the Jacobs-style card
-export function createCard(item, pageType) {
+function createCard(item, pageType) {
     return `
         <a href="/pages/${pageType}/${item.slug}.html" class="project-card js-animate">
             <img src="${item.image || '/images/default.jpg'}" class="project-image">

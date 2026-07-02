@@ -287,10 +287,54 @@ body {
 /* ---- Page Header (consistent inner pages) ---- */
 
 .page-header {
+    position: relative;
     background-color: var(--navy);
     color: var(--white);
     padding: calc(var(--nav-h) + 80px) 2rem 4rem;
     text-align: center;
+}
+
+
+/* ---- Back to Home button ---- */
+
+.back-home-btn {
+    position: absolute;
+    top: calc(var(--nav-h) + 24px);
+    left: 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--gold);
+    padding: 8px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1.5px solid var(--gold);
+    border-radius: 2px;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    white-space: nowrap;
+}
+
+.back-home-btn:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateX(-2px);
+}
+
+.back-home-btn svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+    .back-home-btn {
+        position: static;
+        margin: 0 auto 1.5rem;
+    }
 }
 
 .page-header h1 {
@@ -308,6 +352,7 @@ body {
     margin: 0 auto;
     line-height: 1.6;
 }
+
 
 /* ---- Filter Bar ---- */
 
