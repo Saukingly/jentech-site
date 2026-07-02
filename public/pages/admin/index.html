@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Jentech</title>
+    <link rel="stylesheet" href="public/css/pages.css" />
+    <style>
+        body {
+            background: #0d1520;
+            color: var(--white);
+        }
+        /* ---- Sidebar ---- */
+        
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 240px;
+            background: #060d14;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        @media (min-width: 900px) {
+            .sidebar {
+                transform: translateX(0);
+            }
+        }
+        
+        .sidebar-logo {
+            padding: 20px 20px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .sidebar-logo-mark {
+            width: 32px;
+            height: 32px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .sidebar-logo-text {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.06em;
+        }
+        
+        .sidebar-logo-sub {
+            font-size: 9px;
+            letter-spacing: 0.14em;
+            color: rgba(255, 255, 255, 0.35);
+            text-transform: uppercase;
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.25);
+            padding: 16px 20px 6px;
+        }
+        
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            position: relative;
+            border: none;
+            background: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font-body);
+        }
+        
+        .sidebar-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gold);
+            transform: scaleY(0);
+            transition: transform 0.2s;
+        }
+        
+        .sidebar-link:hover {
+            color: var(--white);
+            background: rgba(255, 255, 255, 0.04);
+        }
+        
+        .sidebar-link.active {
+            color: var(--white);
+            background: rgba(200, 145, 42, 0.08);
+        }
+        
+        .sidebar-link.active::before {
+            transform: scaleY(1);
+        }
+        
+        .sidebar-link svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+            flex-shrink: 0;
+        }
+        
+        .sidebar-link.active svg {
+            opacity: 1;
+        }
+        
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        .admin-user {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+        }
+        
+        .admin-user strong {
+            color: var(--white);
+            display: block;
+            font-size: 14px;
+        }
+        
+        .logout-btn {
+            width: 100%;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+        
+        .logout-btn:hover {
+            border-color: #e25a5a;
+            color: #e25a5a;
+        }
+        /* ---- Main content ---- */
+        
+        .admin-main {
+            flex: 1;
+            margin-left: 0;
+            padding-top: 60px;
+            min-height: 100vh;
+        }
+        
+        @media (min-width: 900px) {
+            .admin-main {
+                margin-left: 240px;
+                padding-top: 0;
+            }
+        }
+        /* ---- Top bar ---- */
+        
+        .admin-topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: #060d14;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 99;
+        }
+        
+        @media (min-width: 900px) {
+            .admin-topbar {
+                left: 240px;
+            }
+        }
+        
+        .topbar-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .sidebar-open-btn {
+            background: none;
+            border: none;
+            color: var(--white);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+        }
+        
+        @media (min-width: 900px) {
+            .sidebar-open-btn {
+                display: none;
+            }
+        }
+        /* ---- Content panel ---- */
+        
+        .panel {
+            display: none;
+            padding: 32px 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .panel {
+                padding: 40px 32px;
+            }
+        }
+        
+        .panel.active {
+            display: block;
+        }
+        /* ---- Stats cards ---- */
+        
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        
+        @media (min-width: 768px) {
+            .stat-cards {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            padding: 20px;
+        }
+        
+        .stat-card-num {
+            font-family: var(--font-display);
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+        }
+        
+        .stat-card-label {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 4px;
+        }
+        
+        .stat-card-gold .stat-card-num {
+            color: var(--gold);
+        }
+        /* ---- Table ---- */
+        
+        .admin-table-wrap {
+            overflow-x: auto;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+        
+        .admin-table th {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.35);
+            padding: 10px 16px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            white-space: nowrap;
+        }
+        
+        .admin-table td {
+            padding: 14px 16px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            vertical-align: middle;
+        }
+        
+        .admin-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .admin-table .td-title {
+            color: var(--white);
+            font-weight: 500;
+            max-width: 280px;
+        }
+        
+        .td-title a {
+            color: var(--white);
+            text-decoration: none;
+        }
+        
+        .td-title a:hover {
+            color: var(--gold);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.published {
+            background: rgba(76, 175, 125, 0.15);
+            color: #4caf7d;
+        }
+        
+        .status-badge.draft {
+            background: rgba(255, 193, 7, 0.12);
+            color: #ffc107;
+        }
+        
+        .status-badge.unread {
+            background: rgba(200, 145, 42, 0.15);
+            color: var(--gold);
+        }
+        
+        .status-badge.read {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.4);
+        }
+        /* ---- Action buttons ---- */
+        
+        .action-btns {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-family: var(--font-body);
+            background: transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .action-btn:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            color: var(--white);
+        }
+        
+        .action-btn.danger:hover {
+            border-color: #e25a5a;
+            color: #e25a5a;
+        }
+        
+        .action-btn.primary {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .action-btn.primary:hover {
+            background: var(--gold);
+            color: var(--white);
+        }
+        /* ---- Panel header ---- */
+        
+        .panel-header {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        
+        @media (min-width: 600px) {
+            .panel-header {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+        
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .panel-subtitle {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-top: 4px;
+        }
+        /* ---- Modal (add/edit form) ---- */
+        
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 999;
+            display: none;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .modal-overlay.open {
+            display: flex;
+        }
+        
+        .modal {
+            background: #0f1d2e;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            max-width: 580px;
+            margin: auto;
+        }
+        
+        .modal-header {
+            padding: 24px 28px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: var(--white);
+        }
+        
+        .modal-body {
+            padding: 24px 28px;
+        }
+        
+        .modal-footer {
+            padding: 16px 28px 24px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        /* ---- Form styles ---- */
+        
+        .form-group-dark {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+        
+        .form-label-dark {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.35);
+        }
+        
+        .form-input-dark,
+        .form-select-dark,
+        .form-textarea-dark {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            padding: 10px 14px;
+            font-size: 13px;
+            font-family: var(--font-body);
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+            border-radius: 0;
+        }
+        
+        .form-input-dark:focus,
+        .form-select-dark:focus,
+        .form-textarea-dark:focus {
+            border-color: var(--gold);
+        }
+        
+        .form-input-dark::placeholder,
+        .form-textarea-dark::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .form-select-dark option {
+            background: #0f1d2e;
+        }
+        
+        .form-textarea-dark {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .form-check input[type="checkbox"] {
+            accent-color: var(--gold);
+            width: 16px;
+            height: 16px;
+        }
+        /* ---- Login screen ---- */
+        
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            background: var(--navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        
+        .login-box {
+            width: 100%;
+            max-width: 380px;
+        }
+        
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        
+        .login-logo-mark {
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--white);
+        }
+        
+        .login-logo-text {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.06em;
+        }
+        
+        .login-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 6px;
+        }
+        
+        .login-sub {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 28px;
+        }
+        
+        #loginError {
+            font-size: 13px;
+            color: #e25a5a;
+            margin-bottom: 14px;
+            display: none;
+        }
+        /* Submission message */
+        
+        .submission-message {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-left: 2px solid var(--gold);
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            max-width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ===================== LOGIN SCREEN ===================== -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <div class="login-logo">
+                <div class="login-logo-mark"><span></span>J</div>
+                <span class="login-logo-text">JENTECH ADMIN</span>
+            </div>
+            <h1 class="login-title">Sign in</h1>
+            <p class="login-sub">Access the Jentech content dashboard</p>
+            <p id="loginError"></p>
+            <div class="form-group-dark">
+                <label class="form-label-dark">Email address</label>
+                <input class="form-input-dark" type="email" id="loginEmail" placeholder="admin@jentechconsultants.com" />
+            </div>
+            <div class="form-group-dark">
+                <label class="form-label-dark">Password</label>
+                <input class="form-input-dark" type="password" id="loginPassword" placeholder="••••••••" />
+            </div>
+            <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:8px;" id="loginBtn">Sign in →</button>
+            <p style="font-size:12px;color:rgba(255,255,255,0.25);margin-top:16px;text-align:center;">Default: admin@jentechconsultants.com / password</p>
+        </div>
+    </div>
+
+    <!-- ===================== ADMIN LAYOUT ===================== -->
+    <div class="admin-layout" id="adminLayout" style="display:none;">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <a href="/" class="sidebar-logo">
+                <div class="sidebar-logo-mark">J</div>
+                <div>
+                    <div class="sidebar-logo-text">JENTECH</div>
+                    <div class="sidebar-logo-sub">Admin Panel</div>
+                </div>
+            </a>
+
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Overview</p>
+                <button class="sidebar-link active" data-panel="dashboard">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>
+        Dashboard
+      </button>
+
+                <p class="sidebar-section-label">Content</p>
+                <button class="sidebar-link" data-panel="projects">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21"/></svg>
+        Projects
+      </button>
+                <button class="sidebar-link" data-panel="services">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63"/></svg>
+        Services
+      </button>
+                <button class="sidebar-link" data-panel="team">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>
+        Team
+      </button>
+                <button class="sidebar-link" data-panel="blog">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Z"/></svg>
+        Blog Posts
+      </button>
+
+                <p class="sidebar-section-label">Inbox</p>
+                <button class="sidebar-link" data-panel="submissions">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+        Submissions <span id="unreadBadge" style="display:none;background:var(--gold);color:var(--white);font-size:10px;padding:2px 6px;margin-left:4px;font-weight:700;border-radius:10px;"></span>
+      </button>
+
+                <p class="sidebar-section-label">Site</p>
+                <a href="/" class="sidebar-link" target="_blank">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>                    View site
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="admin-user">
+                    Logged in as<strong id="adminName">Admin</strong>
+                </div>
+                <button class="logout-btn" id="logoutBtn">Sign out</button>
+            </div>
+        </aside>
+
+        <!-- Top bar (mobile) -->
+        <div class="admin-topbar">
+            <button class="sidebar-open-btn" id="sidebarOpenBtn">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+    </button>
+            <span class="topbar-title" id="topbarTitle">Dashboard</span>
+            <span style="width:28px;"></span>
+        </div>
+
+        <!-- Main content -->
+        <main class="admin-main">
+
+            <!-- ===== DASHBOARD ===== -->
+            <div class="panel active" id="panel-dashboard">
+                <div class="stat-cards" id="dashStats">
+                    <div class="stat-card stat-card-gold">
+                        <div class="stat-card-num" id="countProjects">—</div>
+                        <div class="stat-card-label">Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="countServices">—</div>
+                        <div class="stat-card-label">Services</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="countTeam">—</div>
+                        <div class="stat-card-label">Team members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-num" id="countUnread">—</div>
+                        <div class="stat-card-label">Unread messages</div>
+                    </div>
+                </div>
+                <h2 style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--white);margin-bottom:16px;">Recent submissions</h2>
+                <div id="recentSubmissions" class="admin-table-wrap"></div>
+            </div>
+
+            <!-- ===== PROJECTS ===== -->
+            <div class="panel" id="panel-projects">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Projects</h2>
+                        <p class="panel-subtitle">Manage your project portfolio</p>
+                    </div>
+                    <button class="btn btn-gold" onclick="openModal('project')">+ Add project</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="projectsTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Location</th>
+                                <th>Type</th>
+                                <th>Year</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projectsTbody">
+                            <tr>
+                                <td colspan="6" style="text-align:center;padding:32px;">
+                                    <div class="spinner" style="margin:0 auto;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== SERVICES ===== -->
+            <div class="panel" id="panel-services">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Services</h2>
+                        <p class="panel-subtitle">Manage engineering services</p>
+                    </div>
+                    <button class="btn btn-gold" onclick="openModal('service')">+ Add service</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="servicesTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Slug</th>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="servicesTbody">
+                            <tr>
+                                <td colspan="5" style="text-align:center;padding:32px;">
+                                    <div class="spinner" style="margin:0 auto;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== TEAM ===== -->
+            <div class="panel" id="panel-team">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Team</h2>
+                        <p class="panel-subtitle">Manage team member profiles</p>
+                    </div>
+                    <button class="btn btn-gold" onclick="openModal('team')">+ Add member</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="teamTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Office</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teamTbody">
+                            <tr>
+                                <td colspan="5" style="text-align:center;padding:32px;">
+                                    <div class="spinner" style="margin:0 auto;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== BLOG ===== -->
+            <div class="panel" id="panel-blog">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Blog Posts</h2>
+                        <p class="panel-subtitle">Manage news and insights</p>
+                    </div>
+                    <button class="btn btn-gold" onclick="openModal('blog')">+ New post</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="blogTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blogTbody">
+                            <tr>
+                                <td colspan="5" style="text-align:center;padding:32px;">
+                                    <div class="spinner" style="margin:0 auto;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== SUBMISSIONS ===== -->
+            <div class="panel" id="panel-submissions">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Contact Submissions</h2>
+                        <p class="panel-subtitle">Messages from the contact form</p>
+                    </div>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="submissionsTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Service</th>
+                                <th>Office</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submissionsTbody">
+                            <tr>
+                                <td colspan="7" style="text-align:center;padding:32px;">
+                                    <div class="spinner" style="margin:0 auto;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitle">Add item</span>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-light" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-gold" id="modalSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        // Put this right at the beginning of your script setup
+        async function checkAuth() {
+            try {
+                const auth = await API.get('/auth/me');
+                if (!auth.loggedIn) {
+                    // Boot them to the authentication screen if session is invalid
+                    window.location.href = '/pages/admin/login.html';
+                }
+            } catch (err) {
+                window.location.href = '/pages/admin/login.html';
+            }
+        }
+        checkAuth();
+        /* =====================================================
+            Admin Dashboard JS
+           ===================================================== */
+
+        let currentPanel = 'dashboard';
+        let editingId = null;
+        let editingType = null;
+
+        // ---- Auth check on load ----
+        async function init() {
+            try {
+                const me = await API.get('/auth/me');
+                if (!me.loggedIn) return; // login screen stays visible
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminLayout').style.display = 'flex';
+                document.getElementById('adminName').textContent = me.name;
+                loadDashboard();
+            } catch (_) {}
+        }
+
+        // ---- Login ----
+        document.getElementById('loginBtn').addEventListener('click', async() => {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errEl = document.getElementById('loginError');
+            const btn = document.getElementById('loginBtn');
+            errEl.style.display = 'none';
+            btn.textContent = 'Signing in…';
+            try {
+                const res = await API.post('/auth/login', {
+                    email,
+                    password
+                });
+                if (res.success) {
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminLayout').style.display = 'flex';
+                    document.getElementById('adminName').textContent = res.name;
+                    loadDashboard();
+                } else {
+                    errEl.textContent = res.error || 'Invalid credentials';
+                    errEl.style.display = 'block';
+                }
+            } catch (_) {
+                errEl.textContent = 'Server error. Is the server running?';
+                errEl.style.display = 'block';
+            }
+            btn.textContent = 'Sign in →';
+        });
+
+        document.getElementById('loginPassword').addEventListener('keydown', e => {
+            if (e.key === 'Enter') document.getElementById('loginBtn').click();
+        });
+
+        // ---- Logout ----
+        document.getElementById('logoutBtn').addEventListener('click', async() => {
+            await API.post('/auth/logout', {});
+            window.location.reload();
+        });
+
+        // ---- Sidebar navigation ----
+        document.querySelectorAll('.sidebar-link[data-panel]').forEach(link => {
+            link.addEventListener('click', () => {
+                const panel = link.dataset.panel;
+                switchPanel(panel);
+                // close mobile sidebar
+                document.getElementById('sidebar').classList.remove('open');
+            });
+        });
+
+        document.getElementById('sidebarOpenBtn').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
+
+        function switchPanel(name) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(`panel-${name}`) ? .classList.add('active');
+            document.querySelector(`[data-panel="${name}"]`) ? .classList.add('active');
+            document.getElementById('topbarTitle').textContent = name.charAt(0).toUpperCase() + name.slice(1);
+            currentPanel = name;
+            // Load data for that panel
+            if (name === 'projects') loadProjects();
+            if (name === 'services') loadServices();
+            if (name === 'team') loadTeam();
+            if (name === 'blog') loadBlog();
+            if (name === 'submissions') loadSubmissions();
+            if (name === 'dashboard') loadDashboard();
+        }
+
+        // ---- Dashboard ----
+        async function loadDashboard() {
+            try {
+                const [projects, services, team, subs] = await Promise.all([
+                    API.get('/projects'), API.get('/services'),
+                    API.get('/team'), API.get('/contact')
+                ]);
+                document.getElementById('countProjects').textContent = projects.length;
+                document.getElementById('countServices').textContent = services.length;
+                document.getElementById('countTeam').textContent = team.length;
+                const unread = subs.filter(s => !s.read_status).length;
+                document.getElementById('countUnread').textContent = unread;
+                // Update badge
+                const badge = document.getElementById('unreadBadge');
+                if (unread > 0) {
+                    badge.textContent = unread;
+                    badge.style.display = 'inline';
+                }
+                // Recent submissions table
+                const recent = subs.slice(0, 8);
+                document.getElementById('recentSubmissions').innerHTML = renderSubmissionsTable(recent);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // ---- Projects ----
+        async function loadProjects() {
+            try {
+                const rows = await API.get('/projects');
+                document.getElementById('projectsTbody').innerHTML = rows.length ? rows.map(p => `
+      <tr>
+        <td class="td-title"><a href="/pages/projects/${p.slug}.html" target="_blank">${p.title}</a></td>
+        <td>${p.location || '—'}</td>
+        <td>${p.service_type || '—'}</td>
+        <td>${p.year || '—'}</td>
+        <td><span class="status-badge ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></td>
+        <td><div class="action-btns">
+          <button class="action-btn primary" onclick="openModal('project',${JSON.stringify(p).replace(/"/g,'&quot;')})">Edit</button>
+          <button class="action-btn danger" onclick="deleteItem('projects',${p.id})">Delete</button>
+        </div></td>
+      </tr>`).join('') :
+                    '<tr><td colspan="6" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">No projects yet — add one above</td></tr>';
+            } catch (_) {}
+        }
+
+        // ---- Services ----
+        async function loadServices() {
+            try {
+                const rows = await API.get('/services');
+                document.getElementById('servicesTbody').innerHTML = rows.length ? rows.map(s => `
+      <tr>
+        <td class="td-title">${s.title}</td>
+        <td style="font-size:12px;color:var(--gray-300);">${s.slug}</td>
+        <td>${s.display_order}</td>
+        <td><span class="status-badge ${s.published ? 'published' : 'draft'}">${s.published ? 'Published' : 'Hidden'}</span></td>
+        <td><div class="action-btns">
+          <button class="action-btn primary" onclick="openModal('service',${JSON.stringify(s).replace(/"/g,'&quot;')})">Edit</button>
+          <button class="action-btn danger" onclick="deleteItem('services',${s.id})">Delete</button>
+        </div></td>
+      </tr>`).join('') :
+                    '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">No services yet</td></tr>';
+            } catch (_) {}
+        }
+
+        // ---- Team ----
+        async function loadTeam() {
+            try {
+                const rows = await API.get('/team');
+                document.getElementById('teamTbody').innerHTML = rows.length ? rows.map(m => `
+      <tr>
+        <td class="td-title">${m.name}</td>
+        <td>${m.role || '—'}</td>
+        <td>${m.office || '—'}</td>
+        <td><span class="status-badge ${m.published ? 'published' : 'draft'}">${m.published ? 'Visible' : 'Hidden'}</span></td>
+        <td><div class="action-btns">
+          <button class="action-btn primary" onclick="openModal('team',${JSON.stringify(m).replace(/"/g,'&quot;')})">Edit</button>
+          <button class="action-btn danger" onclick="deleteItem('team',${m.id})">Delete</button>
+        </div></td>
+      </tr>`).join('') :
+                    '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">No team members yet</td></tr>';
+            } catch (_) {}
+        }
+
+        // ---- Blog ----
+        async function loadBlog() {
+            try {
+                const rows = await API.get('/blog');
+                document.getElementById('blogTbody').innerHTML = rows.length ? rows.map(p => `
+      <tr>
+        <td class="td-title"><a href="/pages/blog/${p.slug}.html" target="_blank">${p.title}</a></td>
+        <td>${p.category || '—'}</td>
+        <td>${p.author_name || '—'}</td>
+        <td><span class="status-badge ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></td>
+        <td><div class="action-btns">
+          <button class="action-btn primary" onclick="openModal('blog',${JSON.stringify(p).replace(/"/g,'&quot;')})">Edit</button>
+          <button class="action-btn danger" onclick="deleteItem('blog',${p.id})">Delete</button>
+        </div></td>
+      </tr>`).join('') :
+                    '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">No posts yet</td></tr>';
+            } catch (_) {}
+        }
+
+        // ---- Submissions ----
+        async function loadSubmissions() {
+            try {
+                const rows = await API.get('/contact');
+                document.getElementById('submissionsTbody').innerHTML = renderSubmissionsRows(rows);
+            } catch (_) {}
+        }
+
+        function renderSubmissionsTable(rows) {
+            return `<table class="admin-table">
+    <thead><tr><th>Name</th><th>Email</th><th>Service</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+    <tbody>${renderSubmissionsRows(rows)}</tbody>
+  </table>`;
+        }
+
+        function renderSubmissionsRows(rows) {
+            if (!rows.length) return '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">No submissions yet</td></tr>';
+            return rows.map(s => `
+    <tr id="sub-${s.id}">
+      <td class="td-title">${s.first_name} ${s.last_name}</td>
+      <td><a href="mailto:${s.email}" style="color:var(--gold);text-decoration:none;">${s.email}</a></td>
+      <td>${s.service || '—'}</td>
+      <td>${s.office || '—'}</td>
+      <td style="font-size:12px;">${formatDate(s.created_at)}</td>
+      <td><span class="status-badge ${s.read_status ? 'read' : 'unread'}">${s.read_status ? 'Read' : 'New'}</span></td>
+      <td><div class="action-btns">
+        ${!s.read_status ? `<button class="action-btn primary" onclick="markRead(${s.id})">Mark read</button>` : ''}
+        <button class="action-btn" onclick="viewMessage(${s.id},'${s.first_name} ${s.last_name}','${s.email}','${(s.message||'').replace(/'/g,"\\'")}','${s.service||''}','${s.office||''}')">View</button>
+        <button class="action-btn danger" onclick="deleteItem('contact',${s.id})">Delete</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+async function markRead(id) {
+  await API.patch(`/contact/${id}/read`);
+  loadSubmissions(); loadDashboard();
+}
+
+function viewMessage(id, name, email, message, service, office) {
+  document.getElementById('modalTitle').textContent = `Message from ${name}`;
+  document.getElementById('modalBody').innerHTML = `
+    <div style="margin-bottom:16px;"><span class="form-label-dark">From</span><p style="color:var(--white);margin-top:4px;">${name} — <a href="mailto:${email}" style="color:var(--gold);">${email}</a></p></div>
+    ${service ? `<div style="margin-bottom:16px;"><span class="form-label-dark">Service requested</span><p style="color:var(--white);margin-top:4px;">${service}</p></div>` : ''}
+    ${office ? `<div style="margin-bottom:16px;"><span class="form-label-dark">Office</span><p style="color:var(--white);margin-top:4px;">${office}</p></div>` : ''}
+    <div><span class="form-label-dark">Message</span><div class="submission-message" style="margin-top:8px;">${message}</div></div>
+    <div style="margin-top:20px;"><a href="mailto:${email}" class="btn btn-gold">Reply by email</a></div>
+  `;
+  document.getElementById('modalSaveBtn').style.display = 'none';
+  document.getElementById('modalOverlay').classList.add('open');
+  markRead(id);
+}
+
+// ---- Modal ----
+const modalForms = {
+  project: (d={}) => `
+    <div class="form-group-dark"><label class="form-label-dark">Title *</label><input class="form-input-dark" id="f_title" value="${d.title||''}" placeholder="Project title"></div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Slug *</label><input class="form-input-dark" id="f_slug" value="${d.slug||''}" placeholder="project-slug"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Year</label><input class="form-input-dark" id="f_year" type="number" value="${d.year||''}" placeholder="2024"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Location</label><input class="form-input-dark" id="f_location" value="${d.location||''}" placeholder="Kingston, Jamaica"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Service type</label><input class="form-input-dark" id="f_service_type" value="${d.service_type||''}" placeholder="Civil Engineering"></div>
+    </div>
+    <div class="form-group-dark"><label class="form-label-dark">Short description</label><textarea class="form-textarea-dark" id="f_short_desc" rows="2" placeholder="Brief project overview...">${d.short_desc||''}</textarea></div>
+    <div class="form-group-dark"><label class="form-label-dark">Full description (HTML ok)</label><textarea class="form-textarea-dark" id="f_full_desc" rows="5" placeholder="Detailed project description...">${d.full_desc||''}</textarea></div>
+    <div class="form-group-dark"><label class="form-label-dark">Image URL</label><input class="form-input-dark" id="f_image_url" value="${d.image_url||''}" placeholder="https://..."></div>
+    <div style="display:flex;gap:20px;margin-top:8px;">
+      <label class="form-check"><input type="checkbox" id="f_featured" ${d.featured?'checked':''}> Featured</label>
+      <label class="form-check"><input type="checkbox" id="f_published" ${d.published!==false?'checked':''}> Published</label>
+    </div>`,
+
+  service: (d={}) => `
+    <div class="form-group-dark"><label class="form-label-dark">Title *</label><input class="form-input-dark" id="f_title" value="${d.title||''}" placeholder="Service title"></div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Slug *</label><input class="form-input-dark" id="f_slug" value="${d.slug||''}" placeholder="civil-engineering"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Order</label><input class="form-input-dark" id="f_order" type="number" value="${d.display_order||0}"></div>
+    </div>
+    <div class="form-group-dark"><label class="form-label-dark">Short description</label><textarea class="form-textarea-dark" id="f_short_desc" rows="2">${d.short_desc||''}</textarea></div>
+    <div class="form-group-dark"><label class="form-label-dark">Full description (HTML ok)</label><textarea class="form-textarea-dark" id="f_full_desc" rows="5">${d.full_desc||''}</textarea></div>
+    <label class="form-check" style="margin-top:8px;"><input type="checkbox" id="f_published" ${d.published!==false?'checked':''}> Published</label>`,
+
+  team: (d={}) => `
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Name *</label><input class="form-input-dark" id="f_name" value="${d.name||''}" placeholder="Full name"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Slug *</label><input class="form-input-dark" id="f_slug" value="${d.slug||''}" placeholder="john-smith"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Role</label><input class="form-input-dark" id="f_role" value="${d.role||''}" placeholder="Civil Engineer"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Office</label><select class="form-select-dark" id="f_office"><option ${(d.office||'').includes('Jamaica')?'selected':''}>Kingston, Jamaica</option><option ${(d.office||'').includes('United')?'selected':''}>United States</option></select></div>
+    </div>
+    <div class="form-group-dark"><label class="form-label-dark">Bio (HTML ok)</label><textarea class="form-textarea-dark" id="f_bio" rows="5">${d.bio||''}</textarea></div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Email</label><input class="form-input-dark" id="f_email" value="${d.email||''}" placeholder="name@jentech.com"></div>
+      <div class="form-group-dark"><label class="form-label-dark">LinkedIn URL</label><input class="form-input-dark" id="f_linkedin" value="${d.linkedin||''}" placeholder="https://linkedin.com/in/..."></div>
+    </div>
+    <div class="form-group-dark"><label class="form-label-dark">Image URL</label><input class="form-input-dark" id="f_image_url" value="${d.image_url||''}" placeholder="https://..."></div>
+    <label class="form-check" style="margin-top:8px;"><input type="checkbox" id="f_published" ${d.published!==false?'checked':''}> Visible on site</label>`,
+
+  blog: (d={}) => `
+    <div class="form-group-dark"><label class="form-label-dark">Title *</label><input class="form-input-dark" id="f_title" value="${d.title||''}" placeholder="Post title"></div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Slug *</label><input class="form-input-dark" id="f_slug" value="${d.slug||''}" placeholder="post-slug"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Category</label><input class="form-input-dark" id="f_category" value="${d.category||''}" placeholder="Company Update"></div>
+    </div>
+    <div class="form-group-dark"><label class="form-label-dark">Excerpt</label><textarea class="form-textarea-dark" id="f_excerpt" rows="2" placeholder="Brief summary...">${d.excerpt||''}</textarea></div>
+    <div class="form-group-dark"><label class="form-label-dark">Content (HTML ok)</label><textarea class="form-textarea-dark" id="f_content" rows="8" placeholder="Full post content...">${d.content||''}</textarea></div>
+    <div class="form-group-dark"><label class="form-label-dark">Image URL</label><input class="form-input-dark" id="f_image_url" value="${d.image_url||''}" placeholder="https://..."></div>
+    <label class="form-check" style="margin-top:8px;"><input type="checkbox" id="f_published" ${d.published?'checked':''}> Publish now</label>`
+};
+
+function openModal(type, data = {}) {
+  editingType = type;
+  editingId   = data.id || null;
+  const isEdit = !!editingId;
+  document.getElementById('modalTitle').textContent = `${isEdit ? 'Edit' : 'Add'} ${type}`;
+  document.getElementById('modalBody').innerHTML = modalForms[type](data);
+  document.getElementById('modalSaveBtn').style.display = '';
+  document.getElementById('modalOverlay').classList.add('open');
+
+  // Auto-generate slug from title
+  const titleInput = document.getElementById('f_title');
+  const slugInput  = document.getElementById('f_slug');
+  if (titleInput && slugInput && !isEdit) {
+    titleInput.addEventListener('input', () => {
+      slugInput.value = slugify(titleInput.value);
+    });
+  }
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  editingId = null; editingType = null;
+}
+
+// Close on overlay click
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+
+// Save
+document.getElementById('modalSaveBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('modalSaveBtn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  try {
+    let data = {};
+    const g = id => document.getElementById(id)?.value || '';
+    const c = id => document.getElementById(id)?.checked;
+
+    if (editingType === 'project') {
+      data = { title: g('f_title'), slug: g('f_slug'), location: g('f_location'), service_type: g('f_service_type'), short_desc: g('f_short_desc'), full_desc: g('f_full_desc'), image_url: g('f_image_url'), year: g('f_year') || null, featured: c('f_featured'), published: c('f_published') };
+    } else if (editingType === 'service') {
+      data = { title: g('f_title'), slug: g('f_slug'), short_desc: g('f_short_desc'), full_desc: g('f_full_desc'), display_order: parseInt(g('f_order')) || 0, published: c('f_published') };
+    } else if (editingType === 'team') {
+      data = { name: g('f_name'), slug: g('f_slug'), role: g('f_role'), office: g('f_office'), bio: g('f_bio'), email: g('f_email'), linkedin: g('f_linkedin'), image_url: g('f_image_url'), published: c('f_published') };
+    } else if (editingType === 'blog') {
+      data = { title: g('f_title'), slug: g('f_slug'), category: g('f_category'), excerpt: g('f_excerpt'), content: g('f_content'), image_url: g('f_image_url'), published: c('f_published') };
+    }
+
+    const endpoint = { project: '/projects', service: '/services', team: '/team', blog: '/blog' }[editingType];
+    const res = editingId ? await API.put(`${endpoint}/${editingId}`, data) : await API.post(endpoint, data);
+
+    if (res.success || res.id) {
+      showToast(`${editingType} ${editingId ? 'updated' : 'created'} successfully!`, 'success');
+      closeModal();
+      switchPanel(currentPanel);
+    } else {
+      showToast(res.error || 'Something went wrong', 'error');
+    }
+  } catch (err) {
+    showToast('Server error', 'error');
+  }
+  btn.textContent = 'Save'; btn.disabled = false;
+});
+
+// Delete
+async function deleteItem(endpoint, id) {
+  if (!confirm('Are you sure you want to delete this item? This cannot be undone.')) return;
+  try {
+    const res = await API.delete(`/${endpoint}/${id}`);
+    if (res.success) {
+      showToast('Deleted successfully', 'success');
+      switchPanel(currentPanel);
+    } else {
+      showToast(res.error || 'Delete failed', 'error');
+    }
+  } catch (_) { showToast('Server error', 'error'); }
+}
+
+init();
+    </script>
+</body>
+
+</html>
