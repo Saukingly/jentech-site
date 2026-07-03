@@ -27,7 +27,7 @@
 
         // Fade out scroll hint as user scrolls past the hero
         if (heroScroll) {
-            const fadeEnd = window.innerHeight * 0.35;
+            const fadeEnd = window.innerHeight * 0.6;
             const opacity = Math.max(0, 1 - scrollY / fadeEnd);
             heroScroll.style.opacity = String(opacity);
             heroScroll.style.visibility = opacity <= 0 ? 'hidden' : 'visible';
@@ -50,7 +50,8 @@
         });
 
         dots.forEach(dot => {
-            dot.classList.toggle('active', dot.dataset.section === current);
+            const targetId = (dot.dataset.target || '').replace('#', '');
+            dot.classList.toggle('active', targetId === current);
         });
     }
 
@@ -86,7 +87,7 @@
     /* ---------- Side indicator dots ---------- */
     dots.forEach(dot => {
         dot.addEventListener('click', () => {
-            const target = document.getElementById(dot.dataset.section);
+            const target = document.querySelector(dot.dataset.target);
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });

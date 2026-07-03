@@ -317,7 +317,6 @@ body {
     background: var(--navy);
     display: flex;
     align-items: center;
-    overflow: hidden;
     padding-top: var(--nav)
 }
 
@@ -485,7 +484,7 @@ body {
     font-size: 10px;
     letter-spacing: .16em;
     text-transform: uppercase;
-    animation: hIn 1s 1.2s var(--ease) both;
+    animation: hIn 1s 1.2s var(--ease) backwards;
     transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 

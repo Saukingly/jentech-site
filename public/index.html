@@ -12,6 +12,18 @@
     <link rel="stylesheet" href="/css/pages.css">
     <link rel="stylesheet" href="/css/sections.css">
     <link rel="stylesheet" href="/css/home.css">
+
+    <style>
+        /* Safety net: guarantees the hero glow/pulse effects (like the
+           office-dot pulse) are never clipped, even if an older cached
+           copy of layout.css or home.css still has overflow:hidden
+           on .hero. The decorative background circles/lines stay
+           contained by .hero-bg-decor's own overflow:hidden instead. */
+        
+        .hero {
+            overflow: visible;
+        }
+    </style>
 </head>
 
 <body>
@@ -71,21 +83,23 @@
     </div>
 
     <section class="hero" id="home">
-        <div class="hero-grid"></div>
-        <div class="hero-gradient"></div>
-        <div class="hero-accent-bar"></div>
+        <div class="hero-bg-decor">
+            <div class="hero-grid"></div>
+            <div class="hero-gradient"></div>
+            <div class="hero-accent-bar"></div>
 
-        <div class="hero-lines">
-            <div class="hero-line"></div>
-            <div class="hero-line"></div>
-            <div class="hero-line"></div>
-            <div class="hero-line"></div>
-            <div class="hero-line"></div>
+            <div class="hero-lines">
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+            </div>
+
+            <div class="hero-circle"></div>
+            <div class="hero-circle"></div>
+            <div class="hero-circle"></div>
         </div>
-
-        <div class="hero-circle"></div>
-        <div class="hero-circle"></div>
-        <div class="hero-circle"></div>
 
         <div class="hero-content">
             <div class="hero-overline" data-reveal="fade-down">
