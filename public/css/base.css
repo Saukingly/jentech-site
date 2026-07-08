@@ -389,36 +389,8 @@ body.cursor-hover .cursor-ring {
 }
 
 
-/* Style the 3 lines of the hamburger */
-
-.nav-toggle span {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background-color: #cca858;
-    /* Jentech Gold */
-    margin-bottom: 5px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.nav-toggle span:last-child {
-    margin-bottom: 0;
-}
-
-
-/* Animate into an 'X' when clicked */
-
-.nav-toggle.active span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-
-.nav-toggle.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.nav-toggle.active span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
+/* Hamburger/close button is now styled entirely by pages.css
+   (loaded on every page) so it's pixel-identical everywhere. */
 
 
 /* Smoothly animate elements into view */

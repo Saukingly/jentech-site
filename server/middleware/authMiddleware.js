@@ -13,4 +13,12 @@ function requireAdmin(req, res, next) {
     res.status(403).json({ error: 'Forbidden. Admins only.' });
 }
 
-module.exports = { requireLogin, requireAdmin };
+// Protects client portal routes — separate from staff sessions above
+function requireClientLogin(req, res, next) {
+    if (req.session && req.session.clientId) {
+        return next();
+    }
+    res.status(401).json({ error: 'Unauthorized. Please log in.' });
+}
+
+module.exports = { requireLogin, requireAdmin, requireClientLogin };

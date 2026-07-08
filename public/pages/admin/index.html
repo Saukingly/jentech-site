@@ -734,6 +734,12 @@
         Blog Posts
       </button>
 
+                <p class="sidebar-section-label">Clients</p>
+                <button class="sidebar-link" data-panel="clients">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/></svg>
+        Client Accounts
+      </button>
+
                 <p class="sidebar-section-label">Inbox</p>
                 <button class="sidebar-link" data-panel="submissions">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
@@ -915,6 +921,39 @@
                 </div>
             </div>
 
+            <!-- ===== CLIENTS ===== -->
+            <div class="panel" id="panel-clients">
+                <div class="panel-header">
+                    <div>
+                        <h2 class="panel-title">Client Accounts</h2>
+                        <p class="panel-subtitle">Manage client portal accounts and their project info</p>
+                    </div>
+                    <button class="btn btn-gold" onclick="openModal('client')">+ Add client</button>
+                </div>
+                <div class="admin-table-wrap">
+                    <table class="admin-table" id="clientsTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Company</th>
+                                <th>Project</th>
+                                <th>Progress</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTbody">
+                            <tr>
+                                <td colspan="7" style="text-align:center;padding:32px;">
+                                    <div class="spinner" style="margin:0 auto;"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- ===== SUBMISSIONS ===== -->
             <div class="panel" id="panel-submissions">
                 <div class="panel-header">
@@ -1056,8 +1095,10 @@
         function switchPanel(name) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-            document.getElementById(`panel-${name}`) ? .classList.add('active');
-            document.querySelector(`[data-panel="${name}"]`) ? .classList.add('active');
+            var panelEl = document.getElementById(`panel-${name}`);
+            if (panelEl) panelEl.classList.add('active');
+            var linkEl = document.querySelector(`[data-panel="${name}"]`);
+            if (linkEl) linkEl.classList.add('active');
             document.getElementById('topbarTitle').textContent = name.charAt(0).toUpperCase() + name.slice(1);
             currentPanel = name;
             // Load data for that panel
@@ -1065,6 +1106,7 @@
             if (name === 'services') loadServices();
             if (name === 'team') loadTeam();
             if (name === 'blog') loadBlog();
+            if (name === 'clients') loadClients();
             if (name === 'submissions') loadSubmissions();
             if (name === 'dashboard') loadDashboard();
         }
@@ -1169,6 +1211,27 @@
         </div></td>
       </tr>`).join('') :
                     '<tr><td colspan="5" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">No posts yet</td></tr>';
+            } catch (_) {}
+        }
+
+        // ---- Clients ----
+        async function loadClients() {
+            try {
+                const rows = await API.get('/clients');
+                document.getElementById('clientsTbody').innerHTML = rows.length ? rows.map(c => `
+      <tr>
+        <td class="td-title">${c.name}</td>
+        <td><a href="mailto:${c.email}" style="color:var(--gold);text-decoration:none;">${c.email}</a></td>
+        <td>${c.company || '—'}</td>
+        <td>${c.project_name || '—'}</td>
+        <td>${c.completion_percent != null ? c.completion_percent + '%' : '—'}</td>
+        <td><span class="status-badge published">${c.status || 'In progress'}</span></td>
+        <td><div class="action-btns">
+          <button class="action-btn primary" onclick="openModal('client',${JSON.stringify(c).replace(/"/g,'&quot;')})">Edit</button>
+          <button class="action-btn danger" onclick="deleteItem('clients',${c.id})">Delete</button>
+        </div></td>
+      </tr>`).join('') :
+                    '<tr><td colspan="7" style="text-align:center;color:rgba(255,255,255,0.3);padding:32px;">No client accounts yet — add one above</td></tr>';
             } catch (_) {}
         }
 
@@ -1280,7 +1343,33 @@ const modalForms = {
     <div class="form-group-dark"><label class="form-label-dark">Excerpt</label><textarea class="form-textarea-dark" id="f_excerpt" rows="2" placeholder="Brief summary...">${d.excerpt||''}</textarea></div>
     <div class="form-group-dark"><label class="form-label-dark">Content (HTML ok)</label><textarea class="form-textarea-dark" id="f_content" rows="8" placeholder="Full post content...">${d.content||''}</textarea></div>
     <div class="form-group-dark"><label class="form-label-dark">Image URL</label><input class="form-input-dark" id="f_image_url" value="${d.image_url||''}" placeholder="https://..."></div>
-    <label class="form-check" style="margin-top:8px;"><input type="checkbox" id="f_published" ${d.published?'checked':''}> Publish now</label>`
+    <label class="form-check" style="margin-top:8px;"><input type="checkbox" id="f_published" ${d.published?'checked':''}> Publish now</label>`,
+
+  client: (d={}) => `
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Full name *</label><input class="form-input-dark" id="f_name" value="${d.name||''}" placeholder="Client name"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Email *</label><input class="form-input-dark" type="email" id="f_email" value="${d.email||''}" placeholder="client@company.com"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Company</label><input class="form-input-dark" id="f_company" value="${d.company||''}" placeholder="Company name"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Phone</label><input class="form-input-dark" id="f_phone" value="${d.phone||''}" placeholder="+1 876 000 0000"></div>
+    </div>
+    <div class="form-group-dark"><label class="form-label-dark">${d.id ? 'New password (leave blank to keep current)' : 'Password *'}</label><input class="form-input-dark" type="password" id="f_password" placeholder="••••••••"></div>
+    <hr style="border-color:rgba(255,255,255,0.08);margin:20px 0;">
+    <div class="form-group-dark"><label class="form-label-dark">Project name</label><input class="form-input-dark" id="f_project_name" value="${d.project_name||''}" placeholder="e.g. Kingston Waterfront Redevelopment"></div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Sheet / project ref</label><input class="form-input-dark" id="f_sheet_ref" value="${d.sheet_ref||''}" placeholder="e.g. JC-2026-014"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Phase</label><input class="form-input-dark" id="f_phase" value="${d.phase||''}" placeholder="e.g. Construction"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Completion %</label><input class="form-input-dark" type="number" min="0" max="100" id="f_completion_percent" value="${d.completion_percent||0}"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Status</label><input class="form-input-dark" id="f_status" value="${d.status||'In progress'}" placeholder="e.g. In progress"></div>
+    </div>
+    <div class="form-row-2">
+      <div class="form-group-dark"><label class="form-label-dark">Next milestone</label><input class="form-input-dark" id="f_next_milestone_label" value="${d.next_milestone_label||''}" placeholder="e.g. Final inspection"></div>
+      <div class="form-group-dark"><label class="form-label-dark">Milestone date</label><input class="form-input-dark" type="date" id="f_next_milestone_date" value="${d.next_milestone_date ? String(d.next_milestone_date).slice(0,10) : ''}"></div>
+    </div>
+    <div class="form-group-dark"><label class="form-label-dark">Hero image URL</label><input class="form-input-dark" id="f_hero_image_url" value="${d.hero_image_url||''}" placeholder="https://..."></div>`
 };
 
 function openModal(type, data = {}) {
@@ -1319,8 +1408,8 @@ document.getElementById('modalSaveBtn').addEventListener('click', async () => {
 
   try {
     let data = {};
-    const g = id => document.getElementById(id)?.value || '';
-    const c = id => document.getElementById(id)?.checked;
+    const g = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+    const c = id => { const el = document.getElementById(id); return el ? el.checked : false; };
 
     if (editingType === 'project') {
       data = { title: g('f_title'), slug: g('f_slug'), location: g('f_location'), service_type: g('f_service_type'), short_desc: g('f_short_desc'), full_desc: g('f_full_desc'), image_url: g('f_image_url'), year: g('f_year') || null, featured: c('f_featured'), published: c('f_published') };
@@ -1330,9 +1419,19 @@ document.getElementById('modalSaveBtn').addEventListener('click', async () => {
       data = { name: g('f_name'), slug: g('f_slug'), role: g('f_role'), office: g('f_office'), bio: g('f_bio'), email: g('f_email'), linkedin: g('f_linkedin'), image_url: g('f_image_url'), published: c('f_published') };
     } else if (editingType === 'blog') {
       data = { title: g('f_title'), slug: g('f_slug'), category: g('f_category'), excerpt: g('f_excerpt'), content: g('f_content'), image_url: g('f_image_url'), published: c('f_published') };
+    } else if (editingType === 'client') {
+      data = {
+        name: g('f_name'), email: g('f_email'), company: g('f_company'), phone: g('f_phone'),
+        project_name: g('f_project_name'), sheet_ref: g('f_sheet_ref'), phase: g('f_phase'),
+        completion_percent: parseInt(g('f_completion_percent')) || 0, status: g('f_status'),
+        next_milestone_label: g('f_next_milestone_label'), next_milestone_date: g('f_next_milestone_date') || null,
+        hero_image_url: g('f_hero_image_url')
+      };
+      const pw = g('f_password');
+      if (pw) data.password = pw;
     }
 
-    const endpoint = { project: '/projects', service: '/services', team: '/team', blog: '/blog' }[editingType];
+    const endpoint = { project: '/projects', service: '/services', team: '/team', blog: '/blog', client: '/clients' }[editingType];
     const res = editingId ? await API.put(`${endpoint}/${editingId}`, data) : await API.post(endpoint, data);
 
     if (res.success || res.id) {

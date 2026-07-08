@@ -301,8 +301,6 @@
     border-radius: 50%;
     background: var(--gold);
     flex-shrink: 0;
-    margin-left: 8px;
-    margin-right: 8px;
 }
 
 .hero-office-dot::after {
@@ -661,9 +659,6 @@
         margin: 16px 32px 0;
         padding: 12px 20px;
         text-align: center;
-    }
-    .nav-toggle {
-        display: flex;
     }
     .section-indicator {
         display: none;

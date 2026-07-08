@@ -1,4 +1,4 @@
--- Run this in MySQL to create your database and all tables
+
 
 CREATE DATABASE IF NOT EXISTS jentech_db;
 USE jentech_db;

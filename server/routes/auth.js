@@ -38,7 +38,7 @@ router.post('/logout', (req, res) => {
     });
 });
 
-// GET /api/auth/me  — check if logged in
+// GET /api/auth/me  
 router.get('/me', (req, res) => {
     if (req.session && req.session.userId) {
         res.json({ loggedIn: true, name: req.session.name, role: req.session.role });
@@ -47,16 +47,19 @@ router.get('/me', (req, res) => {
     }
 });
 
-// POST /api/auth/register  (admin only — creates new users)
+// POST /api/auth/register  (public signup — always creates an 'editor' account.
+// The role is intentionally NEVER read from the request body — otherwise anyone
+// could POST { role: 'admin' } and grant themselves full admin access. Promote
+// an account to 'admin' manually in the database if needed.)
 router.post('/register', async(req, res) => {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
     if (!name || !email || !password)
         return res.status(400).json({ error: 'All fields required.' });
 
     try {
         const hashed = await bcrypt.hash(password, 10);
         await db.query(
-            'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)', [name, email, hashed, role || 'editor']
+            'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)', [name, email, hashed, 'editor']
         );
         res.json({ success: true });
     } catch (err) {

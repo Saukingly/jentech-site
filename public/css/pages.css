@@ -212,6 +212,9 @@ body {
     border: none;
     cursor: pointer;
     padding: 4px;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
 }
 
 @media (min-width: 900px) {

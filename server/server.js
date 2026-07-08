@@ -33,6 +33,9 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/services', require('./routes/services'));
 app.use('/api/team', require('./routes/team'));
 app.use('/api/blog', require('./routes/blog'));
+app.use('/api/client-auth', require('./routes/clientAuth'));
+app.use('/api/client-portal', require('./routes/clientPortal'));
+app.use('/api/clients', require('./routes/clients'));
 
 // ---- Catch-all: serve index.html for any unmatched route ----
 // Update this route at the bottom of server.js

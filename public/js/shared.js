@@ -157,14 +157,14 @@ function renderNavbar(activePage = '') {
             `<a href="${p.href}" class="nav-link${activePage === p.label ? ' active' : ''}">${p.label}</a>`
         ),
         `<a href="/pages/admin/login.html" class="nav-link${activePage === 'Admin' ? ' active' : ''}">Admin Portal</a>`,
-        `<a href="/pages/admin/login.html" class="nav-contact">Client Login</a>`
+        `<a href="/pages/client/login.html" class="nav-contact${activePage === 'Client Login' ? ' active' : ''}">Client Login</a>`
     ].join('');
 
     const mobileLinks = [
         `<a href="/">Home</a>`,
         ...pages.map(p => `<a href="${p.href}">${p.label}</a>`),
         `<a href="/pages/admin/login.html">Admin Portal</a>`,
-        `<a href="/pages/admin/login.html" class="m-contact">Client Login</a>`
+        `<a href="/pages/client/login.html" class="m-contact">Client Login</a>`
     ].join('');
 
     return `
