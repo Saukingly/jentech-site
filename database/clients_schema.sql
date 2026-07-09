@@ -1,9 +1,6 @@
--- Run this in MySQL AFTER schema.sql has already been run once.
--- Adds the client portal accounts + their project data.
+
 USE jentech_db;
 
--- Client (customer-facing) accounts — kept separate from the staff `users` table
--- since clients need different fields (company, phone) and different permissions.
 CREATE TABLE IF NOT EXISTS clients (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
@@ -14,9 +11,6 @@ CREATE TABLE IF NOT EXISTS clients (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- One project record per client for now (client_id is UNIQUE below).
--- Structure allows multiple projects per client later if needed —
--- just drop the UNIQUE constraint and adjust the queries in clientPortal.js.
 CREATE TABLE IF NOT EXISTS client_projects (
   id INT AUTO_INCREMENT PRIMARY KEY,
   client_id INT NOT NULL UNIQUE,

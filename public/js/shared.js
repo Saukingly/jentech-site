@@ -7,7 +7,7 @@
 const API = {
     base: '/api',
 
-    // Rewritten with a colon so your auto-formatter can't join them!
+    // wrote it with a colon so your auto-formatter cant join them
     get: async function(path) {
         const res = await fetch(this.base + path, { credentials: 'include' });
         if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveal();
 });
 
-// A reusable function to generate the Jacobs-style card
+//  reusable function to generate the Jacobs-style card
 function createCard(item, pageType) {
     return `
         <a href="/pages/${pageType}/${item.slug}.html" class="project-card js-animate">

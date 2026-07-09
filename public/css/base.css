@@ -361,7 +361,7 @@ body.cursor-hover .cursor-ring {
 }
 
 
-/* Hide the main desktop links smoothly */
+/* Hide the main desktop links */
 
 .navbar.nav-scrolled .nav-links {
     opacity: 0;
@@ -371,7 +371,7 @@ body.cursor-hover .cursor-ring {
 }
 
 
-/* Force the 3-line hamburger menu to appear on desktop when scrolled */
+/* Force 3-line hamburger menu to appear on desktop when scrolled */
 
 @media (min-width: 769px) {
     .navbar.nav-scrolled .nav-toggle {
@@ -389,7 +389,7 @@ body.cursor-hover .cursor-ring {
 }
 
 
-/* Hamburger/close button is now styled entirely by pages.css
+/* Hamburger/close button is styled entirely by pages.css
    (loaded on every page) so it's pixel-identical everywhere. */
 
 

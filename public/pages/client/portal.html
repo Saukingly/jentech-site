@@ -468,6 +468,144 @@
             color: var(--gray-500);
             font-size: 14px;
         }
+        /* ===== Reports & documents ===== */
+        
+        .report-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-chip {
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            background: var(--off-white);
+            border: 1.5px solid var(--gray-100);
+            color: var(--gray-500);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        
+        .filter-chip.active {
+            background: var(--navy);
+            border-color: var(--navy);
+            color: var(--white);
+        }
+        
+        .report-row {
+            padding: 18px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .report-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .report-row-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--gold-dim);
+            color: var(--gold);
+            border: 1px solid rgba(200, 145, 42, 0.3);
+        }
+        
+        .report-date {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+        
+        .report-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+        
+        .report-notes {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+        
+        .report-amount {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+        
+        .report-file-link {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--gold);
+            text-decoration: none;
+        }
+        
+        .report-file-link:hover {
+            text-decoration: underline;
+        }
+        
+        .error-msg,
+        .success-msg {
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .error-msg {
+            color: #c0392b;
+        }
+        
+        .success-msg {
+            color: #1e7e42;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            background: var(--off-white);
+            border: 1.5px solid var(--gray-100);
+            padding: 12px 14px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-body);
+            transition: border-color 0.2s, background 0.2s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+        }
     </style>
 </head>
 
@@ -506,158 +644,89 @@
 
             <div id="portalContent" style="display:none;">
 
-                <!-- ===== Hero project card (LIVE data) ===== -->
+                <!-- ===== Hero (LIVE data) ===== -->
                 <div class="project-hero-card">
                     <div>
-                        <div class="project-hero-eyebrow" id="projSheetRef">PROJECT</div>
-                        <div class="project-hero-title" id="projName">—</div>
-                        <div class="project-hero-meta"><span class="status-pill" id="projStatus">—</span> &nbsp; Phase: <span id="projPhase">—</span></div>
+                        <div class="project-hero-eyebrow" id="projCompany">JENTECH GROUP</div>
+                        <div class="project-hero-title">Welcome back, <span id="projClientFirst">—</span></div>
+                        <div class="project-hero-meta">Documents and reports shared with <span id="projClientCompany">your account</span> appear below as they're issued.</div>
                     </div>
-                    <div class="hero-progress-block">
-                        <div class="hero-progress-num"><span id="projPercent">0</span>%</div>
-                        <div class="hero-progress-label">Complete</div>
-                        <div class="progress-track">
-                            <div class="progress-fill" id="progressFill" style="width:0%;"></div>
-                        </div>
+                    <button class="btn btn-gold" id="newRequestBtn" type="button">+ New request</button>
+                </div>
+
+                <!-- ===== New request modal ===== -->
+                <div id="requestModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(10,22,40,0.6);z-index:100;align-items:center;justify-content:center;padding:20px;">
+                    <div style="background:var(--white);max-width:480px;width:100%;padding:32px;">
+                        <div class="card-title" style="margin-bottom:4px;">New request</div>
+                        <div class="card-subtitle">Tell us what you need — it'll go straight to the right team</div>
+                        <form id="requestForm">
+                            <div class="form-group">
+                                <label class="form-label" for="reqService">What service do you need?</label>
+                                <select class="form-control" id="reqService">
+                                    <option value="">General inquiry</option>
+                                    <option value="Civil & Structural Engineering">Civil & Structural Engineering</option>
+                                    <option value="Geotechnical Exploration">Geotechnical Exploration</option>
+                                    <option value="Materials & Soils Testing">Materials & Soils Testing</option>
+                                    <option value="Project Management">Project Management</option>
+                                    <option value="Site Investigation">Site Investigation</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="reqMessage">Details</label>
+                                <textarea class="form-control" id="reqMessage" rows="4" required style="resize:vertical;"></textarea>
+                            </div>
+                            <div id="requestError" class="error-msg"></div>
+                            <div id="requestSuccess" class="success-msg"></div>
+                            <div style="display:flex;gap:10px;margin-top:16px;">
+                                <button type="button" class="btn btn-outline-gold" id="requestCancelBtn" style="flex:1;justify-content:center;">Cancel</button>
+                                <button type="submit" class="btn btn-gold" id="requestSubmitBtn" style="flex:1;justify-content:center;">Send request</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                <!-- ===== Stats strip (LIVE data) ===== -->
+                <!-- ===== Category counts (LIVE data) ===== -->
                 <div class="stat-cards">
                     <div class="stat-card">
-                        <div class="stat-card-label">Current phase</div>
-                        <div class="stat-card-value" id="statPhase">—</div>
+                        <div class="stat-card-label">Site investigation</div>
+                        <div class="stat-card-value" id="countSiteInvestigation">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-card-label">Next milestone</div>
-                        <div class="stat-card-value" id="statMilestone">—</div>
+                        <div class="stat-card-label">Lab test results</div>
+                        <div class="stat-card-value" id="countLabTestResults">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-card-label">Target date</div>
-                        <div class="stat-card-value" id="statDate">—</div>
+                        <div class="stat-card-label">Geotech recommendations</div>
+                        <div class="stat-card-value" id="countGeotechnicalRecommendations">0</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-card-label">Status</div>
-                        <div class="stat-card-value" id="statStatus">—</div>
+                        <div class="stat-card-label">Inspection findings</div>
+                        <div class="stat-card-value" id="countInspectionFindings">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-label">Invoices</div>
+                        <div class="stat-card-value" id="countInvoice">0</div>
                     </div>
                 </div>
 
-                <!-- ===== Messages + Documents (sample data — not wired to the database yet) ===== -->
-                <div class="portal-grid-2">
-                    <div class="card">
-                        <div class="card-title">Messages</div>
-                        <div class="card-subtitle">Recent updates from your project team</div>
-                        <div class="list-row">
-                            <div class="list-row-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h8m-8 4h5m4-13H5a2 2 0 0 0-2 2v14l4-4h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></div>
-                            <div>
-                                <div class="list-row-title">Site inspection scheduled</div>
-                                <div class="list-row-sub">Our field team will visit next week to review progress.</div>
-                            </div>
-                        </div>
-                        <div class="list-row">
-                            <div class="list-row-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h8m-8 4h5m4-13H5a2 2 0 0 0-2 2v14l4-4h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z"/></svg></div>
-                            <div>
-                                <div class="list-row-title">Structural drawings updated</div>
-                                <div class="list-row-sub">Revision 2 has been uploaded for your review.</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Documents</div>
-                        <div class="card-subtitle">Reports and drawings shared with you</div>
-                        <div class="list-row">
-                            <div class="list-row-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M9 8h1m5 12H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l4.414 4.414a1 1 0 0 1 .293.707V18a2 2 0 0 1-2 2Z"/></svg></div>
-                            <div>
-                                <div class="list-row-title">Geotechnical report — Rev 1</div>
-                                <div class="list-row-sub">PDF · Uploaded recently</div>
-                            </div>
-                        </div>
-                        <div class="list-row">
-                            <div class="list-row-icon"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6M9 8h1m5 12H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l4.414 4.414a1 1 0 0 1 .293.707V18a2 2 0 0 1-2 2Z"/></svg></div>
-                            <div>
-                                <div class="list-row-title">Structural design drawings</div>
-                                <div class="list-row-sub">PDF · Rev 2</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== Timeline (sample data) ===== -->
-                <div class="card" style="margin-bottom:20px;">
-                    <div class="card-title">Project timeline</div>
-                    <div class="card-subtitle">Key phases from start to completion</div>
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-dot done">✓</div>
-                            <div>
-                                <div class="timeline-title">Site investigation</div>
-                                <div class="timeline-sub">Completed</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot done">✓</div>
-                            <div>
-                                <div class="timeline-title">Design & engineering</div>
-                                <div class="timeline-sub">Completed</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot current">●</div>
-                            <div>
-                                <div class="timeline-title">Construction</div>
-                                <div class="timeline-sub">In progress</div>
-                            </div>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot upcoming">○</div>
-                            <div>
-                                <div class="timeline-title">Final inspection & handover</div>
-                                <div class="timeline-sub">Upcoming</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== Project team + Notifications (sample data) ===== -->
-                <div class="portal-grid-2">
-                    <div class="card">
-                        <div class="card-title">Project team</div>
-                        <div class="card-subtitle">Your points of contact at Jentech</div>
-                        <div class="team-row">
-                            <div class="team-avatar">PM</div>
-                            <div>
-                                <div class="list-row-title">Project Manager</div>
-                                <div class="list-row-sub">Jentech Consultants</div>
-                            </div>
-                        </div>
-                        <div class="team-row">
-                            <div class="team-avatar">LE</div>
-                            <div>
-                                <div class="list-row-title">Lead Engineer</div>
-                                <div class="list-row-sub">Jentech Consultants</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Notifications</div>
-                        <div class="card-subtitle">Recent account activity</div>
-                        <div class="list-row">
-                            <div>
-                                <div class="list-row-title">Welcome to the client portal</div>
-                                <div class="list-row-sub">You'll see project updates here as they happen.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== Company updates (sample data) ===== -->
+                <!-- ===== Reports & documents (LIVE data) ===== -->
                 <div class="card">
-                    <div class="card-title">Company updates</div>
-                    <div class="card-subtitle">News from the Jentech Group</div>
-                    <div class="update-item">
-                        <div class="update-date">Jentech Group</div>
-                        <div class="list-row-title">Thank you for choosing Jentech</div>
-                        <div class="list-row-sub">Check back here for milestones, reports, and news about your project.</div>
+                    <div class="card-title">Reports &amp; documents</div>
+                    <div class="card-subtitle">Everything shared with you, most recent first</div>
+
+                    <div class="report-filters" id="reportFilters">
+                        <button class="filter-chip active" data-filter="All">All</button>
+                        <button class="filter-chip" data-filter="Site Investigation Report">Site Investigation</button>
+                        <button class="filter-chip" data-filter="Lab Test Results">Lab Results</button>
+                        <button class="filter-chip" data-filter="Geotechnical Recommendations">Geotechnical</button>
+                        <button class="filter-chip" data-filter="Inspection Findings">Inspection</button>
+                        <button class="filter-chip" data-filter="Invoice">Invoices</button>
+                    </div>
+
+                    <div id="reportsList"></div>
+                    <div id="reportsEmpty" style="display:none;padding:32px 0;text-align:center;color:var(--gray-500);font-size:13.5px;">
+                        No reports have been shared with you yet — check back after your project team has an update.
                     </div>
                 </div>
 
@@ -667,6 +736,8 @@
 
     <script src="/js/shared.js"></script>
     <script>
+        var allReports = [];
+
         // ---- Auth check ----
         async function checkAuth() {
             try {
@@ -682,7 +753,7 @@
             }
         }
 
-        function formatMilestoneDate(dateStr) {
+        function formatDate(dateStr) {
             if (!dateStr) return '—';
             return new Date(dateStr).toLocaleDateString('en-US', {
                 year: 'numeric',
@@ -691,35 +762,146 @@
             });
         }
 
+        function categoryCountKey(category) {
+            return 'count' + category.replace(/[^A-Za-z]/g, '');
+        }
+
+        function renderReports(filter) {
+            var list = document.getElementById('reportsList');
+            var empty = document.getElementById('reportsEmpty');
+            var filtered = filter === 'All' ? allReports : allReports.filter(function(r) {
+                return r.category === filter;
+            });
+
+            if (filtered.length === 0) {
+                list.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            empty.style.display = 'none';
+
+            list.innerHTML = filtered.map(function(r) {
+                var amountLine = r.category === 'Invoice' && r.amount ?
+                    '<div class="report-amount">$' + Number(r.amount).toLocaleString(undefined, {
+                        minimumFractionDigits: 2
+                    }) + '</div>' : '';
+                var fileLink = r.file_url ?
+                    '<a href="' + r.file_url + '" target="_blank" rel="noopener" class="report-file-link">View file →</a>' : '';
+                var notes = r.notes ? '<div class="report-notes">' + r.notes.replace(/</g, '&lt;') + '</div>' : '';
+                return '<div class="report-row">' +
+                    '<div class="report-row-top">' +
+                    '<span class="category-badge">' + r.category + '</span>' +
+                    '<span class="report-date">' + formatDate(r.created_at) + '</span>' +
+                    '</div>' +
+                    '<div class="report-title">' + r.title + '</div>' +
+                    notes + amountLine + fileLink +
+                    '</div>';
+            }).join('');
+        }
+
+        document.getElementById('reportFilters').addEventListener('click', function(e) {
+            var btn = e.target.closest('.filter-chip');
+            if (!btn) return;
+            document.querySelectorAll('.filter-chip').forEach(function(c) {
+                c.classList.remove('active');
+            });
+            btn.classList.add('active');
+            renderReports(btn.getAttribute('data-filter'));
+        });
+
         async function init() {
             const me = await checkAuth();
             if (!me) return;
             document.getElementById('clientName').textContent = me.name;
+            document.getElementById('projClientFirst').textContent = (me.name || '').split(' ')[0] || me.name;
 
             try {
-                const p = await API.get('/client-portal/project');
-                document.getElementById('projSheetRef').textContent = p.sheet_ref || 'PROJECT';
-                document.getElementById('projName').textContent = p.project_name || 'Your project';
-                document.getElementById('projStatus').textContent = p.status || 'In progress';
-                document.getElementById('projPhase').textContent = p.phase || '—';
-                document.getElementById('projPercent').textContent = p.completion_percent || 0;
-                document.getElementById('progressFill').style.width = (p.completion_percent || 0) + '%';
+                allReports = await API.get('/reports/mine');
 
-                document.getElementById('statPhase').textContent = p.phase || '—';
-                document.getElementById('statMilestone').textContent = p.next_milestone_label || '—';
-                document.getElementById('statDate').textContent = formatMilestoneDate(p.next_milestone_date);
-                document.getElementById('statStatus').textContent = p.status || '—';
+                var counts = {
+                    'Site Investigation Report': 0,
+                    'Lab Test Results': 0,
+                    'Geotechnical Recommendations': 0,
+                    'Inspection Findings': 0,
+                    'Invoice': 0
+                };
+                allReports.forEach(function(r) {
+                    if (counts.hasOwnProperty(r.category)) counts[r.category]++;
+                });
+                Object.keys(counts).forEach(function(cat) {
+                    var el = document.getElementById(categoryCountKey(cat));
+                    if (el) el.textContent = counts[cat];
+                });
+
+                renderReports('All');
 
                 document.getElementById('loadingState').style.display = 'none';
                 document.getElementById('portalContent').style.display = 'block';
             } catch (err) {
-                document.getElementById('loadingState').textContent = 'Could not load your project. Please try again shortly.';
+                document.getElementById('loadingState').textContent = 'Could not load your reports. Please try again shortly.';
             }
         }
 
         document.getElementById('logoutBtn').addEventListener('click', async() => {
             await API.post('/client-auth/logout', {});
             window.location.href = '/pages/client/login.html';
+        });
+
+        // ---- New request modal ----
+        var requestOverlay = document.getElementById('requestModalOverlay');
+        document.getElementById('newRequestBtn').addEventListener('click', function() {
+            document.getElementById('requestError').style.display = 'none';
+            document.getElementById('requestSuccess').style.display = 'none';
+            document.getElementById('requestForm').reset();
+            requestOverlay.style.display = 'flex';
+        });
+        document.getElementById('requestCancelBtn').addEventListener('click', function() {
+            requestOverlay.style.display = 'none';
+        });
+        requestOverlay.addEventListener('click', function(e) {
+            if (e.target === requestOverlay) requestOverlay.style.display = 'none';
+        });
+
+        document.getElementById('requestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var service = document.getElementById('reqService').value;
+            var message = document.getElementById('reqMessage').value.trim();
+            var errEl = document.getElementById('requestError');
+            var okEl = document.getElementById('requestSuccess');
+            var btn = document.getElementById('requestSubmitBtn');
+            errEl.style.display = 'none';
+            okEl.style.display = 'none';
+
+            if (!message) {
+                errEl.textContent = 'Please add some details about your request.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Sending…';
+            try {
+                var res = await API.post('/client-portal/request', {
+                    service: service,
+                    message: message
+                });
+                if (res.success) {
+                    okEl.textContent = 'Request sent! Our team will follow up soon.';
+                    okEl.style.display = 'block';
+                    document.getElementById('requestForm').reset();
+                    setTimeout(function() {
+                        requestOverlay.style.display = 'none';
+                    }, 1400);
+                } else {
+                    errEl.textContent = res.error || 'Could not send your request.';
+                    errEl.style.display = 'block';
+                }
+            } catch (_) {
+                errEl.textContent = 'Server error. Please try again shortly.';
+                errEl.style.display = 'block';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Send request';
         });
 
         var sidebarBtn = document.getElementById('sidebarOpenBtn');

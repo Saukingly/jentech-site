@@ -17,7 +17,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: false, // set to true when using HTTPS in production
+        secure: false,
+        /
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 8 // 8 hours
     }
@@ -36,9 +37,8 @@ app.use('/api/blog', require('./routes/blog'));
 app.use('/api/client-auth', require('./routes/clientAuth'));
 app.use('/api/client-portal', require('./routes/clientPortal'));
 app.use('/api/clients', require('./routes/clients'));
+app.use('/api/reports', require('./routes/reports'));
 
-// ---- Catch-all: serve index.html for any unmatched route ----
-// Update this route at the bottom of server.js
 app.get('/{/*path}', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });

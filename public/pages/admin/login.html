@@ -5,11 +5,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>System Login | Jentech</title>
-    <link rel="stylesheet" href="/css/pages.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+         :root {
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --white: #FFFFFF;
+            --paper: #FBF9F5;
+            --ink: #1C1815;
+            --ink-soft: #5B5650;
+            --line: #E7E1D6;
+            --gold: #E8590C;
+            --gold-dark: #B8430A;
+            --gold-tint: #FDE9D9;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
-            background: #060d14;
-            color: var(--white);
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -18,49 +37,46 @@
         }
         
         .login-card {
-            background: #0d1520;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: var(--white);
+            border: 1px solid var(--line);
             padding: 40px;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        
+        .login-logo-mark {
+            width: 38px;
+            height: 38px;
+            background: var(--gold);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
         }
         
         .login-title {
             font-family: var(--font-display);
-            font-size: 28px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+        
+        .login-sub {
+            font-size: 11px;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 24px;
-            color: var(--white);
-            border-bottom: 1px solid var(--gold-dim);
-            padding-bottom: 12px;
-        }
-        
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gray-300);
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s;
-        }
-        
-        .auth-tab.active {
-            background: var(--gold);
-            color: var(--white);
+            color: var(--ink-soft);
         }
         
         .form-group {
@@ -70,18 +86,20 @@
         .form-label {
             display: block;
             font-size: 11px;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--gray-300);
+            letter-spacing: 0.06em;
+            color: var(--ink-soft);
             margin-bottom: 6px;
         }
         
         .form-control {
             width: 100%;
-            background: #121b28;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--paper);
+            border: 1.5px solid var(--line);
             padding: 12px;
-            color: var(--white);
+            color: var(--ink);
+            font-family: var(--font-body);
             font-size: 14px;
             transition: border-color 0.2s;
         }
@@ -89,6 +107,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--gold);
+            background: var(--white);
         }
         
         .btn-submit {
@@ -97,38 +116,39 @@
             background: var(--gold);
             color: var(--white);
             border: none;
+            font-family: var(--font-body);
             font-weight: 600;
+            font-size: 13px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.06em;
             cursor: pointer;
             transition: background 0.2s;
-            margin-top: 10px;
+            margin-top: 6px;
         }
         
         .btn-submit:hover {
-            background: var(--gold-light);
+            background: var(--gold-dark);
         }
         
         .error-msg {
-            color: #ff4a4a;
+            color: #c0392b;
             font-size: 13px;
-            margin-top: 12px;
+            margin-top: 14px;
             display: none;
         }
         
-        .success-msg {
-            color: #4ade80;
-            font-size: 13px;
-            margin-top: 12px;
-            display: none;
+        .login-note {
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.6;
         }
         
-        .auth-panel {
-            display: none;
-        }
-        
-        .auth-panel.active {
-            display: block;
+        .login-note a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
         }
     </style>
 </head>
@@ -136,68 +156,32 @@
 <body>
 
     <div class="login-card">
-        <h2 class="login-title">Jentech Portal</h2>
-
-        <div class="auth-tabs">
-            <button class="auth-tab active" data-tab="login" id="tabLogin">Sign in</button>
-            <button class="auth-tab" data-tab="signup" id="tabSignup">Sign up</button>
+        <div class="login-logo">
+            <div class="login-logo-mark">J</div>
+            <div>
+                <div class="login-title">Jentech Admin Console</div>
+                <div class="login-sub">Staff Sign In</div>
+            </div>
         </div>
 
-        <!-- ===== LOGIN PANEL ===== -->
-        <div class="auth-panel active" id="panelLogin">
-            <form id="loginForm">
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="email" class="form-control" required autocomplete="username">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" id="password" class="form-control" required autocomplete="current-password">
-                </div>
-                <button type="submit" class="btn-submit">Login</button>
-                <div id="errorMsg" class="error-msg"></div>
-            </form>
-        </div>
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-control" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="password" class="form-control" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-submit">Login</button>
+            <div id="errorMsg" class="error-msg"></div>
+        </form>
 
-        <!-- ===== SIGN UP PANEL ===== -->
-        <div class="auth-panel" id="panelSignup">
-            <form id="signupForm">
-                <div class="form-group">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" id="suName" class="form-control" required autocomplete="name">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" id="suEmail" class="form-control" required autocomplete="username">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Password</label>
-                    <input type="password" id="suPassword" class="form-control" required autocomplete="new-password" minlength="6">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Confirm Password</label>
-                    <input type="password" id="suPasswordConfirm" class="form-control" required autocomplete="new-password" minlength="6">
-                </div>
-                <button type="submit" class="btn-submit">Create account</button>
-                <div id="signupErrorMsg" class="error-msg"></div>
-                <div id="signupSuccessMsg" class="success-msg"></div>
-            </form>
-        </div>
+        <p class="login-note">Staff accounts are created by an administrator.<br>Contact your admin if you need access.</p>
     </div>
 
     <script src="/js/shared.js"></script>
     <script>
-        // ---- Tab switching ----
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(tab === 'login' ? 'tabLogin' : 'tabSignup').classList.add('active');
-            document.getElementById(tab === 'login' ? 'panelLogin' : 'panelSignup').classList.add('active');
-        }
-        document.getElementById('tabLogin').addEventListener('click', () => switchAuthTab('login'));
-        document.getElementById('tabSignup').addEventListener('click', () => switchAuthTab('signup'));
-
-        // ---- Login ----
         document.getElementById('loginForm').addEventListener('submit', async(e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -214,49 +198,6 @@
                     window.location.href = '/pages/admin/index.html';
                 } else {
                     errorMsg.textContent = res.error || 'Invalid credentials.';
-                    errorMsg.style.display = 'block';
-                }
-            } catch (err) {
-                errorMsg.textContent = 'Connection failure to authentication server.';
-                errorMsg.style.display = 'block';
-            }
-        });
-
-        // ---- Sign up ---- (always creates an 'editor' account; ask an existing
-        // admin to promote the account in the database if admin access is needed)
-        document.getElementById('signupForm').addEventListener('submit', async(e) => {
-            e.preventDefault();
-            const name = document.getElementById('suName').value.trim();
-            const email = document.getElementById('suEmail').value.trim();
-            const password = document.getElementById('suPassword').value;
-            const passwordConfirm = document.getElementById('suPasswordConfirm').value;
-            const errorMsg = document.getElementById('signupErrorMsg');
-            const successMsg = document.getElementById('signupSuccessMsg');
-            errorMsg.style.display = 'none';
-            successMsg.style.display = 'none';
-
-            if (password !== passwordConfirm) {
-                errorMsg.textContent = 'Passwords do not match.';
-                errorMsg.style.display = 'block';
-                return;
-            }
-
-            try {
-                const res = await API.post('/auth/register', {
-                    name,
-                    email,
-                    password
-                });
-                if (res.success) {
-                    successMsg.textContent = 'Account created! You can now sign in.';
-                    successMsg.style.display = 'block';
-                    document.getElementById('signupForm').reset();
-                    setTimeout(() => {
-                        switchAuthTab('login');
-                        document.getElementById('email').value = email;
-                    }, 1200);
-                } else {
-                    errorMsg.textContent = res.error || 'Could not create account.';
                     errorMsg.style.display = 'block';
                 }
             } catch (err) {

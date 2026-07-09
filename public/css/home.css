@@ -292,7 +292,7 @@ body {
 /* ================== NAVBAR ================== */
 
 
-/* Navbar, logo, nav-links, nav-toggle, and mobile-menu are now styled
+/* Navbar, logo, nav-links, nav-toggle, and mobile-menu are styled
    entirely by pages.css (loaded on every page) so the navbar renders
    identically on the homepage and all inner pages. Only the scroll
    progress bar below is homepage-specific. */
