@@ -39,7 +39,7 @@ app.use('/api/clients', require('./routes/clients'));
 app.use('/api/reports', require('./routes/reports'));
 
 // ---- Catch-all: serve index.html for any unmatched route ----
-// Update this route at the bottom of server.js
+
 app.get('/{/*path}', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });

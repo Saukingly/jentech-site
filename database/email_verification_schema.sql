@@ -1,4 +1,4 @@
--- Run this in MySQL AFTER all previous migrations.
+
 USE jentech_db;
 
 ALTER TABLE clients

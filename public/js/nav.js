@@ -56,7 +56,7 @@
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll(); // run once on load
+    onScroll();
 
     /* ---------- Mobile toggle ---------- */
     if (toggle && navMenu) {
