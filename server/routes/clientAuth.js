@@ -1,28 +1,46 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const db = require('../db');
+const { sendVerificationEmail } = require('../utils/mailer');
+const { loginLimiter, signupLimiter } = require('../middleware/rateLimiter');
 
-// POST /api/client-auth/register — public signup for clients
-router.post('/register', async(req, res) => {
+function baseUrl(req) {
+    return `${req.protocol}://${req.get('host')}`;
+}
+
+// POST /api/client-auth/register — public signup for clients.
+// Account is created unverified; they must click the emailed link before
+// they can log in.
+router.post('/register', signupLimiter, async(req, res) => {
     const { name, email, password, company, phone } = req.body;
     if (!name || !email || !password)
         return res.status(400).json({ error: 'Name, email and password are required.' });
 
     try {
         const hashed = await bcrypt.hash(password, 10);
+        const token = crypto.randomBytes(32).toString('hex');
+        const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
         const [result] = await db.query(
-            'INSERT INTO clients (name, email, password, company, phone) VALUES (?, ?, ?, ?, ?)', [name, email, hashed, company || null, phone || null]
+            `INSERT INTO clients (name, email, password, company, phone, email_verified, verification_token, verification_expires)
+       VALUES (?, ?, ?, ?, ?, FALSE, ?, ?)`, [name, email, hashed, company || null, phone || null, token, expires]
         );
 
-        // Gives the new client an empty project shell so the portal has something to show
         await db.query(
             'INSERT INTO client_projects (client_id, project_name) VALUES (?, ?)', [result.insertId, 'Your project']
         );
 
-        req.session.clientId = result.insertId;
-        req.session.clientName = name;
-        res.json({ success: true, name });
+        const verifyUrl = `${baseUrl(req)}/api/client-auth/verify?token=${token}`;
+        try {
+            await sendVerificationEmail(email, name, verifyUrl);
+        } catch (mailErr) {
+            console.error('Verification email failed to send:', mailErr.message);
+            // Account still exists — they can use "resend verification" later.
+        }
+
+        res.json({ success: true, needsVerification: true });
     } catch (err) {
         if (err.code === 'ER_DUP_ENTRY')
             return res.status(409).json({ error: 'An account with that email already exists.' });
@@ -31,8 +49,64 @@ router.post('/register', async(req, res) => {
     }
 });
 
+// GET /api/client-auth/verify?token=...  — clicked from the emailed link.
+// Marks the account verified, logs them straight in, and sends them to the portal.
+router.get('/verify', async(req, res) => {
+    const { token } = req.query;
+    if (!token) return res.redirect('/pages/client/login.html?verify=missing');
+
+    try {
+        const [rows] = await db.query(
+            'SELECT * FROM clients WHERE verification_token = ? AND verification_expires > NOW()', [token]
+        );
+        if (rows.length === 0)
+            return res.redirect('/pages/client/login.html?verify=expired');
+
+        const client = rows[0];
+        await db.query(
+            'UPDATE clients SET email_verified = TRUE, verification_token = NULL, verification_expires = NULL WHERE id = ?', [client.id]
+        );
+
+        req.session.clientId = client.id;
+        req.session.clientName = client.name;
+        res.redirect('/pages/client/portal.html');
+    } catch (err) {
+        console.error(err);
+        res.redirect('/pages/client/login.html?verify=error');
+    }
+});
+
+// POST /api/client-auth/resend-verification
+router.post('/resend-verification', signupLimiter, async(req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email is required.' });
+
+    try {
+        const [rows] = await db.query('SELECT * FROM clients WHERE email = ?', [email]);
+        // Same response whether or not the account exists / is already verified —
+        // avoids leaking which emails have accounts.
+        if (rows.length === 0 || rows[0].email_verified) {
+            return res.json({ success: true });
+        }
+
+        const client = rows[0];
+        const token = crypto.randomBytes(32).toString('hex');
+        const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        await db.query(
+            'UPDATE clients SET verification_token = ?, verification_expires = ? WHERE id = ?', [token, expires, client.id]
+        );
+
+        const verifyUrl = `${baseUrl(req)}/api/client-auth/verify?token=${token}`;
+        await sendVerificationEmail(client.email, client.name, verifyUrl);
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error.' });
+    }
+});
+
 // POST /api/client-auth/login
-router.post('/login', async(req, res) => {
+router.post('/login', loginLimiter, async(req, res) => {
     const { email, password } = req.body;
     if (!email || !password)
         return res.status(400).json({ error: 'Email and password are required.' });
@@ -46,6 +120,9 @@ router.post('/login', async(req, res) => {
         const match = await bcrypt.compare(password, client.password);
         if (!match)
             return res.status(401).json({ error: 'Invalid email or password.' });
+
+        if (!client.email_verified)
+            return res.status(403).json({ error: 'Please verify your email before logging in.', needsVerification: true });
 
         req.session.clientId = client.id;
         req.session.clientName = client.name;

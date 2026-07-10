@@ -3,9 +3,10 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../db');
 const { requireAdmin } = require('../middleware/authMiddleware');
+const { loginLimiter } = require('../middleware/rateLimiter');
 
 // POST /api/auth/login
-router.post('/login', async(req, res) => {
+router.post('/login', loginLimiter, async(req, res) => {
     const { email, password } = req.body;
     if (!email || !password)
         return res.status(400).json({ error: 'Email and password are required.' });
@@ -50,7 +51,7 @@ router.get('/me', (req, res) => {
 });
 
 // POST /api/auth/register  (ADMIN ONLY — creates a staff account for one of the
-// three companies. There is no public signup for staff: department
+// three companies. There is no public signup for staff anymore: department
 // accounts are created here by an existing admin.)
 router.post('/register', requireAdmin, async(req, res) => {
     const { name, email, password, role, department } = req.body;

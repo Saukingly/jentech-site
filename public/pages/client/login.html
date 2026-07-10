@@ -220,6 +220,18 @@
             } catch (_) {}
         })();
 
+        // ---- Show a message if arriving from a verification link ----
+        (function checkVerifyParam() {
+            const params = new URLSearchParams(window.location.search);
+            const verify = params.get('verify');
+            if (!verify) return;
+            const errEl = document.getElementById('loginError');
+            if (verify === 'expired') errEl.textContent = 'That verification link has expired. Enter your email below and click "Resend verification email".';
+            else if (verify === 'missing') errEl.textContent = 'That verification link looks incomplete. Please use the link from your email again.';
+            else errEl.textContent = 'Something went wrong verifying your email. Please try again.';
+            errEl.style.display = 'block';
+        })();
+
         // ---- Tab switching ----
         function switchTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -230,6 +242,21 @@
         document.getElementById('tabLogin').addEventListener('click', () => switchTab('login'));
         document.getElementById('tabSignup').addEventListener('click', () => switchTab('signup'));
 
+        // ---- Resend verification ----
+        async function resendVerification(email) {
+            const errEl = document.getElementById('loginError');
+            try {
+                await API.post('/client-auth/resend-verification', {
+                    email
+                });
+                errEl.textContent = 'If that email needs verifying, a new link has been sent — check your inbox.';
+                errEl.style.display = 'block';
+            } catch (_) {
+                errEl.textContent = 'Could not resend right now. Please try again shortly.';
+                errEl.style.display = 'block';
+            }
+        }
+
         // ---- Login ----
         document.getElementById('loginForm').addEventListener('submit', async(e) => {
             e.preventDefault();
@@ -238,6 +265,7 @@
             const errEl = document.getElementById('loginError');
             const btn = document.getElementById('loginBtn');
             errEl.style.display = 'none';
+            errEl.innerHTML = '';
             btn.disabled = true;
             btn.textContent = 'Logging in…';
 
@@ -249,6 +277,14 @@
                 if (res.success) {
                     window.location.href = '/pages/client/portal.html';
                     return;
+                } else if (res.needsVerification) {
+                    errEl.innerHTML = (res.error || 'Please verify your email before logging in.') +
+                        ' <a href="#" id="resendLink" style="color:inherit;text-decoration:underline;">Resend verification email</a>';
+                    errEl.style.display = 'block';
+                    document.getElementById('resendLink').addEventListener('click', function(ev) {
+                        ev.preventDefault();
+                        resendVerification(email);
+                    });
                 } else {
                     errEl.textContent = res.error || 'Invalid email or password.';
                     errEl.style.display = 'block';
@@ -293,8 +329,9 @@
                     phone
                 });
                 if (res.success) {
-                    window.location.href = '/pages/client/portal.html';
-                    return;
+                    okEl.textContent = 'Account created! Check your email (' + email + ') for a verification link before logging in.';
+                    okEl.style.display = 'block';
+                    document.getElementById('signupForm').reset();
                 } else {
                     errEl.textContent = res.error || 'Could not create account.';
                     errEl.style.display = 'block';
