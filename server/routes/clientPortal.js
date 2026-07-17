@@ -42,4 +42,26 @@ router.post('/request', requireClientLogin, async(req, res) => {
     }
 });
 
+// GET /api/client-portal/my-requests — everything this client has submitted,
+// with its current status (pending/answered), most recent first.
+router.get('/my-requests', requireClientLogin, async(req, res) => {
+    try {
+        const [clientRows] = await db.query('SELECT email FROM clients WHERE id = ?', [req.session.clientId]);
+        if (clientRows.length === 0) return res.status(404).json({ error: 'Account not found.' });
+
+        const [rows] = await db.query(
+            `SELECT cs.id, cs.service, cs.department, cs.message, cs.status, cs.created_at,
+              r.id AS report_id, r.category AS report_category, r.title AS report_title
+       FROM contact_submissions cs
+       LEFT JOIN reports r ON r.submission_id = cs.id
+       WHERE cs.email = ?
+       ORDER BY cs.created_at DESC`, [clientRows[0].email]
+        );
+        res.json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error.' });
+    }
+});
+
 module.exports = router;

@@ -4,7 +4,7 @@ const db = require('../db');
 const { requireLogin } = require('../middleware/authMiddleware');
 
 // Maps the service a visitor selects on the contact form to the company that
-// actually handles that kind of work.  matches the <option> values in
+// actually handles that kind of work. Must match the <option> values in
 // public/pages/contact/index.html exactly.
 function departmentForService(service) {
     if (!service) return null;
@@ -19,13 +19,17 @@ router.post('/', async(req, res) => {
     if (!first_name || !last_name || !email || !message)
         return res.status(400).json({ error: 'Required fields missing.' });
 
+    // Normalized (trimmed + lowercased) so this always matches a client's
+    // account email later, regardless of how either was typed/cased.
+    const normalizedEmail = email.trim().toLowerCase();
+
     const department = departmentForService(service);
 
     try {
         await db.query(
             `INSERT INTO contact_submissions
        (first_name, last_name, email, office, service, message, department, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`, [first_name, last_name, email, office || null, service || null, message, department]
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`, [first_name, last_name, normalizedEmail, office || null, service || null, message, department]
         );
         res.json({ success: true, message: 'Message received! We will be in touch.' });
     } catch (err) {

@@ -1637,7 +1637,7 @@ const modalForms = {
     <div class="form-group-dark"><label class="form-label-dark">Title *</label><input class="form-input-dark" id="f_title" placeholder="e.g. Site Investigation Report — Rev 1"></div>
     <div class="form-group-dark" id="amountRow" style="display:none;"><label class="form-label-dark">Amount (USD)</label><input class="form-input-dark" type="number" step="0.01" id="f_amount" placeholder="0.00"></div>
     <div class="form-group-dark"><label class="form-label-dark">Notes for the client</label><textarea class="form-textarea-dark" id="f_notes" rows="4" placeholder="Summary of findings or details of the deliverable..."></textarea></div>
-    <div class="form-group-dark"><label class="form-label-dark">File URL (optional)</label><input class="form-input-dark" id="f_file_url" placeholder="https://..."></div>
+    <div class="form-group-dark"><label class="form-label-dark">Attach file (optional — PDF, Word, Excel, or image, max 20MB)</label><input class="form-input-dark" type="file" id="f_file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png"></div>
     <input type="hidden" id="f_submission_id" value="${d.submission_id||''}">`
 };
 
@@ -1707,16 +1707,34 @@ document.getElementById('modalSaveBtn').addEventListener('click', async () => {
       const pw = g('f_password');
       if (pw) data.password = pw;
     } else if (editingType === 'report') {
-      data = {
-        submission_id: g('f_submission_id') || null,
-        client_email: g('f_client_email'), department: g('f_department'),
-        category: g('f_category'), title: g('f_title'), notes: g('f_notes'),
-        file_url: g('f_file_url'), amount: g('f_category') === 'Invoice' ? (parseFloat(g('f_amount')) || null) : null
-      };
+      // Built separately below as FormData (needs to carry an actual file).
     }
 
-    const endpoint = { project: '/projects', service: '/services', team: '/team', blog: '/blog', client: '/clients' }[editingType];
-    const res = editingId ? await API.put(`${endpoint}/${editingId}`, data) : await API.post(endpoint, data);
+    let res;
+    if (editingType === 'staff') {
+      // Creation uses /auth/register (admin-only); edits use /auth/staff/:id —
+      // these aren't symmetric like the other resources, so handle separately.
+      res = editingId ? await API.put(`/auth/staff/${editingId}`, data) : await API.post('/auth/register', data);
+    } else if (editingType === 'report') {
+      if (!confirm('Send this report to the client now? They will see it in their portal immediately.')) { btn.textContent = 'Save'; btn.disabled = false; return; }
+
+      const fd = new FormData();
+      fd.append('submission_id', g('f_submission_id') || '');
+      fd.append('client_email', g('f_client_email'));
+      fd.append('department', g('f_department'));
+      fd.append('category', g('f_category'));
+      fd.append('title', g('f_title'));
+      fd.append('notes', g('f_notes'));
+      fd.append('amount', g('f_category') === 'Invoice' ? (parseFloat(g('f_amount')) || '') : '');
+      const fileEl = document.getElementById('f_file');
+      if (fileEl && fileEl.files[0]) fd.append('file', fileEl.files[0]);
+
+      const rawRes = await fetch('/api/reports', { method: 'POST', credentials: 'include', body: fd });
+      res = await rawRes.json();
+    } else {
+      const endpoint = { project: '/projects', service: '/services', team: '/team', blog: '/blog', client: '/clients' }[editingType];
+      res = editingId ? await API.put(`${endpoint}/${editingId}`, data) : await API.post(endpoint, data);
+    }
 
     if (res.success || res.id) {
       showToast(`${editingType} ${editingId ? 'updated' : 'created'} successfully!`, 'success');

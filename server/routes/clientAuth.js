@@ -18,6 +18,8 @@ router.post('/register', signupLimiter, async(req, res) => {
     if (!name || !email || !password)
         return res.status(400).json({ error: 'Name, email and password are required.' });
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     try {
         const hashed = await bcrypt.hash(password, 10);
         const token = crypto.randomBytes(32).toString('hex');
@@ -25,7 +27,7 @@ router.post('/register', signupLimiter, async(req, res) => {
 
         const [result] = await db.query(
             `INSERT INTO clients (name, email, password, company, phone, email_verified, verification_token, verification_expires)
-       VALUES (?, ?, ?, ?, ?, FALSE, ?, ?)`, [name, email, hashed, company || null, phone || null, token, expires]
+       VALUES (?, ?, ?, ?, ?, FALSE, ?, ?)`, [name, normalizedEmail, hashed, company || null, phone || null, token, expires]
         );
 
         await db.query(
@@ -34,7 +36,7 @@ router.post('/register', signupLimiter, async(req, res) => {
 
         const verifyUrl = `${baseUrl(req)}/api/client-auth/verify?token=${token}`;
         try {
-            await sendVerificationEmail(email, name, verifyUrl);
+            await sendVerificationEmail(normalizedEmail, name, verifyUrl);
         } catch (mailErr) {
             console.error('Verification email failed to send:', mailErr.message);
             // Account still exists — they can use "resend verification" later.
@@ -81,8 +83,10 @@ router.post('/resend-verification', signupLimiter, async(req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: 'Email is required.' });
 
+    const normalizedEmail = email.trim().toLowerCase();
+
     try {
-        const [rows] = await db.query('SELECT * FROM clients WHERE email = ?', [email]);
+        const [rows] = await db.query('SELECT * FROM clients WHERE email = ?', [normalizedEmail]);
         // Same response whether or not the account exists / is already verified —
         // avoids leaking which emails have accounts.
         if (rows.length === 0 || rows[0].email_verified) {
@@ -112,7 +116,7 @@ router.post('/login', loginLimiter, async(req, res) => {
         return res.status(400).json({ error: 'Email and password are required.' });
 
     try {
-        const [rows] = await db.query('SELECT * FROM clients WHERE email = ?', [email]);
+        const [rows] = await db.query('SELECT * FROM clients WHERE email = ?', [email.trim().toLowerCase()]);
         if (rows.length === 0)
             return res.status(401).json({ error: 'Invalid email or password.' });
 
@@ -141,9 +145,15 @@ router.post('/logout', (req, res) => {
 });
 
 // GET /api/client-auth/me
-router.get('/me', (req, res) => {
+router.get('/me', async(req, res) => {
     if (req.session && req.session.clientId) {
-        res.json({ loggedIn: true, name: req.session.clientName });
+        try {
+            const [rows] = await db.query('SELECT company FROM clients WHERE id = ?', [req.session.clientId]);
+            const company = rows.length ? rows[0].company : null;
+            res.json({ loggedIn: true, name: req.session.clientName, company: company || null });
+        } catch (err) {
+            res.json({ loggedIn: true, name: req.session.clientName, company: null });
+        }
     } else {
         res.json({ loggedIn: false });
     }
