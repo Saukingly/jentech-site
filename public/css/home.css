@@ -292,7 +292,7 @@ body {
 /* ================== NAVBAR ================== */
 
 
-/* Navbar, logo, nav-links, nav-toggle, and mobile-menu are styled
+/* Navbar, logo, nav-links, nav-toggle, and mobile-menu are now styled
    entirely by pages.css (loaded on every page) so the navbar renders
    identically on the homepage and all inner pages. Only the scroll
    progress bar below is homepage-specific. */
@@ -1979,4 +1979,38 @@ body {
     font-size: 22px;
     color: var(--navy);
     margin-bottom: 8px
+}
+
+
+/* ---- Core Companies: hover reveals the company logo instead of a plain
+   highlight. Scoped to .services-grid only — the shared .card component
+   is used across the whole site, and this behavior is homepage-specific. ---- */
+
+.services-grid .card {
+    position: relative;
+}
+
+.services-grid .card-logo-reveal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.services-grid .card-logo-reveal img {
+    max-width: 55%;
+    max-height: 90px;
+    object-fit: contain;
+}
+
+.services-grid .card:hover .card-logo-reveal {
+    opacity: 1;
+    transform: scale(1);
 }

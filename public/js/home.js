@@ -1,6 +1,7 @@
-/*home.js — Jentech Homepage JavaScript
-No custom cursor. Mobile-first.*/
-
+/* =====================================================
+   home.js — Jentech Homepage JavaScript
+   No custom cursor. Mobile-first.
+   ===================================================== */
 
 // ---- API helper ----
 async function api(path) {
@@ -35,9 +36,9 @@ function initials(name) {
     return (name || '?').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
 
-
-//NAVBAR
-
+/* =====================================================
+   NAVBAR
+   ===================================================== */
 function initNav() {
     const nav = document.getElementById('nav');
     const bar = document.getElementById('scrollBar');
@@ -86,9 +87,9 @@ function initNav() {
     });
 }
 
-
-//SCROLL REVEAL
-
+/* =====================================================
+   SCROLL REVEAL
+   ===================================================== */
 function initReveal() {
     const obs = new IntersectionObserver(entries => {
         entries.forEach(e => {
@@ -102,9 +103,9 @@ function initReveal() {
     document.querySelectorAll('[data-r], [data-stag]').forEach(el => obs.observe(el));
 }
 
-
-//ANIMATED COUNTERS (stats bar)
-
+/* =====================================================
+   ANIMATED COUNTERS (stats bar)
+   ===================================================== */
 function initCounters() {
     const ease = t => 1 - Math.pow(1 - t, 3);
     const obs = new IntersectionObserver(entries => {
@@ -130,9 +131,9 @@ function initCounters() {
     document.querySelectorAll('[data-count]').forEach(el => obs.observe(el));
 }
 
-
-//SERVICES (fetched from API)
-
+/* =====================================================
+   SERVICES (fetched from API)
+   ===================================================== */
 const srvIcons = {
     'civil-engineering': `<svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>`,
     'structural-engineering': `<svg width="36" height="36" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.4"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75"/></svg>`,
@@ -169,9 +170,9 @@ async function loadServices() {
     }
 }
 
-
-//PROJECTS (horizontal scroll, fetched from API)
-
+/* =====================================================
+   PROJECTS (horizontal scroll, fetched from API)
+   ===================================================== */
 const projBgs = [
     'linear-gradient(145deg,#0d2535,#1a3a52)',
     'linear-gradient(145deg,#1a2d0d,#2e4d1a)',
@@ -250,43 +251,9 @@ function initProjScroll() {
   updateFill();
 }
 
-
-   //TEAM (fetched from API)
-
-const avaClasses = ['ava-0','ava-1','ava-2','ava-3','ava-4','ava-5'];
-
-async function loadTeam() {
-  const grid = document.getElementById('teamGrid');
-  if (!grid) return;
-  try {
-    const data = await api('/team');
-    const list = data.slice(0, 8);
-    if (!list.length) {
-      grid.innerHTML = '<div class="empty"><h3>Team coming soon</h3></div>';
-      return;
-    }
-    grid.innerHTML = list.map((m, i) => `
-      <a href="/pages/team/${m.slug}" class="team-card">
-        <div class="tc-ava ${avaClasses[i % avaClasses.length]}">
-          ${m.image_url ? `<img src="${m.image_url}" alt="${m.name}" loading="lazy">` : initials(m.name)}
-        </div>
-        <div class="tc-body">
-          <h4 class="tc-name">${m.name}</h4>
-          <p class="tc-role">${m.role || ''}</p>
-          <p class="tc-office">${m.office || ''}</p>
-        </div>
-      </a>
-    `).join('');
-    document.querySelectorAll('#teamGrid .team-card').forEach(el => el.setAttribute('data-r', ''));
-    initReveal();
-  } catch (err) {
-    console.error('Team load error:', err);
-    grid.innerHTML = '<div class="empty"><h3>Could not load team</h3></div>';
-  }
-}
-
-   //BLOG / NEWS (fetched from API)
-
+/* =====================================================
+   BLOG / NEWS (fetched from API)
+   ===================================================== */
 async function loadBlog() {
   const grid = document.getElementById('newsGrid');
   if (!grid) return;
@@ -319,8 +286,9 @@ async function loadBlog() {
   }
 }
 
-
-   //CONTACT FORM (sends to /api/contact → auto email)
+/* =====================================================
+   CONTACT FORM (sends to /api/contact → auto email)
+   ===================================================== */
 function initContact() {
   const form = document.getElementById('contactForm');
   if (!form) return;
@@ -328,7 +296,7 @@ function initContact() {
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const btn = form.querySelector('.f-submit');
-    const g   = id => document.getElementById(id)?.value?.trim() || '';
+    const g   = id => { const el = document.getElementById(id); return el && el.value ? el.value.trim() : ''; };
 
     const payload = {
       first_name: g('cFname'),
@@ -378,24 +346,23 @@ function initContact() {
   });
 }
 
-
-   //INIT — runs when DOM is ready
-
+/* =====================================================
+   INIT — runs when DOM is ready
+   ===================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initReveal();
   initCounters();
   loadServices();
   loadProjects();
-  loadTeam();
   loadBlog();
   initContact();
 });
 
-// Inside fetch() or load() function
-const grid = document.getElementById('projectsGrid'); 
+// Inside your fetch() or load() function
+const grid = document.getElementById('projectsGrid'); // Ensure your HTML has this ID
 
-fetch('/api/services') // Calls server/routes/services.js
+fetch('/api/services') // Calls your server/routes/services.js
     .then(res => res.json())
     .then(data => {
         grid.innerHTML = data.map(item => createCard(item, 'services')).join('');

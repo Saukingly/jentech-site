@@ -6,10 +6,19 @@ require('dotenv').config();
 
 const app = express();
 
+// Personalized API responses (client portal, admin dashboard, etc.) should
+// never be conditionally cached — disable Express's default ETag generation
+// so these routes always return a fresh 200 instead of a 304 with no body.
+app.set('etag', false);
+
 // ---- Middleware ----
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/api', (req, res, next) => {
+    res.set('Cache-Control', 'no-store');
+    next();
+});
 
 // ---- Sessions ----
 app.use(session({

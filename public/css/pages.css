@@ -138,7 +138,13 @@ body {
 .logo-wordmark {
     display: flex;
     flex-direction: column;
-    gap: 1px;
+    gap: 4px;
+}
+
+.logo-wordmark-img {
+    height: 20px;
+    width: auto;
+    display: block;
 }
 
 .logo-name {
@@ -1166,6 +1172,7 @@ body {
     min-height: 40vh;
     padding: 2rem;
     width: 100%;
+    /* 🚀 THE MAGIC FIX FOR PC: Forces the item to span across all grid columns */
     grid-column: 1 / -1;
 }
 

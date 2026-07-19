@@ -926,6 +926,7 @@
                     '<a href="' + r.file_url + '" target="_blank" rel="noopener" class="report-file-link">View file →</a>' : '';
                 var notes = r.notes ? '<div class="report-notes">' + r.notes.replace(/</g, '&lt;') + '</div>' : '';
                 var icon = CATEGORY_ICONS[r.category] || CATEGORY_ICONS['Inspection Findings'];
+                var sheetNo = String(filtered.length - i).padStart(2, '0');
                 return '<div class="report-row" id="report-' + r.id + '">' +
                     '<div class="report-sheet-no">' +
                     '<div class="report-sheet-icon">' + icon + '</div>' +
@@ -1104,6 +1105,7 @@
                 document.getElementById('loadingState').style.display = 'none';
                 document.getElementById('portalContent').style.display = 'block';
             } catch (err) {
+                console.error('Client portal failed to load:', err);
                 document.getElementById('loadingState').textContent = 'Could not load your account. Please try again shortly.';
             }
         }

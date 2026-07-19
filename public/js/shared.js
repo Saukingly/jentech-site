@@ -7,7 +7,7 @@
 const API = {
     base: '/api',
 
-    // wrote it with a colon so your auto-formatter cant join them
+    // Rewritten with a colon so your auto-formatter can't join them!
     get: async function(path) {
         const res = await fetch(this.base + path, { credentials: 'include' });
         if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -147,7 +147,7 @@ function renderNavbar(activePage = '') {
     const pages = [
         { href: '/pages/services/index.html', label: 'Services' },
         { href: '/pages/projects/index.html', label: 'Projects' },
-        { href: '/pages/team/index.html', label: 'Team' },
+        { href: '/pages/about/index.html', label: 'About' },
         { href: '/pages/contact/index.html', label: 'Contact' },
     ];
 
@@ -171,9 +171,8 @@ function renderNavbar(activePage = '') {
     <nav class="navbar" id="navbar">
       <div class="nav-inner">
         <a href="/" class="nav-logo">
-          <div class="logo-mark"><span>J</span></div>
           <div class="logo-wordmark">
-            <span class="logo-name">JENTECH</span>
+            <img src="/images/logos/jentech-wordmark-white.png" alt="Jentech" class="logo-wordmark-img">
             <span class="logo-tagline">Group of Companies</span>
           </div>
         </a>
@@ -199,9 +198,8 @@ function renderFooter() {
         <div class="footer-grid">
           <div>
             <a href="/" class="nav-logo" style="display:inline-flex;margin-bottom:4px;">
-              <div class="logo-mark">J</div>
               <div class="logo-wordmark">
-                <span class="logo-name">JENTECH</span>
+                <img src="/images/logos/jentech-wordmark-white.png" alt="Jentech" class="logo-wordmark-img">
                 <span class="logo-tagline">Consultants Group</span>
               </div>
             </a>
@@ -212,7 +210,7 @@ function renderFooter() {
               <h5>Pages</h5>
               <a href="/pages/services/">Services</a>
               <a href="/pages/projects/">Projects</a>
-              <a href="/pages/team/">Team</a>
+              <a href="/pages/about/index.html">About</a>
               <a href="/pages/blog/">Blog</a>
             </div>
             <div class="footer-col">
@@ -244,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initReveal();
 });
 
-//  reusable function to generate the Jacobs-style card
+// A reusable function to generate the Jacobs-style card
 function createCard(item, pageType) {
     return `
         <a href="/pages/${pageType}/${item.slug}.html" class="project-card js-animate">
