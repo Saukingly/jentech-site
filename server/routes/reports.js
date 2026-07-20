@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const db = require('../db');
+const { applyWatermark } = require('../utils/watermark');
 const { requireLogin, requireClientLogin } = require('../middleware/authMiddleware');
 
 // ---- File upload setup ----
@@ -66,6 +67,10 @@ router.post('/', requireLogin, (req, res, next) => {
     const normalizedEmail = client_email.trim().toLowerCase();
     // Prefer an actually-uploaded file; fall back to a manually typed URL if given.
     const finalFileUrl = req.file ? `/uploads/reports/${req.file.filename}` : (file_url || null);
+
+    if (req.file) {
+        await applyWatermark(req.file.path, req.file.mimetype);
+    }
 
     try {
         await db.query(

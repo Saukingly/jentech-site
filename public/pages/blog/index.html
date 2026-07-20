@@ -288,7 +288,7 @@
         function renderPosts(posts) {
             const grid = document.getElementById('blogGrid');
             grid.innerHTML = posts.map(p => `
-        <a href="/pages/blog/${p.slug}.html" class="blog-card">
+        <a href="/pages/blog/${p.slug}" class="blog-card">
           <div class="bc-img">
             ${p.image_url
               ? `<img src="${p.image_url}" alt="${p.title}" loading="lazy">`

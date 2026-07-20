@@ -301,6 +301,24 @@
     <script>
         document.getElementById('navbarMount').innerHTML = renderNavbar('Contact');
 
+        // Pre-select the service dropdown if arriving from a "Request this
+        // service" link (e.g. /pages/contact/index.html?service=Site%20Investigation)
+        (function prefillService() {
+            const params = new URLSearchParams(window.location.search);
+            const service = params.get('service');
+            if (!service) return;
+            const select = document.getElementById('service');
+            const match = Array.from(select.options).find(opt => opt.value === service);
+            if (match) {
+                select.value = service;
+                select.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                select.style.borderColor = 'var(--gold)';
+            }
+        })();
+
         const form = document.getElementById('contactForm');
         const submitBtn = document.getElementById('submitBtn');
 

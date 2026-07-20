@@ -48,6 +48,19 @@ app.use('/api/client-portal', require('./routes/clientPortal'));
 app.use('/api/clients', require('./routes/clients'));
 app.use('/api/reports', require('./routes/reports'));
 
+// ---- Clean detail-page URLs (e.g. /pages/services/civil-structural-engineering) ----
+// express.static above already handles any real file (index.html, CSS, JS),
+// so these only fire for an actual slug that doesn't match a file on disk.
+app.get('/pages/services/:slug', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/pages/services/detail.html'));
+});
+app.get('/pages/blog/:slug', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/pages/blog/detail.html'));
+});
+app.get('/pages/projects/:slug', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/pages/projects/detail.html'));
+});
+
 // ---- Catch-all: serve index.html for any unmatched route ----
 // Update this route at the bottom of server.js
 app.get('/{/*path}', (req, res) => {

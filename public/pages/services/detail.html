@@ -81,7 +81,7 @@
                 }
               </div>
               <div style="margin-top:40px;">
-                <a href="/pages/contact/index.html" class="btn btn-gold">Request this service</a>
+                <a href="/pages/contact/index.html?service=${encodeURIComponent(s.title)}" class="btn btn-gold">Request this service</a>
               </div>
             </div>
 
@@ -104,7 +104,7 @@
               <div class="sidebar-box">
                 <p class="sidebar-box-title">Get started</p>
                 <p style="font-size:14px;color:var(--gray-500);margin-bottom:20px;line-height:1.7;">Ready to discuss your ${s.title.toLowerCase()} needs? Our team is available in both Jamaica and the United States.</p>
-                <a href="/pages/contact/index.html" class="btn btn-gold" style="width:100%;justify-content:center;">Contact us now</a>
+                <a href="/pages/contact/index.html?service=${encodeURIComponent(s.title)}" class="btn btn-gold" style="width:100%;justify-content:center;">Contact us now</a>
               </div>
             </aside>
           </div>
@@ -134,7 +134,7 @@
         const grid    = document.getElementById('relatedGrid');
         section.style.display = 'block';
         grid.innerHTML = related.map(s => `
-          <a href="/pages/services/${s.slug}.html" class="card">
+          <a href="/pages/services/${s.slug}" class="card">
             <div class="card-body">
               <p class="card-tag">Service</p>
               <h3 class="card-title">${s.title}</h3>
