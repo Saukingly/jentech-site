@@ -51,7 +51,7 @@
         "ipaddr.js": "^1.9.1",
         "is-promise": "^4.0.0",
         "is-property": "^1.0.2",
-        "jimp": "^0.22.12",
+        "jimp": "^1.6.1",
         "long": "^5.3.2",
         "lru.min": "^1.1.4",
         "math-intrinsics": "^1.1.0",
