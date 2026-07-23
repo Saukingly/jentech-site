@@ -728,6 +728,39 @@
             line-height: 1.6;
             max-width: 400px;
         }
+        /* ---- Toast notifications (used by showToast() from shared.js) ---- */
+        
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--ink);
+            color: var(--white);
+            padding: 14px 24px;
+            font-family: var(--font-body);
+            font-size: 13.5px;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 9999;
+            max-width: 90vw;
+        }
+        
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .toast.error {
+            background: #c0392b;
+        }
+        
+        .toast.success {
+            background: #1e7e42;
+        }
     </style>
 </head>
 
@@ -736,9 +769,8 @@
     <!-- ===================== LOGIN SCREEN ===================== -->
     <div id="loginScreen">
         <div class="login-box">
-            <div class="login-logo">
-                <div class="login-logo-mark"><span></span>J</div>
-                <span class="login-logo-text">JENTECH ADMIN</span>
+            <div class="login-logo" style="flex-direction:column;align-items:flex-start;gap:6px;">
+                <img src="/images/logos/jentech-wordmark-white.png" alt="Jentech" style="height:28px;width:auto;">
             </div>
             <h1 class="login-title">Sign in</h1>
             <p class="login-sub">Access the Jentech content dashboard</p>
@@ -761,12 +793,9 @@
 
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <a href="/" class="sidebar-logo">
-                <div class="sidebar-logo-mark">J</div>
-                <div>
-                    <div class="sidebar-logo-text">JENTECH</div>
-                    <div class="sidebar-logo-sub">Admin Panel</div>
-                </div>
+            <a href="/" class="sidebar-logo" style="flex-direction:column;align-items:flex-start;gap:6px;">
+                <img src="/images/logos/jentech-wordmark-black.png" alt="Jentech" style="height:22px;width:auto;">
+                <div class="sidebar-logo-sub">Admin Panel</div>
             </a>
 
             <nav class="sidebar-nav">
@@ -1710,12 +1739,37 @@ document.getElementById('modalSaveBtn').addEventListener('click', async () => {
       // Built separately below as FormData (needs to carry an actual file).
     }
 
+    // ---- Required-field validation, before we bother the server ----
+    const missing = [];
+    if (['project', 'service', 'blog'].includes(editingType) && !g('f_title')) missing.push('Title');
+    if (editingType === 'team' && !g('f_name')) missing.push('Name');
+    if (editingType === 'client') {
+      if (!g('f_name')) missing.push('Name');
+      if (!g('f_email')) missing.push('Email');
+      if (!editingId && !g('f_password')) missing.push('Password');
+    }
+    if (editingType === 'staff') {
+      if (!g('f_name')) missing.push('Name');
+      if (!g('f_email')) missing.push('Email');
+      if (!editingId && !g('f_password')) missing.push('Password');
+    }
+    if (missing.length) {
+      showToast(`Please fill in: ${missing.join(', ')}`, 'error');
+      btn.textContent = 'Save'; btn.disabled = false;
+      return;
+    }
+
     let res;
     if (editingType === 'staff') {
       // Creation uses /auth/register (admin-only); edits use /auth/staff/:id —
       // these aren't symmetric like the other resources, so handle separately.
       res = editingId ? await API.put(`/auth/staff/${editingId}`, data) : await API.post('/auth/register', data);
     } else if (editingType === 'report') {
+      if (!g('f_client_email') || !g('f_category') || !g('f_title')) {
+        showToast('Please fill in client email, category, and title before sending.', 'error');
+        btn.textContent = 'Save'; btn.disabled = false;
+        return;
+      }
       if (!confirm('Send this report to the client now? They will see it in their portal immediately.')) { btn.textContent = 'Save'; btn.disabled = false; return; }
 
       const fd = new FormData();

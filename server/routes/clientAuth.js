@@ -69,9 +69,15 @@ router.get('/verify', async(req, res) => {
             'UPDATE clients SET email_verified = TRUE, verification_token = NULL, verification_expires = NULL WHERE id = ?', [client.id]
         );
 
-        req.session.clientId = client.id;
-        req.session.clientName = client.name;
-        res.redirect('/pages/client/portal.html');
+        req.session.regenerate((err) => {
+            if (err) {
+                console.error(err);
+                return res.redirect('/pages/client/login.html?verify=error');
+            }
+            req.session.clientId = client.id;
+            req.session.clientName = client.name;
+            res.redirect('/pages/client/portal.html');
+        });
     } catch (err) {
         console.error(err);
         res.redirect('/pages/client/login.html?verify=error');
@@ -128,9 +134,15 @@ router.post('/login', loginLimiter, async(req, res) => {
         if (!client.email_verified)
             return res.status(403).json({ error: 'Please verify your email before logging in.', needsVerification: true });
 
-        req.session.clientId = client.id;
-        req.session.clientName = client.name;
-        res.json({ success: true, name: client.name });
+        req.session.regenerate((err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Server error.' });
+            }
+            req.session.clientId = client.id;
+            req.session.clientName = client.name;
+            res.json({ success: true, name: client.name });
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error.' });

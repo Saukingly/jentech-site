@@ -57,9 +57,27 @@ router.get('/', requireLogin, async(req, res) => {
     }
 });
 
+// Shared authorization check: admins can act on anything; department-scoped
+// staff can only act on records belonging to their own department. Returns
+// true if allowed, or sends a 403 and returns false if not.
+async function canActOnSubmission(req, res, id) {
+    if (req.session.role === 'admin' || !req.session.department) return true;
+    const [rows] = await db.query('SELECT department FROM contact_submissions WHERE id = ?', [id]);
+    if (rows.length === 0) {
+        res.status(404).json({ error: 'Not found.' });
+        return false;
+    }
+    if (rows[0].department !== req.session.department) {
+        res.status(403).json({ error: 'You can only manage inquiries for your own department.' });
+        return false;
+    }
+    return true;
+}
+
 // PATCH /api/contact/:id/read  — mark as read
 router.patch('/:id/read', requireLogin, async(req, res) => {
     try {
+        if (!(await canActOnSubmission(req, res, req.params.id))) return;
         await db.query(
             'UPDATE contact_submissions SET read_status = true WHERE id = ?', [req.params.id]
         );
@@ -75,6 +93,7 @@ router.patch('/:id/status', requireLogin, async(req, res) => {
     if (!['pending', 'answered'].includes(status))
         return res.status(400).json({ error: 'Invalid status.' });
     try {
+        if (!(await canActOnSubmission(req, res, req.params.id))) return;
         await db.query('UPDATE contact_submissions SET status = ? WHERE id = ?', [status, req.params.id]);
         res.json({ success: true });
     } catch (err) {
@@ -85,6 +104,7 @@ router.patch('/:id/status', requireLogin, async(req, res) => {
 // DELETE /api/contact/:id
 router.delete('/:id', requireLogin, async(req, res) => {
     try {
+        if (!(await canActOnSubmission(req, res, req.params.id))) return;
         await db.query('DELETE FROM contact_submissions WHERE id = ?', [req.params.id]);
         res.json({ success: true });
     } catch (err) {

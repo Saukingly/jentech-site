@@ -14,6 +14,12 @@
     <link rel="stylesheet" href="/css/home.css">
 
     <style>
+        /* Safety net: guarantees the hero glow/pulse effects (like the
+           office-dot pulse) are never clipped, even if an older cached
+           copy of layout.css or home.css still has overflow:hidden
+           on .hero. The decorative background circles/lines stay
+           contained by .hero-bg-decor's own overflow:hidden instead. */
+        
         .hero {
             overflow: visible;
         }
@@ -57,6 +63,7 @@
                 <a href="/pages/services/index.html" class="nav-link">Services</a>
                 <a href="/pages/projects/index.html" class="nav-link">Projects</a>
                 <a href="/pages/about/index.html" class="nav-link">About</a>
+                <a href="/pages/blog/index.html" class="nav-link">Blog</a>
                 <a href="/pages/contact/index.html" class="nav-link">Contact</a>
                 <a href="/pages/admin/login.html" class="nav-link">Admin Portal</a>
                 <a href="/pages/client/login.html" class="nav-contact">Client Login</a>
@@ -71,6 +78,7 @@
         <a href="/pages/services/index.html">Services</a>
         <a href="/pages/projects/index.html">Projects</a>
         <a href="/pages/about/index.html">About</a>
+        <a href="/pages/blog/index.html">Blog</a>
         <a href="/pages/contact/index.html">Contact</a>
         <a href="/pages/client/login.html" class="m-contact">Client Login</a>
     </div>

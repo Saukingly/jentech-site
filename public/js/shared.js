@@ -148,6 +148,7 @@ function renderNavbar(activePage = '') {
         { href: '/pages/services/index.html', label: 'Services' },
         { href: '/pages/projects/index.html', label: 'Projects' },
         { href: '/pages/about/index.html', label: 'About' },
+        { href: '/pages/blog/index.html', label: 'Blog' },
         { href: '/pages/contact/index.html', label: 'Contact' },
     ];
 

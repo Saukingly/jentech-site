@@ -93,9 +93,13 @@ router.post('/', requireLogin, (req, res, next) => {
 // DELETE /api/reports/:id — staff
 router.delete('/:id', requireLogin, async(req, res) => {
     try {
-        const [rows] = await db.query('SELECT file_url FROM reports WHERE id = ?', [req.params.id]);
+        const [rows] = await db.query('SELECT file_url, department FROM reports WHERE id = ?', [req.params.id]);
+        if (rows.length === 0) return res.status(404).json({ error: 'Not found.' });
+        if (req.session.role !== 'admin' && req.session.department && rows[0].department !== req.session.department) {
+            return res.status(403).json({ error: 'You can only manage reports for your own department.' });
+        }
         await db.query('DELETE FROM reports WHERE id = ?', [req.params.id]);
-        if (rows.length && rows[0].file_url && rows[0].file_url.startsWith('/uploads/reports/')) {
+        if (rows[0].file_url && rows[0].file_url.startsWith('/uploads/reports/')) {
             const filePath = path.join(__dirname, '..', rows[0].file_url);
             fs.unlink(filePath, () => {}); // best-effort, ignore errors
         }

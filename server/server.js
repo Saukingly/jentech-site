@@ -11,8 +11,33 @@ const app = express();
 // so these routes always return a fresh 200 instead of a 304 with no body.
 app.set('etag', false);
 
-// ---- Middleware ----
-app.use(cors({ origin: true, credentials: true }));
+// ---- CORS: allowlist specific origins instead of reflecting any origin ----
+// Add your real production domain(s) to ALLOWED_ORIGINS in .env once deployed,
+// comma-separated, e.g. ALLOWED_ORIGINS=https://jentechgroup.com
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
+    .split(',').map(o => o.trim()).filter(Boolean);
+
+app.use(cors({
+    origin: (origin, callback) => {
+        // Allow same-origin/non-browser requests (no Origin header) and anything
+        // explicitly allowlisted. Anything else is rejected.
+        if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+        callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true
+}));
+
+// ---- Basic security headers (no extra dependency needed) ----
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    if (process.env.NODE_ENV === 'production') {
+        res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains');
+    }
+    next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', (req, res, next) => {
@@ -28,6 +53,7 @@ app.use(session({
     cookie: {
         secure: process.env.NODE_ENV === 'production', // true once deployed behind HTTPS
         httpOnly: true,
+        sameSite: 'lax',
         maxAge: 1000 * 60 * 60 * 8 // 8 hours
     }
 }));
@@ -70,5 +96,5 @@ app.get('/{/*path}', (req, res) => {
 // ---- Start server ----
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Jentech server running at http://localhost:${PORT}`);
+    console.log(`Jentech running at http://localhost:${PORT}`);
 });

@@ -21,13 +21,20 @@ router.post('/login', loginLimiter, async(req, res) => {
         if (!match)
             return res.status(401).json({ error: 'Invalid email or password.' });
 
-        // Save session
-        req.session.userId = user.id;
-        req.session.name = user.name;
-        req.session.role = user.role;
-        req.session.department = user.department || null;
-
-        res.json({ success: true, name: user.name, role: user.role, department: user.department || null });
+        // Regenerate the session ID on login so a session ID issued before
+        // authentication can never become a valid authenticated session
+        // (session fixation protection).
+        req.session.regenerate((err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: 'Server error.' });
+            }
+            req.session.userId = user.id;
+            req.session.name = user.name;
+            req.session.role = user.role;
+            req.session.department = user.department || null;
+            res.json({ success: true, name: user.name, role: user.role, department: user.department || null });
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error.' });
