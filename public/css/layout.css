@@ -301,6 +301,7 @@
     border-radius: 50%;
     background: var(--gold);
     flex-shrink: 0;
+    margin-left: 10px;
 }
 
 .hero-office-dot::after {
