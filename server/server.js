@@ -58,6 +58,32 @@ app.use(session({
     }
 }));
 
+// ---- Admin subdomain isolation ----
+// Set ADMIN_HOSTNAME in .env once you have a real domain (e.g.
+// ADMIN_HOSTNAME=admin.jentechgroup.com) to move the admin panel off your
+// main site entirely: it becomes reachable ONLY at that subdomain, and
+// completely unreachable (404) from your main domain. Leave it unset for
+// local development — this whole block does nothing until it's configured,
+// so it can't break anything you're testing locally right now.
+const ADMIN_HOSTNAME = process.env.ADMIN_HOSTNAME;
+if (ADMIN_HOSTNAME) {
+    app.use((req, res, next) => {
+        const isAdminPath = req.path.startsWith('/pages/admin');
+        const isSharedAsset = req.path.startsWith('/css') || req.path.startsWith('/js') ||
+            req.path.startsWith('/images') || req.path.startsWith('/api') || req.path === '/favicon.ico';
+
+        if (req.hostname === ADMIN_HOSTNAME) {
+            // On the admin subdomain: only admin pages, shared assets, and the API are reachable.
+            if (isAdminPath || isSharedAsset) return next();
+            return res.redirect('/pages/admin/login.html');
+        } else {
+            // On the main domain: the admin panel no longer exists here at all.
+            if (isAdminPath) return res.status(404).send('Not found');
+            return next();
+        }
+    });
+}
+
 // ---- Serve frontend files ----
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
