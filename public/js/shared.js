@@ -3,6 +3,41 @@
    Navbar, toast, scroll reveal, API helper
    ===================================================== */
 
+// ---- Session-expiry handling ----
+// A 401 from any protected endpoint means the session timed out from
+// inactivity (login endpoints are excluded below since a wrong password
+// also returns 401 and that's a different, expected case). Shows a clear
+// message instead of the request just silently failing, then redirects to
+// the right login page for whichever app (admin/client) the person is on.
+let sessionExpiredShown = false;
+
+function isLoginEndpoint(path) {
+    return path === '/auth/login' || path === '/client-auth/login' ||
+        path === '/auth/register' || path === '/client-auth/register';
+}
+
+function handleSessionExpired() {
+    if (sessionExpiredShown) return;
+    const onAdmin = window.location.pathname.startsWith('/pages/admin');
+    const onClient = window.location.pathname.startsWith('/pages/client');
+    if (!onAdmin && !onClient) return; // not on a page with a login-gated session
+    if (window.location.pathname.endsWith('login.html')) return; // already on login
+
+    sessionExpiredShown = true;
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,22,40,0.75);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;';
+    overlay.innerHTML = `
+    <div style="background:#fff;max-width:380px;width:100%;padding:32px;text-align:center;border-top:3px solid #c8912a;">
+      <div style="font-size:16px;font-weight:700;color:#0a1628;margin-bottom:10px;">You've been signed out</div>
+      <div style="font-size:14px;color:#666;line-height:1.6;">Your session ended due to inactivity. Redirecting you to log in again…</div>
+    </div>`;
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        window.location.href = onAdmin ? '/pages/admin/login.html' : '/pages/client/login.html';
+    }, 2200);
+}
+
 // ---- API Helper ----
 const API = {
     base: '/api',
@@ -10,6 +45,7 @@ const API = {
     // Rewritten with a colon so your auto-formatter can't join them!
     get: async function(path) {
         const res = await fetch(this.base + path, { credentials: 'include' });
+        if (res.status === 401 && !isLoginEndpoint(path)) handleSessionExpired();
         if (!res.ok) throw new Error(`API error ${res.status}`);
         return res.json();
     },
@@ -21,6 +57,7 @@ const API = {
             credentials: 'include',
             body: JSON.stringify(data)
         });
+        if (res.status === 401 && !isLoginEndpoint(path)) handleSessionExpired();
         return res.json();
     },
 
@@ -31,6 +68,7 @@ const API = {
             credentials: 'include',
             body: JSON.stringify(data)
         });
+        if (res.status === 401 && !isLoginEndpoint(path)) handleSessionExpired();
         return res.json();
     },
 
@@ -39,6 +77,7 @@ const API = {
             method: 'DELETE',
             credentials: 'include'
         });
+        if (res.status === 401 && !isLoginEndpoint(path)) handleSessionExpired();
         return res.json();
     },
 
@@ -49,6 +88,7 @@ const API = {
             credentials: 'include',
             body: JSON.stringify(data)
         });
+        if (res.status === 401 && !isLoginEndpoint(path)) handleSessionExpired();
         return res.json();
     }
 };

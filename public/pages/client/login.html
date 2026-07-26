@@ -191,13 +191,18 @@
                                 <input class="form-control" type="tel" id="suPhone" autocomplete="tel">
                             </div>
                         </div>
+                        <div class="form-group" style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true">
+                            <label for="suWebsite">Leave this field empty</label>
+                            <input type="text" id="suWebsite" name="website" tabindex="-1" autocomplete="off">
+                        </div>
                         <div class="form-group">
                             <label class="form-label" for="suPassword">Password <span style="color:var(--gold);">*</span></label>
-                            <input class="form-control" type="password" id="suPassword" required minlength="6" autocomplete="new-password">
+                            <input class="form-control" type="password" id="suPassword" required minlength="8" autocomplete="new-password">
+                            <div style="font-size:11.5px;color:var(--gray-500);margin-top:6px;">At least 8 characters, including a letter and a number.</div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="suPasswordConfirm">Confirm Password <span style="color:var(--gold);">*</span></label>
-                            <input class="form-control" type="password" id="suPasswordConfirm" required minlength="6" autocomplete="new-password">
+                            <input class="form-control" type="password" id="suPasswordConfirm" required minlength="8" autocomplete="new-password">
                         </div>
                         <button type="submit" class="btn btn-gold form-submit" id="signupBtn">Create account →</button>
                         <div id="signupError" class="error-msg"></div>
@@ -304,6 +309,7 @@
             const phone = document.getElementById('suPhone').value.trim();
             const password = document.getElementById('suPassword').value;
             const passwordConfirm = document.getElementById('suPasswordConfirm').value;
+            const website = document.getElementById('suWebsite').value;
             const errEl = document.getElementById('signupError');
             const okEl = document.getElementById('signupSuccess');
             const btn = document.getElementById('signupBtn');
@@ -324,7 +330,8 @@
                     email,
                     password,
                     company,
-                    phone
+                    phone,
+                    website
                 });
                 if (res.success) {
                     okEl.textContent = 'Account created! Check your email (' + email + ') for a verification link before logging in.';

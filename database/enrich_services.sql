@@ -1,8 +1,4 @@
--- Run this after update_services.sql has already been run.
--- Adds two details from Jentech's real services list that weren't fully
--- captured yet: investigating potential SOURCES of construction materials
--- (not just testing samples already collected), and QC systems/monitoring
--- as an ongoing service rather than a one-off test.
+
 USE jentech_db;
 
 UPDATE services

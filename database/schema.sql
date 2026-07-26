@@ -87,7 +87,7 @@ CREATE TABLE contact_submissions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Seed: default admin account (password: Admin1234!)
+-- Seed: default admin account 
 INSERT INTO users (name, email, password, role)
 VALUES (
   'Jentech Admin',

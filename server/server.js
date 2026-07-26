@@ -1,8 +1,10 @@
 const express = require('express');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
+const db = require('./db');
 
 const app = express();
 
@@ -46,15 +48,33 @@ app.use('/api', (req, res, next) => {
 });
 
 // ---- Sessions ----
+// Stored in MySQL (your existing database — no new infrastructure needed)
+// instead of server memory, so logins survive server restarts/redeploys.
+const sessionStore = new MySQLStore({
+    createDatabaseTable: true, // auto-creates the `sessions` table on first run
+    expiration: 1000 * 60 * 30, // matches cookie maxAge below
+    clearExpired: true,
+    checkExpirationInterval: 1000 * 60 * 15 // sweep expired sessions every 15 min
+}, db);
+sessionStore.onReady().catch((err) => console.error('Session store failed to connect:', err.message));
+
+// IDLE_TIMEOUT_MINUTES controls how long someone can sit inactive before
+// being signed out automatically. `rolling: true` resets this clock on every
+// request, so it never affects someone actively using the site — only
+// genuine inactivity triggers it.
+const IDLE_TIMEOUT_MINUTES = parseInt(process.env.IDLE_TIMEOUT_MINUTES) || 30;
+
 app.use(session({
+    store: sessionStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
         secure: process.env.NODE_ENV === 'production', // true once deployed behind HTTPS
         httpOnly: true,
         sameSite: 'lax',
-        maxAge: 1000 * 60 * 60 * 8 // 8 hours
+        maxAge: 1000 * 60 * IDLE_TIMEOUT_MINUTES
     }
 }));
 

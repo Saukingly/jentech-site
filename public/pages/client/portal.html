@@ -647,6 +647,9 @@
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 10.5h7.5m-7.5 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/></svg>                    My Requests
                     <span class="portal-nav-badge" id="pendingBadge" style="display:none;">0</span>
                 </a>
+                <a class="portal-nav-link" href="#" data-panel="settings">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 0 1 0 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.02-.397-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.216.456a1.125 1.125 0 0 1-1.37-.49l-1.296-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 0 1 0-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 0 1-.26-1.43l1.296-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.213-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>                    Settings
+                </a>
             </nav>
             <div class="portal-sidebar-footer">
                 <div class="portal-user">Logged in as<strong id="clientName">—</strong></div>
@@ -760,6 +763,65 @@
                         <div id="requestsEmpty" style="display:none;padding:32px 0;text-align:center;color:var(--gray-500);font-size:13.5px;">
                             You haven't submitted any requests yet.
                         </div>
+                    </div>
+                </div>
+
+                <!-- ===== SETTINGS PANEL ===== -->
+                <div class="portal-panel" id="panel-settings">
+                    <div class="panel-heading">
+                        <h1>Settings</h1>
+                        <p>Update your account details and password</p>
+                    </div>
+
+                    <div class="card" style="margin-bottom:20px;">
+                        <div class="card-title">Profile</div>
+                        <div class="card-subtitle">Your email address can't be changed here — contact us if it needs to be updated</div>
+                        <form id="profileForm">
+                            <div class="form-group">
+                                <label class="form-label" for="settingsEmail">Email Address</label>
+                                <input class="form-control" type="email" id="settingsEmail" disabled style="background:var(--off-white);color:var(--gray-500);">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="settingsName">Full Name</label>
+                                <input class="form-control" type="text" id="settingsName" required>
+                            </div>
+                            <div class="form-row two-col">
+                                <div class="form-group">
+                                    <label class="form-label" for="settingsCompany">Company</label>
+                                    <input class="form-control" type="text" id="settingsCompany">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="settingsPhone">Phone</label>
+                                    <input class="form-control" type="tel" id="settingsPhone">
+                                </div>
+                            </div>
+                            <div id="profileError" class="error-msg"></div>
+                            <div id="profileSuccess" class="success-msg"></div>
+                            <button type="submit" class="btn btn-gold" id="profileSaveBtn">Save changes</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-title">Change Password</div>
+                        <div class="card-subtitle">You'll need to enter your current password to confirm the change</div>
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label class="form-label" for="currentPassword">Current Password</label>
+                                <input class="form-control" type="password" id="currentPassword" required autocomplete="current-password">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="newPassword">New Password</label>
+                                <input class="form-control" type="password" id="newPassword" required minlength="8" autocomplete="new-password">
+                                <div style="font-size:11.5px;color:var(--gray-500);margin-top:6px;">At least 8 characters, including a letter and a number.</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="newPasswordConfirm">Confirm New Password</label>
+                                <input class="form-control" type="password" id="newPasswordConfirm" required minlength="8" autocomplete="new-password">
+                            </div>
+                            <div id="passwordError" class="error-msg"></div>
+                            <div id="passwordSuccess" class="success-msg"></div>
+                            <button type="submit" class="btn btn-gold" id="passwordSaveBtn">Update password</button>
+                        </form>
                     </div>
                 </div>
 
@@ -1062,12 +1124,18 @@
             document.getElementById('projClientCompany').textContent = me.company || me.name;
 
             try {
-                const [reports, requests] = await Promise.all([
+                const [reports, requests, profile] = await Promise.all([
                     API.get('/reports/mine'),
-                    API.get('/client-portal/my-requests')
+                    API.get('/client-portal/my-requests'),
+                    API.get('/client-portal/profile')
                 ]);
                 allReports = reports;
                 allRequests = requests;
+
+                document.getElementById('settingsEmail').value = profile.email || '';
+                document.getElementById('settingsName').value = profile.name || '';
+                document.getElementById('settingsCompany').value = profile.company || '';
+                document.getElementById('settingsPhone').value = profile.phone || '';
 
                 var counts = {
                     'Site Investigation Report': 0,
@@ -1170,6 +1238,91 @@
             }
             btn.disabled = false;
             btn.textContent = 'Send request';
+        });
+
+        // ---- Profile settings ----
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var errEl = document.getElementById('profileError');
+            var okEl = document.getElementById('profileSuccess');
+            var btn = document.getElementById('profileSaveBtn');
+            errEl.style.display = 'none';
+            okEl.style.display = 'none';
+
+            var name = document.getElementById('settingsName').value.trim();
+            var company = document.getElementById('settingsCompany').value.trim();
+            var phone = document.getElementById('settingsPhone').value.trim();
+
+            if (!name) {
+                errEl.textContent = 'Name is required.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Saving…';
+            try {
+                var res = await API.put('/client-portal/profile', {
+                    name: name,
+                    company: company,
+                    phone: phone
+                });
+                if (res.success) {
+                    okEl.textContent = 'Profile updated.';
+                    okEl.style.display = 'block';
+                    document.getElementById('clientName').textContent = name;
+                } else {
+                    errEl.textContent = res.error || 'Could not save changes.';
+                    errEl.style.display = 'block';
+                }
+            } catch (_) {
+                errEl.textContent = 'Server error. Please try again shortly.';
+                errEl.style.display = 'block';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Save changes';
+        });
+
+        // ---- Change password ----
+        document.getElementById('passwordForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var errEl = document.getElementById('passwordError');
+            var okEl = document.getElementById('passwordSuccess');
+            var btn = document.getElementById('passwordSaveBtn');
+            errEl.style.display = 'none';
+            okEl.style.display = 'none';
+
+            var currentPassword = document.getElementById('currentPassword').value;
+            var newPassword = document.getElementById('newPassword').value;
+            var newPasswordConfirm = document.getElementById('newPasswordConfirm').value;
+
+            if (newPassword !== newPasswordConfirm) {
+                errEl.textContent = 'New passwords do not match.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Updating…';
+            try {
+                var res = await API.put('/client-portal/password', {
+                    current_password: currentPassword,
+                    new_password: newPassword
+                });
+                if (res.success) {
+                    okEl.textContent = 'Password updated.';
+                    okEl.style.display = 'block';
+                    document.getElementById('passwordForm').reset();
+                } else {
+                    errEl.textContent = res.error || 'Could not update password.';
+                    errEl.style.display = 'block';
+                }
+            } catch (_) {
+                errEl.textContent = 'Server error. Please try again shortly.';
+                errEl.style.display = 'block';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Update password';
         });
 
         var sidebarBtn = document.getElementById('sidebarOpenBtn');

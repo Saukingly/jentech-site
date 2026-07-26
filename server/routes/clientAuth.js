@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const db = require('../db');
 const { sendVerificationEmail } = require('../utils/mailer');
+const { validatePassword } = require('../utils/validation');
 const { loginLimiter, signupLimiter } = require('../middleware/rateLimiter');
 
 function baseUrl(req) {
@@ -14,9 +15,19 @@ function baseUrl(req) {
 // Account is created unverified; they must click the emailed link before
 // they can log in.
 router.post('/register', signupLimiter, async(req, res) => {
-    const { name, email, password, company, phone } = req.body;
+    const { name, email, password, company, phone, website } = req.body;
+
+    // Honeypot: a real person never sees or fills this field (hidden via CSS
+    // on the form); a bot filling every field it finds will fill it. Pretend
+    // success without actually creating anything or sending an email, so
+    // the bot doesn't learn it was caught.
+    if (website) return res.json({ success: true, needsVerification: true });
+
     if (!name || !email || !password)
         return res.status(400).json({ error: 'Name, email and password are required.' });
+
+    const passwordError = validatePassword(password);
+    if (passwordError) return res.status(400).json({ error: passwordError });
 
     const normalizedEmail = email.trim().toLowerCase();
 
