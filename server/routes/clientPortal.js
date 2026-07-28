@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const db = require('../db');
 const { requireClientLogin } = require('../middleware/authMiddleware');
 const { validatePassword } = require('../utils/validation');
+const { encrypt, decrypt } = require('../utils/encryption');
 
 // Same service → department mapping used by the public contact form,
 // so requests submitted from the portal route the same way.
@@ -73,7 +74,9 @@ router.get('/profile', requireClientLogin, async(req, res) => {
             'SELECT name, email, company, phone FROM clients WHERE id = ?', [req.session.clientId]
         );
         if (rows.length === 0) return res.status(404).json({ error: 'Account not found.' });
-        res.json(rows[0]);
+        const profile = rows[0];
+        profile.phone = decrypt(profile.phone);
+        res.json(profile);
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error.' });
@@ -89,8 +92,9 @@ router.put('/profile', requireClientLogin, async(req, res) => {
         return res.status(400).json({ error: 'Name is required.' });
 
     try {
+        const encryptedPhone = phone ? encrypt(phone) : null;
         await db.query(
-            'UPDATE clients SET name = ?, company = ?, phone = ? WHERE id = ?', [name.trim(), company || null, phone || null, req.session.clientId]
+            'UPDATE clients SET name = ?, company = ?, phone = ? WHERE id = ?', [name.trim(), company || null, encryptedPhone, req.session.clientId]
         );
         req.session.clientName = name.trim();
         res.json({ success: true });

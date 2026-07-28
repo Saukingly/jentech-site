@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const db = require('../db');
 const { requireAdmin } = require('../middleware/authMiddleware');
+const { encrypt, decrypt } = require('../utils/encryption');
 
 // GET /api/clients — list all client accounts + their project (admin only)
 router.get('/', requireAdmin, async(req, res) => {
@@ -16,6 +17,7 @@ router.get('/', requireAdmin, async(req, res) => {
        LEFT JOIN client_projects cp ON cp.client_id = c.id
        ORDER BY c.created_at DESC`
         );
+        rows.forEach(r => { r.phone = decrypt(r.phone); });
         res.json(rows);
     } catch (err) {
         console.error(err);
@@ -46,8 +48,9 @@ router.post('/', requireAdmin, async(req, res) => {
 
     try {
         const hashed = await bcrypt.hash(password, 10);
+        const encryptedPhone = phone ? encrypt(phone) : null;
         const [result] = await db.query(
-            'INSERT INTO clients (name, email, password, company, phone) VALUES (?, ?, ?, ?, ?)', [name, email, hashed, company || null, phone || null]
+            'INSERT INTO clients (name, email, password, company, phone) VALUES (?, ?, ?, ?, ?)', [name, email, hashed, company || null, encryptedPhone]
         );
         await db.query(
             `INSERT INTO client_projects
@@ -86,14 +89,15 @@ router.put('/:id', requireAdmin, async(req, res) => {
     } = req.body;
 
     try {
+        const encryptedPhone = phone ? encrypt(phone) : null;
         if (password) {
             const hashed = await bcrypt.hash(password, 10);
             await db.query(
-                'UPDATE clients SET name=?, email=?, company=?, phone=?, password=? WHERE id=?', [name, email, company || null, phone || null, hashed, req.params.id]
+                'UPDATE clients SET name=?, email=?, company=?, phone=?, password=? WHERE id=?', [name, email, company || null, encryptedPhone, hashed, req.params.id]
             );
         } else {
             await db.query(
-                'UPDATE clients SET name=?, email=?, company=?, phone=? WHERE id=?', [name, email, company || null, phone || null, req.params.id]
+                'UPDATE clients SET name=?, email=?, company=?, phone=? WHERE id=?', [name, email, company || null, encryptedPhone, req.params.id]
             );
         }
 
@@ -129,7 +133,7 @@ router.put('/:id', requireAdmin, async(req, res) => {
     }
 });
 
-
+// DELETE /api/clients/:id (admin only)
 router.delete('/:id', requireAdmin, async(req, res) => {
     try {
         await db.query('DELETE FROM clients WHERE id = ?', [req.params.id]);

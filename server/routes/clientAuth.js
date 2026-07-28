@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const db = require('../db');
 const { sendVerificationEmail } = require('../utils/mailer');
 const { validatePassword } = require('../utils/validation');
+const { encrypt } = require('../utils/encryption');
 const { loginLimiter, signupLimiter } = require('../middleware/rateLimiter');
 
 function baseUrl(req) {
@@ -15,7 +16,7 @@ function baseUrl(req) {
 // Account is created unverified; they must click the emailed link before
 // they can log in.
 router.post('/register', signupLimiter, async(req, res) => {
-    const { name, email, password, company, phone, website } = req.body;
+    const { name, email, password, company, phone, website, privacy_accepted } = req.body;
 
     // Honeypot: a real person never sees or fills this field (hidden via CSS
     // on the form); a bot filling every field it finds will fill it. Pretend
@@ -26,6 +27,9 @@ router.post('/register', signupLimiter, async(req, res) => {
     if (!name || !email || !password)
         return res.status(400).json({ error: 'Name, email and password are required.' });
 
+    if (!privacy_accepted)
+        return res.status(400).json({ error: 'You must accept the Privacy Policy to create an account.' });
+
     const passwordError = validatePassword(password);
     if (passwordError) return res.status(400).json({ error: passwordError });
 
@@ -33,12 +37,13 @@ router.post('/register', signupLimiter, async(req, res) => {
 
     try {
         const hashed = await bcrypt.hash(password, 10);
+        const encryptedPhone = phone ? encrypt(phone) : null;
         const token = crypto.randomBytes(32).toString('hex');
         const expires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
         const [result] = await db.query(
-            `INSERT INTO clients (name, email, password, company, phone, email_verified, verification_token, verification_expires)
-       VALUES (?, ?, ?, ?, ?, FALSE, ?, ?)`, [name, normalizedEmail, hashed, company || null, phone || null, token, expires]
+            `INSERT INTO clients (name, email, password, company, phone, email_verified, verification_token, verification_expires, privacy_accepted_at)
+       VALUES (?, ?, ?, ?, ?, FALSE, ?, ?, NOW())`, [name, normalizedEmail, hashed, company || null, encryptedPhone, token, expires]
         );
 
         await db.query(

@@ -268,7 +268,7 @@ function renderFooter() {
         </div>
         <div class="footer-bottom">
           <p>© ${new Date().getFullYear()} The Jentech Group of Companies. All rights reserved.</p>
-          <p>Engineering Excellence Since 1974</p>
+          <p><a href="/pages/privacy/index.html" style="color:inherit;">Privacy Policy</a> &nbsp;·&nbsp; Engineering Excellence Since 1974</p>
         </div>
       </div>
     </footer>

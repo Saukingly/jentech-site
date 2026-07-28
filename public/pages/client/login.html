@@ -204,11 +204,17 @@
                             <label class="form-label" for="suPasswordConfirm">Confirm Password <span style="color:var(--gold);">*</span></label>
                             <input class="form-control" type="password" id="suPasswordConfirm" required minlength="8" autocomplete="new-password">
                         </div>
+                        <div class="form-group" style="display:flex;align-items:flex-start;gap:10px;">
+                            <input type="checkbox" id="suPrivacyAccepted" required style="margin-top:3px;flex-shrink:0;width:16px;height:16px;">
+                            <label for="suPrivacyAccepted" style="font-size:13px;color:var(--gray-500);line-height:1.5;">I have read and agree to the <a href="/pages/privacy/index.html" target="_blank" style="color:var(--gold);text-decoration:underline;">Privacy Policy</a>. <span style="color:var(--gold);">*</span></label>
+                        </div>
                         <button type="submit" class="btn btn-gold form-submit" id="signupBtn">Create account →</button>
                         <div id="signupError" class="error-msg"></div>
                         <div id="signupSuccess" class="success-msg"></div>
                     </form>
                 </div>
+
+                <p class="form-note">Are you a member of the Jentech team? <a href="/pages/admin/login.html" class="link-arrow" style="font-size:12px;">Staff login</a></p>
             </div>
         </div>
     </section>
@@ -310,6 +316,7 @@
             const password = document.getElementById('suPassword').value;
             const passwordConfirm = document.getElementById('suPasswordConfirm').value;
             const website = document.getElementById('suWebsite').value;
+            const privacyAccepted = document.getElementById('suPrivacyAccepted').checked;
             const errEl = document.getElementById('signupError');
             const okEl = document.getElementById('signupSuccess');
             const btn = document.getElementById('signupBtn');
@@ -318,6 +325,12 @@
 
             if (password !== passwordConfirm) {
                 errEl.textContent = 'Passwords do not match.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            if (!privacyAccepted) {
+                errEl.textContent = 'Please accept the Privacy Policy to continue.';
                 errEl.style.display = 'block';
                 return;
             }
@@ -331,7 +344,8 @@
                     password,
                     company,
                     phone,
-                    website
+                    website,
+                    privacy_accepted: privacyAccepted
                 });
                 if (res.success) {
                     okEl.textContent = 'Account created! Check your email (' + email + ') for a verification link before logging in.';
