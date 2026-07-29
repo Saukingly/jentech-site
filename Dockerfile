@@ -28,8 +28,4 @@ WORKDIR /app/server
 
 EXPOSE 3000
 
-<<<<<<< HEAD
 CMD ["node", "server.js"]
-=======
-CMD ["node", "server.js"]
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
