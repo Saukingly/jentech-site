@@ -16,19 +16,12 @@ app.set('etag', false);
 // ---- CORS: allowlist specific origins instead of reflecting any origin ----
 // Add your real production domain(s) to ALLOWED_ORIGINS in .env once deployed,
 // comma-separated, e.g. ALLOWED_ORIGINS=https://jentechgroup.com
-<<<<<<< HEAD
 // Scoped to /api only — static pages/CSS/JS never need CORS checks, and
 // keeping this scoped avoids it ever interfering with normal page loads.
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
     .split(',').map(o => o.trim()).filter(Boolean);
 
 app.use('/api', cors({
-=======
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:3000')
-    .split(',').map(o => o.trim()).filter(Boolean);
-
-app.use(cors({
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
     origin: (origin, callback) => {
         // Allow same-origin/non-browser requests (no Origin header) and anything
         // explicitly allowlisted. Anything else is rejected.
@@ -148,7 +141,6 @@ app.get('/{/*path}', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
-<<<<<<< HEAD
 // ---- Global error handler ----
 // Catches anything that gets thrown/passed to next() anywhere above
 // (including CORS rejections) and returns a clean response instead of a
@@ -163,11 +155,5 @@ app.use((err, req, res, next) => {
 // ---- Start server ----
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`🚀 Jentech server running at http://localhost:${PORT}`);
-=======
-// ---- Start server ----
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Jentech running at http://localhost:${PORT}`);
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
+    console.log(`Jentech server running at http://localhost:${PORT}`);
 });
