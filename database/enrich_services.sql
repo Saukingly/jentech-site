@@ -1,12 +1,8 @@
-<<<<<<< HEAD
 -- Run this after update_services.sql has already been run.
 -- Adds two details from Jentech's real services list that weren't fully
 -- captured yet: investigating potential SOURCES of construction materials
 -- (not just testing samples already collected), and QC systems/monitoring
 -- as an ongoing service rather than a one-off test.
-=======
-
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 USE jentech_db;
 
 UPDATE services
@@ -34,8 +30,4 @@ SET full_desc = '<p>Construction materials laboratories provide the technical ev
   </ul>
   <h2>Why it matters</h2>
   <p>Reliable materials testing helps ensure construction materials perform as expected under design conditions. Independent evaluation of material properties and construction quality gives engineers and project owners documentation for quality control and regulatory compliance.</p>'
-<<<<<<< HEAD
 WHERE slug = 'materials-soils-testing';
-=======
-WHERE slug = 'materials-soils-testing';
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
