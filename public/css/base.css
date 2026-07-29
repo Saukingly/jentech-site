@@ -361,11 +361,7 @@ body.cursor-hover .cursor-ring {
 }
 
 
-<<<<<<< HEAD
 /* Hide the main desktop links smoothly */
-=======
-/* Hide the main desktop links */
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 
 .navbar.nav-scrolled .nav-links {
     opacity: 0;
@@ -375,11 +371,7 @@ body.cursor-hover .cursor-ring {
 }
 
 
-<<<<<<< HEAD
 /* Force the 3-line hamburger menu to appear on desktop when scrolled */
-=======
-/* Force 3-line hamburger menu to appear on desktop when scrolled */
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 
 @media (min-width: 769px) {
     .navbar.nav-scrolled .nav-toggle {
@@ -397,11 +389,7 @@ body.cursor-hover .cursor-ring {
 }
 
 
-<<<<<<< HEAD
 /* Hamburger/close button is now styled entirely by pages.css
-=======
-/* Hamburger/close button is styled entirely by pages.css
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
    (loaded on every page) so it's pixel-identical everywhere. */
 
 
