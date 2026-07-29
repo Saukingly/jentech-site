@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team Member | Jentech Consultants</title>
+    <link rel="stylesheet" href="/css/pages.css" />
+    <style>
+        .member-hero {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+        
+        @media (min-width: 768px) {
+            .member-hero {
+                flex-direction: row;
+                gap: 48px;
+                align-items: flex-end;
+            }
+        }
+        
+        .member-avatar-large {
+            width: 140px;
+            height: 140px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 56px;
+            font-weight: 700;
+            color: var(--white);
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            overflow: hidden;
+        }
+        
+        @media (min-width: 768px) {
+            .member-avatar-large {
+                width: 180px;
+                height: 180px;
+                font-size: 72px;
+            }
+        }
+        
+        .member-avatar-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .member-hero-info {
+            flex: 1;
+        }
+        
+        .member-name {
+            font-family: var(--font-display);
+            font-size: clamp(32px, 6vw, 56px);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .member-role {
+            font-size: 16px;
+            color: var(--gold);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        
+        .member-office {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+        /* Contact pills */
+        
+        .contact-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        
+        .contact-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        
+        .contact-pill:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header" id="memberHero">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1 id="heroTitle">Loading…</h1>
+        <p id="heroSubtitle"></p>
+    </section>
+
+    <section class="section" style="padding-top:56px;">
+        <div class="container">
+            <a href="/pages/team/" class="back-link">← Back to team</a>
+
+            <div id="mainContent">
+                <div class="loading-wrap">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footerMount"></div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Team');
+        document.getElementById('footerMount').innerHTML = renderFooter();
+
+        async function loadMember() {
+            const slug = getSlugFromURL();
+            const main = document.getElementById('mainContent');
+
+            try {
+                const m = await API.get(`/team/${slug}`);
+
+                document.title = `${m.name} | Jentech Consultants`;
+                document.getElementById('heroTitle').textContent = m.name;
+                document.getElementById('heroSubtitle').textContent = [m.role, m.office].filter(Boolean).join(' · ');
+
+                // Main
+                main.innerHTML = `
+          <div class="member-hero" style="margin-bottom:48px;">
+            <div class="member-avatar-large">
+              ${m.image_url ? `<img src="${m.image_url}" alt="${m.name}">` : getInitials(m.name)}
+            </div>
+            <div class="member-hero-info">
+              <div class="contact-pills">
+                ${m.email ? `<a href="mailto:${m.email}" class="contact-pill">✉ ${m.email}</a>` : ''}
+                ${m.linkedin ? `<a href="${m.linkedin}" target="_blank" class="contact-pill">in LinkedIn</a>` : ''}
+                <a href="/pages/contact/index.html" class="contact-pill btn-gold" style="border-color:var(--gold);background:var(--gold);color:var(--white);">Get in touch →</a>
+              </div>
+            </div>
+          </div>
+          <div class="detail-layout">
+            <div data-reveal>
+              <div class="rich-content">
+                ${m.bio
+                  ? m.bio
+                  : `<h2>About ${m.name.split(' ')[0]}</h2>
+                     <p>${m.name} is a licensed engineer with the Jentech Consultants Group, bringing deep expertise in ${m.role?.toLowerCase() || 'civil engineering'} to projects across Jamaica and the Caribbean.</p>
+                     <p>As part of the Jentech team, they contribute to the firm's mission of delivering world-class engineering solutions grounded in local knowledge and international best practice.</p>
+                     <h2>Areas of expertise</h2>
+                     <ul>
+                       <li>${m.role || 'Civil Engineering'}</li>
+                       <li>Project delivery and technical leadership</li>
+                       <li>Client consulting and stakeholder management</li>
+                       <li>Site investigation and reporting</li>
+                     </ul>`
+                }
+              </div>
+            </div>
+
+            <aside class="detail-sidebar" data-reveal>
+              <div class="sidebar-box">
+                <p class="sidebar-box-title">Details</p>
+                <div class="sidebar-item"><span class="sidebar-label">Name</span><span class="sidebar-value">${m.name}</span></div>
+                ${m.role ? `<div class="sidebar-item"><span class="sidebar-label">Role</span><span class="sidebar-value">${m.role}</span></div>` : ''}
+                ${m.office ? `<div class="sidebar-item"><span class="sidebar-label">Office</span><span class="sidebar-value">${m.office}</span></div>` : ''}
+                <div class="sidebar-item"><span class="sidebar-label">Company</span><span class="sidebar-value">Jentech Group</span></div>
+              </div>
+              ${m.email ? `
+              <div class="sidebar-box">
+                <p class="sidebar-box-title">Contact</p>
+                <a href="mailto:${m.email}" class="btn btn-gold" style="width:100%;justify-content:center;">Send an email</a>
+              </div>` : ''}
+            </aside>
+          </div>
+        `;
+
+        initReveal();
+
+      } catch (err) {
+        document.getElementById('heroTitle').textContent = 'Team member not found';
+        document.getElementById('heroSubtitle').textContent = '';
+        main.innerHTML = `
+          <div class="empty-state">
+            <h3>Team member not found</h3>
+            <a href="/pages/team/" class="btn btn-gold" style="margin-top:24px;">View all team</a>
+          </div>`;
+      }
+    }
+
+    function getInitials(name) {
+      return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+    }
+
+    loadMember();
+    </script>
+</body>
+
+</html>

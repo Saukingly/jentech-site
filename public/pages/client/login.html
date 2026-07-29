@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Login | Jentech Group</title>
+    <link rel="stylesheet" href="/css/pages.css">
+    <style>
+        .auth-wrap {
+            max-width: 460px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: var(--white);
+            border: 1.5px solid var(--gray-100);
+            padding: 40px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 28px;
+            border-bottom: 1.5px solid var(--gray-100);
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 14px 0;
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-500);
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .auth-tab.active {
+            color: var(--navy);
+            border-bottom-color: var(--gold);
+        }
+
+        .auth-panel {
+            display: none;
+        }
+
+        .auth-panel.active {
+            display: block;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 480px) {
+            .form-row.two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--off-white);
+            border: 1.5px solid var(--gray-100);
+            padding: 13px 14px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-body);
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+        }
+
+        .form-submit {
+            width: 100%;
+            margin-top: 4px;
+            justify-content: center;
+        }
+
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .form-note {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 16px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .error-msg,
+        .success-msg {
+            font-size: 13px;
+            margin-top: 14px;
+            display: none;
+        }
+
+        .error-msg {
+            color: #c0392b;
+        }
+
+        .success-msg {
+            color: #1e7e42;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1>Client Portal</h1>
+        <p>Log in to track your project, or sign up for a new account.</p>
+    </section>
+
+    <section class="section">
+        <div class="auth-wrap">
+            <div class="form-card">
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" id="tabLogin">Log in</button>
+                    <button class="auth-tab" id="tabSignup">Sign up</button>
+                </div>
+
+                <!-- ===== LOGIN PANEL ===== -->
+                <div class="auth-panel active" id="panelLogin">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label class="form-label" for="loginEmail">Email Address</label>
+                            <input class="form-control" type="email" id="loginEmail" required autocomplete="username">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="loginPassword">Password</label>
+                            <input class="form-control" type="password" id="loginPassword" required autocomplete="current-password">
+                        </div>
+                        <button type="submit" class="btn btn-gold form-submit" id="loginBtn">Log in →</button>
+                        <div id="loginError" class="error-msg"></div>
+                    </form>
+                </div>
+
+                <!-- ===== SIGN UP PANEL ===== -->
+                <div class="auth-panel" id="panelSignup">
+                    <form id="signupForm">
+                        <div class="form-group">
+                            <label class="form-label" for="suName">Full Name <span style="color:var(--gold);">*</span></label>
+                            <input class="form-control" type="text" id="suName" required autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="suEmail">Email Address <span style="color:var(--gold);">*</span></label>
+                            <input class="form-control" type="email" id="suEmail" required autocomplete="username">
+                        </div>
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label" for="suCompany">Company</label>
+                                <input class="form-control" type="text" id="suCompany" autocomplete="organization">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="suPhone">Phone</label>
+                                <input class="form-control" type="tel" id="suPhone" autocomplete="tel">
+                            </div>
+                        </div>
+                        <div class="form-group" style="position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden;" aria-hidden="true">
+                            <label for="suWebsite">Leave this field empty</label>
+                            <input type="text" id="suWebsite" name="website" tabindex="-1" autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="suPassword">Password <span style="color:var(--gold);">*</span></label>
+                            <input class="form-control" type="password" id="suPassword" required minlength="8" autocomplete="new-password">
+                            <div style="font-size:11.5px;color:var(--gray-500);margin-top:6px;">At least 8 characters, including a letter and a number.</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="suPasswordConfirm">Confirm Password <span style="color:var(--gold);">*</span></label>
+                            <input class="form-control" type="password" id="suPasswordConfirm" required minlength="8" autocomplete="new-password">
+                        </div>
+                        <div class="form-group" style="display:flex;align-items:flex-start;gap:10px;">
+                            <input type="checkbox" id="suPrivacyAccepted" required style="margin-top:3px;flex-shrink:0;width:16px;height:16px;">
+                            <label for="suPrivacyAccepted" style="font-size:13px;color:var(--gray-500);line-height:1.5;">I have read and agree to the <a href="/pages/privacy/index.html" target="_blank" style="color:var(--gold);text-decoration:underline;">Privacy Policy</a>. <span style="color:var(--gold);">*</span></label>
+                        </div>
+                        <button type="submit" class="btn btn-gold form-submit" id="signupBtn">Create account →</button>
+                        <div id="signupError" class="error-msg"></div>
+                        <div id="signupSuccess" class="success-msg"></div>
+                    </form>
+                </div>
+
+                <p class="form-note">Are you a member of the Jentech team? <a href="/pages/admin/login.html" class="link-arrow" style="font-size:12px;">Staff login</a></p>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        // ---- Redirect straight to the portal if already logged in ----
+        (async function checkAuth() {
+            try {
+                const me = await API.get('/client-auth/me');
+                if (me.loggedIn) window.location.href = '/pages/client/portal.html';
+            } catch (_) {}
+        })();
+
+        // ---- Show a message if arriving from a verification link ----
+        (function checkVerifyParam() {
+            const params = new URLSearchParams(window.location.search);
+            const verify = params.get('verify');
+            if (!verify) return;
+            const errEl = document.getElementById('loginError');
+            if (verify === 'expired') errEl.textContent = 'That verification link has expired. Enter your email below and click "Resend verification email".';
+            else if (verify === 'missing') errEl.textContent = 'That verification link looks incomplete. Please use the link from your email again.';
+            else errEl.textContent = 'Something went wrong verifying your email. Please try again.';
+            errEl.style.display = 'block';
+        })();
+
+        // ---- Tab switching ----
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(tab === 'login' ? 'tabLogin' : 'tabSignup').classList.add('active');
+            document.getElementById(tab === 'login' ? 'panelLogin' : 'panelSignup').classList.add('active');
+        }
+        document.getElementById('tabLogin').addEventListener('click', () => switchTab('login'));
+        document.getElementById('tabSignup').addEventListener('click', () => switchTab('signup'));
+
+        // ---- Resend verification ----
+        async function resendVerification(email) {
+            const errEl = document.getElementById('loginError');
+            try {
+                await API.post('/client-auth/resend-verification', { email });
+                errEl.textContent = 'If that email needs verifying, a new link has been sent — check your inbox.';
+                errEl.style.display = 'block';
+            } catch (_) {
+                errEl.textContent = 'Could not resend right now. Please try again shortly.';
+                errEl.style.display = 'block';
+            }
+        }
+
+        // ---- Login ----
+        document.getElementById('loginForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errEl = document.getElementById('loginError');
+            const btn = document.getElementById('loginBtn');
+            errEl.style.display = 'none';
+            errEl.innerHTML = '';
+            btn.disabled = true;
+            btn.textContent = 'Logging in…';
+
+            try {
+                const res = await API.post('/client-auth/login', { email, password });
+                if (res.success) {
+                    window.location.href = '/pages/client/portal.html';
+                    return;
+                } else if (res.needsVerification) {
+                    errEl.innerHTML = (res.error || 'Please verify your email before logging in.') +
+                        ' <a href="#" id="resendLink" style="color:inherit;text-decoration:underline;">Resend verification email</a>';
+                    errEl.style.display = 'block';
+                    document.getElementById('resendLink').addEventListener('click', function(ev) {
+                        ev.preventDefault();
+                        resendVerification(email);
+                    });
+                } else {
+                    errEl.textContent = res.error || 'Invalid email or password.';
+                    errEl.style.display = 'block';
+                }
+            } catch (_) {
+                errEl.textContent = 'Server error. Is the server running?';
+                errEl.style.display = 'block';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Log in →';
+        });
+
+        // ---- Sign up ----
+        document.getElementById('signupForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const name = document.getElementById('suName').value.trim();
+            const email = document.getElementById('suEmail').value.trim();
+            const company = document.getElementById('suCompany').value.trim();
+            const phone = document.getElementById('suPhone').value.trim();
+            const password = document.getElementById('suPassword').value;
+            const passwordConfirm = document.getElementById('suPasswordConfirm').value;
+            const website = document.getElementById('suWebsite').value;
+            const privacyAccepted = document.getElementById('suPrivacyAccepted').checked;
+            const errEl = document.getElementById('signupError');
+            const okEl = document.getElementById('signupSuccess');
+            const btn = document.getElementById('signupBtn');
+            errEl.style.display = 'none';
+            okEl.style.display = 'none';
+
+            if (password !== passwordConfirm) {
+                errEl.textContent = 'Passwords do not match.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            if (!privacyAccepted) {
+                errEl.textContent = 'Please accept the Privacy Policy to continue.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Creating account…';
+            try {
+                const res = await API.post('/client-auth/register', { name, email, password, company, phone, website, privacy_accepted: privacyAccepted });
+                if (res.success) {
+                    okEl.textContent = 'Account created! Check your email (' + email + ') for a verification link before logging in.';
+                    okEl.style.display = 'block';
+                    document.getElementById('signupForm').reset();
+                } else {
+                    errEl.textContent = res.error || 'Could not create account.';
+                    errEl.style.display = 'block';
+                }
+            } catch (_) {
+                errEl.textContent = 'Server error. Is the server running?';
+                errEl.style.display = 'block';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Create account →';
+        });
+
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Client Login');
+        document.body.insertAdjacentHTML('beforeend', renderFooter());
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog | Jentech Consultants</title>
+    <link rel="stylesheet" href="/css/pages.css" />
+    <style>
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2px;
+        }
+        
+        @media (min-width: 700px) {
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .blog-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        .blog-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: var(--off-white);
+            overflow: hidden;
+            transition: background 0.3s;
+            position: relative;
+        }
+        
+        .blog-card:hover {
+            background: var(--navy);
+        }
+        
+        .blog-card:hover .bc-title {
+            color: var(--white);
+        }
+        
+        .blog-card:hover .bc-excerpt {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .blog-card:hover .bc-date {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .blog-card:hover .bc-arrow {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .bc-img {
+            height: 200px;
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @media (min-width: 768px) {
+            .bc-img {
+                height: 220px;
+            }
+        }
+        
+        .bc-img-inner {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(200, 145, 42, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 145, 42, 0.07) 1px, transparent 1px);
+            background-size: 24px 24px;
+            transition: transform 0.6s;
+        }
+        
+        .blog-card:hover .bc-img-inner {
+            transform: scale(1.04);
+        }
+        
+        .bc-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s;
+        }
+        
+        .blog-card:hover .bc-img img {
+            transform: scale(1.04);
+        }
+        
+        .bc-body {
+            padding: 24px;
+            padding-bottom: 52px;
+        }
+        
+        @media (min-width: 768px) {
+            .bc-body {
+                padding: 28px;
+                padding-bottom: 56px;
+            }
+        }
+        
+        .bc-cat {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+        
+        .bc-cat::before {
+            content: '';
+            width: 14px;
+            height: 1px;
+            background: var(--gold);
+        }
+        
+        .bc-title {
+            font-family: var(--font-display);
+            font-size: clamp(18px, 2.5vw, 22px);
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-bottom: 10px;
+            transition: color 0.2s;
+        }
+        
+        .bc-excerpt {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.7;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+        }
+        
+        .bc-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .bc-date {
+            font-size: 11px;
+            color: var(--gray-300);
+            transition: color 0.2s;
+        }
+        
+        .bc-author {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-500);
+            transition: color 0.2s;
+        }
+        
+        .blog-card:hover .bc-author {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .bc-arrow {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border: 1.5px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-300);
+            font-size: 13px;
+            transition: all 0.25s;
+        }
+        /* Category filters */
+        
+        .cat-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .cat-btn {
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: var(--off-white);
+            color: var(--gray-500);
+            border: 1.5px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-body);
+        }
+        
+        .cat-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .cat-btn.active {
+            background: var(--navy);
+            color: var(--white);
+            border-color: var(--navy);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1>The Jentech Blog</h1>
+        <p>Industry updates, project milestones, and engineering insights from our team across Jamaica and the United States.</p>
+    </section>
+
+    <div class="filter-bar" id="catBar">
+        <button class="filter-btn active" data-cat="all">All posts</button>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="blog-grid" id="blogGrid" data-stagger>
+                <div class="loading-wrap" style="grid-column:1/-1;">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footerMount"></div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Blog');
+        document.getElementById('footerMount').innerHTML = renderFooter();
+
+        let allPosts = [];
+
+        async function loadBlog() {
+            const grid = document.getElementById('blogGrid');
+            const catBar = document.getElementById('catBar');
+            try {
+                allPosts = await API.get('/blog');
+                if (!allPosts.length) {
+                    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>No posts yet</h3><p>Check back soon for updates.</p></div>';
+                    return;
+                }
+
+                // Build category buttons
+                const cats = [...new Set(allPosts.map(p => p.category).filter(Boolean))];
+                cats.forEach(cat => {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.dataset.cat = cat;
+                    btn.textContent = cat;
+                    catBar.appendChild(btn);
+                });
+
+                renderPosts(allPosts);
+
+                catBar.addEventListener('click', e => {
+                    if (!e.target.classList.contains('filter-btn')) return;
+                    document.querySelectorAll('#catBar .filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const cat = e.target.dataset.cat;
+                    const filtered = cat === 'all' ? allPosts : allPosts.filter(p => p.category === cat);
+                    renderPosts(filtered);
+                });
+
+            } catch (err) {
+                grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>Could not load posts</h3></div>';
+            }
+        }
+
+        function renderPosts(posts) {
+            const grid = document.getElementById('blogGrid');
+            grid.innerHTML = posts.map(p => `
+        <a href="/pages/blog/${p.slug}" class="blog-card">
+          <div class="bc-img">
+            ${p.image_url
+              ? `<img src="${p.image_url}" alt="${p.title}" loading="lazy">`
+              : `<div class="bc-img-inner"></div>`
+            }
+          </div>
+          <div class="bc-body">
+            <p class="bc-cat">${p.category || 'News'}</p>
+            <h3 class="bc-title">${p.title}</h3>
+            ${p.excerpt ? `<p class="bc-excerpt">${p.excerpt}</p>` : ''}
+            <div class="bc-meta">
+              <span class="bc-date">${formatDate(p.published_at)}</span>
+              ${p.author_name ? `<span style="color:var(--gray-300);font-size:11px;">·</span><span class="bc-author">${p.author_name}</span>` : ''}
+            </div>
+          </div>
+          <div class="bc-arrow">→</div>
+        </a>
+      `).join('');
+      initReveal();
+    }
+
+    loadBlog();
+    </script>
+</body>
+
+</html>

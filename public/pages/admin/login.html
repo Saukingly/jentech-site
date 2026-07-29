@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Login | Jentech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --white: #FFFFFF;
+            --paper: #FBF9F5;
+            --ink: #1C1815;
+            --ink-soft: #5B5650;
+            --line: #E7E1D6;
+            --gold: #E8590C;
+            --gold-dark: #B8430A;
+            --gold-tint: #FDE9D9;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-body);
+        }
+
+        .login-card {
+            background: var(--white);
+            border: 1px solid var(--line);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .login-logo-mark {
+            width: 38px;
+            height: 38px;
+            background: var(--gold);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .login-title {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .login-sub {
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-soft);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--ink-soft);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--paper);
+            border: 1.5px solid var(--line);
+            padding: 12px;
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: var(--gold);
+            color: var(--white);
+            border: none;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 6px;
+        }
+
+        .btn-submit:hover {
+            background: var(--gold-dark);
+        }
+
+        .error-msg {
+            color: #c0392b;
+            font-size: 13px;
+            margin-top: 14px;
+            display: none;
+        }
+
+        .login-note {
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .login-note a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+        <div class="login-logo" style="flex-direction:column;align-items:flex-start;gap:6px;">
+            <img src="/images/logos/jentech-wordmark-black.png" alt="Jentech" style="height:26px;width:auto;">
+            <div class="login-sub">Staff Sign In</div>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-control" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="password" class="form-control" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-submit">Login</button>
+            <div id="errorMsg" class="error-msg"></div>
+        </form>
+
+        <p class="login-note">Staff accounts are created by an administrator.<br>Contact your admin if you need access.</p>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async(e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.style.display = 'none';
+
+            try {
+                const res = await API.post('/auth/login', { email, password });
+                if (res.success) {
+                    window.location.href = '/pages/admin/index.html';
+                } else {
+                    errorMsg.textContent = res.error || 'Invalid credentials.';
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                errorMsg.textContent = 'Connection failure to authentication server.';
+                errorMsg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jentech Group of Companies</title>
+
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/pages.css">
+    <link rel="stylesheet" href="/css/sections.css">
+    <link rel="stylesheet" href="/css/home.css">
+
+    <style>
+        /* Safety net: guarantees the hero glow/pulse effects (like the
+           office-dot pulse) are never clipped, even if an older cached
+           copy of layout.css or home.css still has overflow:hidden
+           on .hero. The decorative background circles/lines stay
+           contained by .hero-bg-decor's own overflow:hidden instead. */
+        
+        .hero {
+            overflow: visible;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-loader">
+        <div class="loader-inner">
+            <div class="loader-logo"><img src="/images/logos/jentech-wordmark-white.png" alt="Jentech" style="height:56px;width:auto;display:block;"></div>
+            <div class="loader-bar-wrap">
+                <div class="loader-bar"></div>
+            </div>
+            <div class="loader-text">Solving Problems...</div>
+        </div>
+    </div>
+
+    <div class="cursor"></div>
+    <div class="cursor-ring"></div>
+
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <div class="section-indicator">
+        <button class="indicator-dot active" data-target="#home"></button>
+        <button class="indicator-dot" data-target="#stats"></button>
+        <button class="indicator-dot" data-target="#services"></button>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <div class="logo-wordmark">
+                    <img src="/images/logos/jentech-wordmark-white.png" alt="Jentech" class="logo-wordmark-img">
+                    <span class="logo-tagline">Group of Companies</span>
+                </div>
+            </a>
+
+            <div class="nav-links">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="/pages/services/index.html" class="nav-link">Services</a>
+                <a href="/pages/projects/index.html" class="nav-link">Projects</a>
+                <a href="/pages/about/index.html" class="nav-link">About</a>
+                <a href="/pages/blog/index.html" class="nav-link">Blog</a>
+                <a href="/pages/contact/index.html" class="nav-link">Contact</a>
+                <a href="/pages/client/login.html" class="nav-contact">Client Login</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/pages/services/index.html">Services</a>
+        <a href="/pages/projects/index.html">Projects</a>
+        <a href="/pages/about/index.html">About</a>
+        <a href="/pages/blog/index.html">Blog</a>
+        <a href="/pages/contact/index.html">Contact</a>
+        <a href="/pages/client/login.html" class="m-contact">Client Login</a>
+    </div>
+
+    <section class="hero" id="home">
+        <div class="hero-bg-decor">
+            <div class="hero-grid"></div>
+            <div class="hero-gradient"></div>
+            <div class="hero-accent-bar"></div>
+
+            <div class="hero-lines">
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+                <div class="hero-line"></div>
+            </div>
+
+            <div class="hero-circle"></div>
+            <div class="hero-circle"></div>
+            <div class="hero-circle"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-overline" data-reveal="fade-down">
+                <span class="hero-overline-text">Civil & Structural Engineering</span>
+                <div class="hero-overline-line"></div>
+            </div>
+
+            <h1 class="hero-headline" data-reveal="fade-up">
+                Engineering the <em>Caribbean</em>
+            </h1>
+
+            <p class="hero-body" data-reveal="fade-up">
+                Comprehensive professional services in Civil, Structural, Geotechnical and Environmental Engineering, Project Management, and Site Investigation since 1974.
+            </p>
+
+            <div class="hero-actions" data-reveal="fade-up">
+                <a href="/pages/projects/index.html" class="btn btn-gold hover-target">View Projects</a>
+                <a href="/pages/services/index.html" class="btn btn-outline hover-target">Core Companies</a>
+            </div>
+
+            <div class="hero-offices" data-reveal="fade-up">
+                <div class="hero-office">
+                    <div class="hero-office-dot"></div> Jentech Consultants</div>
+                <div class="hero-office">
+                    <div class="hero-office-dot"></div> Geotech Exploration Services</div>
+                <div class="hero-office">
+                    <div class="hero-office-dot"></div> Jets Laboratories</div>
+            </div>
+        </div>
+
+        <div class="hero-scroll">
+            <div class="scroll-mouse">
+                <div class="scroll-mouse-dot"></div>
+            </div>
+            Scroll
+        </div>
+    </section>
+
+    <section class="stats-bar" id="stats">
+        <div class="stats-inner" data-stagger>
+            <div class="stat-item hover-target">
+                <div class="stat-num">50<span class="stat-unit">+</span></div>
+                <div class="stat-label">Years Experience</div>
+            </div>
+            <div class="stat-item hover-target">
+                <div class="stat-num">3<span class="stat-unit"></span></div>
+                <div class="stat-label">Inter-related Companies</div>
+            </div>
+            <div class="stat-item hover-target">
+                <div class="stat-num">100<span class="stat-unit">+</span></div>
+                <div class="stat-label">Major Projects</div>
+            </div>
+            <div class="stat-item hover-target">
+                <div class="stat-num">1<span class="stat-unit"></span></div>
+                <div class="stat-label">Integrated Approach</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section related-section" id="services">
+        <div class="container">
+            <div class="section-header" data-reveal="fade-up">
+                <div class="eyebrow">Solutions</div>
+                <h2 class="heading-lg">Core Companies</h2>
+            </div>
+
+            <div class="cards-grid services-grid" data-stagger>
+                <a href="/pages/services/index.html" class="card hover-target">
+                    <div class="card-logo-reveal">
+                        <img src="/images/logos/jentech-consultants-logo.jpg" alt="Jentech Consultants logo">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Design & Consulting</div>
+                        <h3 class="card-title">Jentech Consultants</h3>
+                        <p class="card-desc">Multi-disciplinary civil design, feasibility studies, and comprehensive structural engineering.</p>
+                        <div class="card-arrow">→</div>
+                    </div>
+                </a>
+
+                <a href="/pages/services/index.html" class="card hover-target">
+                    <div class="card-logo-reveal">
+                        <img src="/images/logos/geotech-exploration-logo.jpg" alt="Geotech Exploration Services logo">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Subsurface Testing</div>
+                        <h3 class="card-title">Geotech Exploration</h3>
+                        <p class="card-desc">Advanced field testing, drilling, rock coring, and deep geological investigations.</p>
+                        <div class="card-arrow">→</div>
+                    </div>
+                </a>
+
+                <a href="/pages/projects/index.html" class="card hover-target">
+                    <div class="card-logo-reveal">
+                        <img src="/images/logos/jets-laboratories-logo.jpg" alt="Jets Laboratories logo">
+                    </div>
+                    <div class="card-body">
+                        <div class="card-tag">Quality Control</div>
+                        <h3 class="card-title">Jets Laboratories</h3>
+                        <p class="card-desc">Rigorous soils and materials testing, structural analysis, and meticulous field monitoring.</p>
+                        <div class="card-arrow">→</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script src="/js/shared.js"></script>
+    <script src="/js/animations.js"></script>
+    <script src="/js/nav.js"></script>
+    <script src="/js/interactions.js"></script>
+    <script src="/js/home.js"></script>
+
+    <script>
+        function removeLoader() {
+            const loader = document.querySelector('.page-loader');
+            if (loader && !loader.classList.contains('done')) {
+                loader.classList.add('done');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(removeLoader, 2000);
+        });
+
+        setTimeout(removeLoader, 3500);
+    </script>
+</body>

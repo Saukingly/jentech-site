@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post | Jentech Consultants</title>
+    <link rel="stylesheet" href="/css/pages.css" />
+    <style>
+        .post-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+        }
+        
+        @media (min-width: 1024px) {
+            .post-layout {
+                grid-template-columns: 1fr 300px;
+                gap: 72px;
+                align-items: start;
+            }
+        }
+        
+        .post-header {
+            margin-bottom: 32px;
+        }
+        
+        .post-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .post-date {
+            font-size: 13px;
+            color: var(--gray-300);
+        }
+        
+        .post-author {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gold);
+        }
+        
+        .post-cat {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: rgba(200, 145, 42, 0.12);
+            color: var(--gold);
+            padding: 3px 10px;
+        }
+        
+        .post-title {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.05;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+        
+        .post-hero-img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            margin-bottom: 40px;
+        }
+        
+        @media (min-width: 768px) {
+            .post-hero-img {
+                height: 400px;
+                margin-bottom: 56px;
+            }
+        }
+        
+        .post-hero-placeholder {
+            width: 100%;
+            height: 260px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(rgba(200, 145, 42, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(200, 145, 42, 0.06) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        
+        @media (min-width: 768px) {
+            .post-hero-placeholder {
+                height: 360px;
+                margin-bottom: 56px;
+            }
+        }
+        
+        .post-share {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 1px solid var(--gray-100);
+            flex-wrap: wrap;
+        }
+        
+        .share-label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-300);
+        }
+        
+        .share-btn {
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border: 1.5px solid var(--gray-100);
+            color: var(--gray-500);
+            cursor: pointer;
+            font-family: var(--font-body);
+            background: transparent;
+            transition: all 0.2s;
+        }
+        
+        .share-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        /* Related posts */
+        
+        .related-post-card {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            background: var(--off-white);
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 2px;
+            transition: background 0.2s;
+        }
+        
+        .related-post-card:hover {
+            background: var(--gray-50);
+        }
+        
+        .rpc-img {
+            width: 72px;
+            height: 72px;
+            flex-shrink: 0;
+            background: var(--navy-mid);
+            object-fit: cover;
+        }
+        
+        .rpc-body {
+            flex: 1;
+        }
+        
+        .rpc-cat {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 6px;
+        }
+        
+        .rpc-title {
+            font-family: var(--font-display);
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.25;
+        }
+        
+        .rpc-date {
+            font-size: 11px;
+            color: var(--gray-300);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1 id="heroTitle">Loading…</h1>
+        <p id="heroSubtitle"></p>
+    </section>
+
+    <section class="section" style="padding-top:48px;">
+        <div class="container">
+            <a href="/pages/blog/" class="back-link">← Back to blog</a>
+
+            <div id="mainContent">
+                <div class="loading-wrap">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="footerMount"></div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Blog');
+        document.getElementById('footerMount').innerHTML = renderFooter();
+
+        async function loadPost() {
+            const slug = getSlugFromURL();
+            const main = document.getElementById('mainContent');
+
+            try {
+                const p = await API.get(`/blog/${slug}`);
+
+                document.title = `${p.title} | Jentech Blog`;
+                document.getElementById('heroTitle').textContent = p.title;
+                document.getElementById('heroSubtitle').textContent = p.excerpt || [p.category, formatDate(p.published_at)].filter(Boolean).join(' · ');
+
+                main.innerHTML = `
+          <div class="post-layout">
+            <!-- Main article -->
+            <article data-reveal>
+              <!-- Hero image -->
+              ${p.image_url
+                ? `<img src="${p.image_url}" alt="${p.title}" class="post-hero-img">`
+                : `<div class="post-hero-placeholder"></div>`
+              }
+
+              <div class="post-header">
+                <div class="post-meta">
+                  ${p.category ? `<span class="post-cat">${p.category}</span>` : ''}
+                  <span class="post-date">${formatDate(p.published_at)}</span>
+                  ${p.author_name ? `<span class="post-author">By ${p.author_name}</span>` : ''}
+                </div>
+                ${p.excerpt ? `<p style="font-size:17px;color:var(--gray-500);line-height:1.7;font-style:italic;border-left:3px solid var(--gold);padding-left:20px;">${p.excerpt}</p>` : ''}
+              </div>
+
+              <div class="rich-content">
+                ${p.content || '<p>Full article content coming soon.</p>'}
+              </div>
+
+              <!-- Share -->
+              <div class="post-share">
+                <span class="share-label">Share</span>
+                <button class="share-btn" onclick="copyLink()">Copy link</button>
+                <a href="https://twitter.com/intent/tweet?text=${encodeURIComponent(p.title)}&url=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn" style="text-decoration:none;">Twitter</a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}" target="_blank" class="share-btn" style="text-decoration:none;">LinkedIn</a>
+              </div>
+            </article>
+
+            <!-- Sidebar -->
+            <aside class="detail-sidebar" data-reveal>
+              <div class="sidebar-box">
+                <p class="sidebar-box-title">About this post</p>
+                ${p.category ? `<div class="sidebar-item"><span class="sidebar-label">Category</span><span class="sidebar-value">${p.category}</span></div>` : ''}
+                <div class="sidebar-item"><span class="sidebar-label">Published</span><span class="sidebar-value">${formatDate(p.published_at)}</span></div>
+                ${p.author_name ? `<div class="sidebar-item"><span class="sidebar-label">Author</span><span class="sidebar-value">${p.author_name}</span></div>` : ''}
+              </div>
+              <div class="sidebar-box">
+                <p class="sidebar-box-title">Have a project?</p>
+                <p style="font-size:13px;color:var(--gray-500);margin-bottom:16px;line-height:1.7;">Talk to our engineering team in Jamaica or the United States.</p>
+                <a href="/pages/contact/index.html" class="btn btn-gold" style="width:100%;justify-content:center;">Contact us</a>
+              </div>
+              <div id="relatedPostsList"></div>
+            </aside>
+          </div>
+        `;
+
+        loadRelatedPosts(slug, p.category);
+        initReveal();
+
+      } catch (err) {
+        main.innerHTML = `
+          <div class="empty-state">
+            <h3>Post not found</h3>
+            <a href="/pages/blog/" class="btn btn-gold" style="margin-top:24px;">View all posts</a>
+          </div>`;
+      }
+    }
+
+    async function loadRelatedPosts(currentSlug, category) {
+      try {
+        const all = await API.get('/blog');
+        const related = all.filter(p => p.slug !== currentSlug).slice(0, 3);
+        if (!related.length) return;
+        const list = document.getElementById('relatedPostsList');
+        if (!list) return;
+        list.innerHTML = `
+          <div class="sidebar-box">
+            <p class="sidebar-box-title">More posts</p>
+            ${related.map(p => `
+              <a href="/pages/blog/${p.slug}.html" class="related-post-card" style="margin-bottom:2px;">
+                <div class="rpc-img" style="background:linear-gradient(135deg,var(--navy),var(--navy-light));"></div>
+                <div class="rpc-body">
+                  <p class="rpc-cat">${p.category || 'News'}</p>
+                  <p class="rpc-title">${p.title}</p>
+                  <p class="rpc-date">${formatDate(p.published_at)}</p>
+                </div>
+              </a>
+            `).join('')}
+          </div>
+        `;
+      } catch (_) {}
+    }
+
+    function copyLink() {
+      navigator.clipboard.writeText(window.location.href)
+        .then(() => showToast('Link copied to clipboard!', 'success'))
+        .catch(() => showToast('Could not copy link', 'error'));
+    }
+
+    loadPost();
+    </script>
+</body>
+
+</html>

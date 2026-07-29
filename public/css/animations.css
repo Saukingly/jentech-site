@@ -1,0 +1,531 @@
+/* =====================================================
+   ANIMATIONS.CSS — Motion, Reveals, Transitions
+   Jentech Consultants Group
+   ===================================================== */
+
+
+/* ---- Respect reduced motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .cursor,
+    .cursor-ring {
+        display: none;
+    }
+}
+
+
+/* ---- Reveal base states ---- */
+
+[data-reveal] {
+    opacity: 0;
+    transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+}
+
+[data-reveal="fade-up"] {
+    transform: translateY(36px);
+}
+
+[data-reveal="fade-down"] {
+    transform: translateY(-24px);
+}
+
+[data-reveal="fade-left"] {
+    transform: translateX(-36px);
+}
+
+[data-reveal="fade-right"] {
+    transform: translateX(36px);
+}
+
+[data-reveal="scale"] {
+    transform: scale(0.94);
+}
+
+[data-reveal="clip-left"] {
+    clip-path: inset(0 100% 0 0);
+}
+
+[data-reveal].revealed {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+}
+
+
+/* Stagger children */
+
+[data-stagger]>* {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+[data-stagger].revealed>*:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+[data-stagger].revealed>*:nth-child(2) {
+    transition-delay: 80ms;
+}
+
+[data-stagger].revealed>*:nth-child(3) {
+    transition-delay: 160ms;
+}
+
+[data-stagger].revealed>*:nth-child(4) {
+    transition-delay: 240ms;
+}
+
+[data-stagger].revealed>*:nth-child(5) {
+    transition-delay: 320ms;
+}
+
+[data-stagger].revealed>*:nth-child(6) {
+    transition-delay: 400ms;
+}
+
+[data-stagger].revealed>* {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ---- Counter animation ---- */
+
+.stat-num[data-count] {
+    transition: none;
+}
+
+
+/* ---- Hero entrance ---- */
+
+.hero-overline {
+    animation: heroFade 0.8s 0.2s var(--ease-out) both;
+}
+
+.hero-headline {
+    animation: heroFade 0.9s 0.4s var(--ease-out) both;
+}
+
+.hero-body {
+    animation: heroFade 0.8s 0.55s var(--ease-out) both;
+}
+
+.hero-actions {
+    animation: heroFade 0.8s 0.7s var(--ease-out) both;
+}
+
+.hero-offices {
+    animation: heroFade 0.8s 0.9s var(--ease-out) both;
+}
+
+.hero-scroll {
+    animation: heroFade 1s 1.2s var(--ease-out) both;
+}
+
+.hero-lines .hero-line {
+    transform-origin: top;
+    animation: lineDraw 1.4s 0.6s var(--ease-out) both;
+}
+
+.hero-lines .hero-line:nth-child(1) {
+    animation-delay: 0.6s;
+}
+
+.hero-lines .hero-line:nth-child(2) {
+    animation-delay: 0.8s;
+}
+
+.hero-lines .hero-line:nth-child(3) {
+    animation-delay: 1s;
+}
+
+.hero-lines .hero-line:nth-child(4) {
+    animation-delay: 0.7s;
+}
+
+.hero-lines .hero-line:nth-child(5) {
+    animation-delay: 0.9s;
+}
+
+.hero-circle {
+    animation: circleFade 1.5s 0.5s var(--ease-out) both;
+}
+
+.hero-circle:nth-child(1) {
+    animation-delay: 0.5s;
+}
+
+.hero-circle:nth-child(2) {
+    animation-delay: 0.7s;
+}
+
+.hero-circle:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+@keyframes heroFade {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineDraw {
+    from {
+        opacity: 0;
+        transform: scaleY(0);
+    }
+    to {
+        opacity: 1;
+        transform: scaleY(1);
+    }
+}
+
+@keyframes circleFade {
+    from {
+        opacity: 0;
+        transform: translateY(-50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+.hero-circle:nth-child(3) {
+    /* no transform: translateY for small circle */
+    animation: circleFadeSimple 1.5s 0.9s var(--ease-out) both;
+}
+
+@keyframes circleFadeSimple {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* ---- Stat bar underline animation ---- */
+
+.stat-item {
+    animation: statSlide 0.6s var(--ease-out) both;
+}
+
+.stat-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.stat-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.stat-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.stat-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+@keyframes statSlide {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ---- Blueprint line draw on about section ---- */
+
+.about-img-main {
+    overflow: hidden;
+}
+
+.blueprint-svg {
+    width: 100%;
+    height: 100%;
+    stroke: rgba(200, 145, 42, 0.35);
+    stroke-width: 0.8;
+    fill: none;
+}
+
+.blueprint-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    transition: stroke-dashoffset 2s var(--ease-out);
+}
+
+.about-section.revealed .blueprint-path {
+    stroke-dashoffset: 0;
+}
+
+
+/* ---- Section transition accent bars ---- */
+
+.section-accent {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.8s var(--ease-out);
+}
+
+.section-accent.revealed {
+    transform: scaleX(1);
+}
+
+
+/* ---- Loading bar (page load) ---- */
+
+.page-loader {
+    position: fixed;
+    inset: 0;
+    background: var(--navy);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Changed from 0.6s to 1.2s for a cinematic fade-out */
+    transition: opacity 0.5s var(--ease-out), visibility 0.6s;
+}
+
+.page-loader.done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loader-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.loader-logo {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.08em;
+}
+
+.loader-logo span {
+    color: var(--gold);
+}
+
+.loader-bar-wrap {
+    width: 200px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+
+.loader-bar {
+    height: 100%;
+    background: var(--gold);
+    animation: loaderBar 0.9s var(--ease-out) forwards;
+}
+
+@keyframes loaderBar {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.loader-text {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+
+/* ---- Company cards stagger ---- */
+
+.companies-grid .company-card {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out), background 0.35s, border-color 0.35s;
+}
+
+.companies-grid.revealed .company-card:nth-child(1) {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0ms;
+}
+
+.companies-grid.revealed .company-card:nth-child(2) {
+    opacity: 1;
+    transform: none;
+    transition-delay: 120ms;
+}
+
+.companies-grid.revealed .company-card:nth-child(3) {
+    opacity: 1;
+    transform: none;
+    transition-delay: 240ms;
+}
+
+
+/* ---- Service cards stagger ---- */
+
+.services-grid .service-card {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out), background 0.3s;
+}
+
+.services-grid.revealed .service-card {
+    opacity: 1;
+    transform: none;
+}
+
+.services-grid.revealed .service-card:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+.services-grid.revealed .service-card:nth-child(2) {
+    transition-delay: 70ms;
+}
+
+.services-grid.revealed .service-card:nth-child(3) {
+    transition-delay: 140ms;
+}
+
+.services-grid.revealed .service-card:nth-child(4) {
+    transition-delay: 210ms;
+}
+
+.services-grid.revealed .service-card:nth-child(5) {
+    transition-delay: 280ms;
+}
+
+.services-grid.revealed .service-card:nth-child(6) {
+    transition-delay: 350ms;
+}
+
+
+/* ---- Team cards stagger ---- */
+
+.team-grid .team-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out), background 0.3s;
+}
+
+.team-grid.revealed .team-card {
+    opacity: 1;
+    transform: none;
+}
+
+.team-grid.revealed .team-card:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+.team-grid.revealed .team-card:nth-child(2) {
+    transition-delay: 80ms;
+}
+
+.team-grid.revealed .team-card:nth-child(3) {
+    transition-delay: 160ms;
+}
+
+.team-grid.revealed .team-card:nth-child(4) {
+    transition-delay: 240ms;
+}
+
+
+/* ---- News cards ---- */
+
+.news-grid .news-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.55s var(--ease-out), transform 0.55s var(--ease-out), background 0.3s;
+}
+
+.news-grid.revealed .news-card {
+    opacity: 1;
+    transform: none;
+}
+
+.news-grid.revealed .news-card:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+.news-grid.revealed .news-card:nth-child(2) {
+    transition-delay: 80ms;
+}
+
+.news-grid.revealed .news-card:nth-child(3) {
+    transition-delay: 160ms;
+}
+
+.news-grid.revealed .news-card:nth-child(4) {
+    transition-delay: 240ms;
+}
+
+
+/* ---- Pulse on office dots ---- */
+
+@keyframes officeGlow {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(200, 145, 42, 0.6);
+    }
+    60% {
+        box-shadow: 0 0 0 8px rgba(200, 145, 42, 0);
+    }
+}
+
+.footer-office-mini-dot,
+.hero-office-dot {
+    animation: officeGlow 2.5s infinite;
+}
+
+.footer-office-mini-dot:nth-child(odd) {
+    animation-delay: 1.25s;
+}
+
+
+/* ---- Smooth number ticker feel ---- */
+
+@keyframes tickUp {
+    from {
+        transform: translateY(6px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.stat-num.counted {
+    animation: tickUp 0.3s var(--ease-out);
+}

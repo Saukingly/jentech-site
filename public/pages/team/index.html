@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Team | Jentech Consultants</title>
+    <link rel="stylesheet" href="/css/pages.css" />
+    <style>
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+        }
+        
+        @media (min-width: 768px) {
+            .team-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .team-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        .team-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: var(--off-white);
+            overflow: hidden;
+            transition: background 0.3s;
+            position: relative;
+        }
+        
+        .team-card:hover {
+            background: var(--navy);
+        }
+        
+        .team-card:hover .tc-name {
+            color: var(--white);
+        }
+        
+        .team-card:hover .tc-role {
+            color: var(--gold-light);
+        }
+        
+        .team-card:hover .tc-office {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .team-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+            transform-origin: left;
+        }
+        
+        .team-card:hover::after {
+            transform: scaleX(1);
+        }
+        
+        .tc-avatar {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s;
+        }
+        
+        @media (min-width: 768px) {
+            .tc-avatar {
+                height: 200px;
+                font-size: 64px;
+            }
+        }
+        
+        .team-card:hover .tc-avatar {
+            transform: scale(1.03);
+        }
+        /* Avatar colour variants */
+        
+        .tc-avatar--0 {
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+        }
+        
+        .tc-avatar--1 {
+            background: linear-gradient(135deg, #1a3a28, #2d5e40);
+        }
+        
+        .tc-avatar--2 {
+            background: linear-gradient(135deg, var(--gold), #a0701a);
+        }
+        
+        .tc-avatar--3 {
+            background: linear-gradient(135deg, #1a2a50, #2a4080);
+        }
+        
+        .tc-avatar--4 {
+            background: linear-gradient(135deg, #2a1a3a, #4a2a60);
+        }
+        
+        .tc-avatar--5 {
+            background: linear-gradient(135deg, #3a2a10, #5a4020);
+        }
+        
+        .tc-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .tc-body {
+            padding: 16px 20px 24px;
+        }
+        
+        @media (min-width: 768px) {
+            .tc-body {
+                padding: 20px 24px 28px;
+            }
+        }
+        
+        .tc-name {
+            font-family: var(--font-display);
+            font-size: clamp(16px, 2vw, 20px);
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 4px;
+            transition: color 0.2s;
+        }
+        
+        .tc-role {
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 500;
+            margin-bottom: 4px;
+            transition: color 0.2s;
+        }
+        
+        .tc-office {
+            font-size: 11px;
+            color: var(--gray-300);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        /* Office filter */
+        
+        .office-filter {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .office-btn {
+            padding: 7px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: var(--off-white);
+            color: var(--gray-500);
+            border: 1.5px solid transparent;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+        
+        .office-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .office-btn.active {
+            background: var(--navy);
+            color: var(--white);
+            border-color: var(--navy);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1>Meet the Team</h1>
+        <p>Licensed engineers and technical specialists across our Jamaica and United States offices.</p>
+    </section>
+
+    <div class="filter-bar" id="officeFilter">
+        <button class="filter-btn active" data-office="all">All offices</button>
+        <button class="filter-btn" data-office="jamaica">Jamaica</button>
+        <button class="filter-btn" data-office="usa">United States</button>
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="team-grid" id="teamGrid" data-stagger>
+                <div class="loading-wrap" style="grid-column:1/-1;">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Join CTA -->
+    <section style="background:var(--navy);padding:64px 0 72px;">
+        <div class="container" style="display:flex;flex-direction:column;gap:24px;align-items:flex-start;" data-reveal>
+            <div>
+                <p class="eyebrow light">Join us</p>
+                <h2 class="heading-xl" style="color:var(--white);margin-top:8px;">Build your career at Jentech</h2>
+                <p style="color:rgba(255,255,255,0.5);margin-top:16px;max-width:500px;font-size:15px;line-height:1.7;">We're always looking for talented engineers and technical professionals to join our growing team across Jamaica and the United States.</p>
+            </div>
+            <a href="/pages/contact/index.html" class="btn btn-gold">Get in touch</a>
+        </div>
+    </section>
+
+    <div id="footerMount"></div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Team');
+        document.getElementById('footerMount').innerHTML = renderFooter();
+
+        let allTeam = [];
+        const colors = ['0', '1', '2', '3', '4', '5'];
+
+        async function loadTeam() {
+            const grid = document.getElementById('teamGrid');
+            try {
+                allTeam = await API.get('/team');
+                if (!allTeam.length) {
+                    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>Meet the team coming soon</h3></div>';
+                    return;
+                }
+                renderTeam(allTeam);
+
+                document.getElementById('officeFilter').addEventListener('click', e => {
+                    if (!e.target.classList.contains('filter-btn')) return;
+                    document.querySelectorAll('#officeFilter .filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    const office = e.target.dataset.office;
+                    const filtered = office === 'all' ? allTeam :
+                        allTeam.filter(m => (m.office || '').toLowerCase().includes(office === 'usa' ? 'united states' : 'jamaica'));
+                    renderTeam(filtered);
+                });
+
+            } catch (err) {
+                grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><h3>Could not load team</h3></div>';
+            }
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        function renderTeam(members) {
+            const grid = document.getElementById('teamGrid');
+            grid.innerHTML = members.map((m, i) => `
+        <a href="/pages/team/${m.slug}.html" class="team-card">
+          <div class="tc-avatar tc-avatar--${i % 6}">
+            ${m.image_url
+              ? `<img src="${m.image_url}" alt="${m.name}">`
+              : getInitials(m.name)
+            }
+          </div>
+          <div class="tc-body">
+            <h3 class="tc-name">${m.name}</h3>
+            <p class="tc-role">${m.role || ''}</p>
+            <p class="tc-office">${m.office || ''}</p>
+          </div>
+        </a>
+      `).join('');
+      initReveal();
+    }
+
+    loadTeam();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Jentech Group</title>
+    <link rel="stylesheet" href="/css/pages.css">
+    <style>
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 48px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        @media (min-width: 900px) {
+            .contact-grid {
+                grid-template-columns: 1.2fr 1fr;
+                gap: 64px;
+                padding: 0 32px;
+            }
+        }
+        /* ---- Form card ---- */
+        
+        .form-card h2 {
+            font-family: var(--font-display);
+            font-size: 28px;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+        
+        .form-card>p {
+            color: var(--gray-500);
+            font-size: 15px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        @media (min-width: 560px) {
+            .form-row.two-col {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: flex;
+            align-items: flex-end;
+            min-height: 34px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+        
+        .form-label .req {
+            color: var(--gold);
+        }
+        
+        .form-control {
+            width: 100%;
+            background: var(--off-white);
+            border: 1.5px solid var(--gray-100);
+            padding: 13px 14px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            color: var(--text-body);
+            transition: border-color 0.2s, background 0.2s;
+        }
+        
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236a6865' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            background: var(--white);
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 130px;
+        }
+        
+        .form-submit {
+            width: 100%;
+            margin-top: 4px;
+        }
+        
+        .form-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .form-note {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 14px;
+            line-height: 1.6;
+        }
+        /* ---- Info column ---- */
+        
+        .info-block {
+            margin-bottom: 36px;
+        }
+        
+        .info-block h3 {
+            font-family: var(--font-display);
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--navy);
+            margin-bottom: 6px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--gold);
+        }
+        
+        .office-card {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+        
+        .office-card:last-child {
+            border-bottom: none;
+        }
+        
+        .office-name {
+            font-weight: 700;
+            color: var(--navy);
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+        
+        .office-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.6;
+            margin-bottom: 4px;
+        }
+        
+        .office-detail a {
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .office-detail a:hover {
+            color: var(--gold);
+        }
+        
+        .office-detail svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+            margin-top: 3px;
+            color: var(--gold);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1>Get in Touch</h1>
+        <p>Tell us about your project and our team will get back to you shortly.</p>
+    </section>
+
+    <section class="section">
+        <div class="contact-grid">
+
+            <div class="form-card">
+                <h2>Send us a message</h2>
+                <p>Fill out the form below and a member of the Jentech team will follow up within one business day.</p>
+
+                <form id="contactForm" novalidate>
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label" for="firstName">First Name <span class="req">*</span></label>
+                            <input class="form-control" type="text" id="firstName" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="lastName">Last Name <span class="req">*</span></label>
+                            <input class="form-control" type="text" id="lastName" name="last_name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address <span class="req">*</span></label>
+                        <input class="form-control" type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label" for="office">Which company are you contacting?</label>
+                            <select class="form-control" id="office" name="office">
+                                <option value="">No preference</option>
+                                <option value="Jentech Consultants">Jentech Consultants</option>
+                                <option value="Geotech Exploration Services">Geotech Exploration Services</option>
+                                <option value="Jets Laboratories">Jets Laboratories</option>
+                                <option value="Jentech Americanos">Jentech Americanos</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="service">What service do you need?</label>
+                            <select class="form-control" id="service" name="service">
+                                <option value="">General inquiry</option>
+                                <option value="Civil & Structural Engineering">Civil & Structural Engineering</option>
+                                <option value="Geotechnical Exploration">Geotechnical Exploration</option>
+                                <option value="Materials & Soils Testing">Materials & Soils Testing</option>
+                                <option value="Project Management">Project Management</option>
+                                <option value="Site Investigation">Site Investigation</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="message">How can we help? <span class="req">*</span></label>
+                        <textarea class="form-control" id="message" name="message" placeholder="Tell us a bit about your project, timeline, and location…" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-gold form-submit" id="submitBtn">Send Message</button>
+                    <p class="form-note">Fields marked <span class="req">*</span> are required. We'll never share your information with third parties. See our <a href="/pages/privacy/index.html" target="_blank" style="color:var(--gold);">Privacy Policy</a>.</p>
+                </form>
+            </div>
+
+            <div class="info-col">
+                <div class="info-block">
+                    <h3>Our Office</h3>
+                    <div class="office-card" id="jamaica-office">
+                        <div class="office-name">Jentech Group of Companies</div>
+                        <div class="office-detail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>14a Hope Road, Kingston 10, Jamaica</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <h3>Our Departments</h3>
+                    <div class="office-card" id="jentech-consultants-contact">
+                        <div class="office-name">Jentech Consultants Limited</div>
+                        <div class="office-detail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+18769262201">+1 876 926 2201</a>
+                        </div>
+                        <div class="office-detail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+                            <a href="mailto:wreid@jentechconsultants.com">wreid@jentechconsultants.com</a>
+                        </div>
+                    </div>
+                    <div class="office-card" id="geotech-contact">
+                        <div class="office-name">Geotech Exploration Services Ltd</div>
+                        <div class="office-detail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+18769262202">+1 876 926 2202</a>
+                        </div>
+                        <div class="office-detail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+                            <a href="mailto:vlawrence@jentechconsultants.com">vlawrence@jentechconsultants.com</a>
+                        </div>
+                    </div>
+                    <div class="office-card" id="jets-labs-contact">
+                        <div class="office-name">Jets Laboratories Ltd</div>
+                        <div class="office-detail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <a href="tel:+18769267756">+1 876 926 7756</a>
+                        </div>
+                        <div class="office-detail">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+                            <a href="mailto:glawrence@jentechconsultants.com">glawrence@jentechconsultants.com</a>
+                        </div>
+                    </div>
+                    <div class="office-card" id="jentech-americanos-contact">
+                        <div class="office-name">Jentech Americanos</div>
+                        <div class="office-detail">
+                            <span style="color:var(--gray-500);font-style:italic;">Contact details coming soon</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <h3>Business Hours</h3>
+                    <div class="office-detail">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>Monday – Friday: 8:00 AM – 5:00 PM<br>Saturday – Sunday: Closed</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Contact');
+
+        // Pre-select the service dropdown if arriving from a "Request this
+        // service" link (e.g. /pages/contact/index.html?service=Site%20Investigation)
+        (function prefillService() {
+            const params = new URLSearchParams(window.location.search);
+            const service = params.get('service');
+            if (!service) return;
+            const select = document.getElementById('service');
+            const match = Array.from(select.options).find(opt => opt.value === service);
+            if (match) {
+                select.value = service;
+                select.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                select.style.borderColor = 'var(--gold)';
+            }
+        })();
+
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', async(e) => {
+            e.preventDefault();
+
+            const payload = {
+                first_name: document.getElementById('firstName').value.trim(),
+                last_name: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                office: document.getElementById('office').value,
+                service: document.getElementById('service').value,
+                message: document.getElementById('message').value.trim()
+            };
+
+            if (!payload.first_name || !payload.last_name || !payload.email || !payload.message) {
+                showToast('Please fill in all required fields.', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending…';
+
+            try {
+                const res = await API.post('/contact', payload);
+                if (res.success) {
+                    showToast(res.message || 'Message sent! We will be in touch.', 'success');
+                    form.reset();
+                } else {
+                    showToast(res.error || 'Something went wrong. Please try again.', 'error');
+                }
+            } catch (err) {
+                showToast('Could not send message. Please try again later.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+    </script>
+
+    <script>
+        document.body.insertAdjacentHTML('beforeend', renderFooter());
+    </script>
+</body>
+
+</html>

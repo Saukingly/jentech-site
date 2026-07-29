@@ -1,0 +1,16 @@
+# Never commit secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Uploaded files (contains client documents — don't commit real client data)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+*.log

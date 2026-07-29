@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy | Jentech Group of Companies</title>
+    <link rel="stylesheet" href="/css/pages.css" />
+    <style>
+        .policy-body h2 {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 2.5vw, 26px);
+            font-weight: 700;
+            color: var(--navy);
+            margin: 36px 0 12px;
+        }
+
+        .policy-body h2:first-child {
+            margin-top: 0;
+        }
+
+        .policy-body p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-body);
+            margin-bottom: 14px;
+        }
+
+        .policy-body ul {
+            margin: 0 0 16px 20px;
+        }
+
+        .policy-body li {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-body);
+            margin-bottom: 6px;
+        }
+
+        .policy-notice {
+            background: var(--off-white);
+            border-left: 3px solid var(--gold);
+            padding: 18px 22px;
+            font-size: 13.5px;
+            color: var(--gray-500);
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .policy-updated {
+            font-size: 12.5px;
+            color: var(--gray-500);
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1>Privacy Policy</h1>
+        <p>How Jentech Group of Companies collects, uses, and protects your information.</p>
+    </section>
+
+    <section class="section">
+        <div class="container" style="max-width:760px;">
+            <div class="policy-body">
+
+                <div class="policy-updated">Last updated: <span id="lastUpdatedDate"></span></div>
+
+                <h2>Who we are</h2>
+                <p>This policy covers Jentech Consultants Limited, Geotech Exploration Services Ltd, and Jets Laboratories Ltd (together, "Jentech," "we," "us," or "our"), operating at 14a Hope Road, Kingston 10, Jamaica. It applies to our website, client portal, and any information you share with us directly.</p>
+
+                <h2>What we collect</h2>
+                <p>We collect information you provide directly to us:</p>
+                <ul>
+                    <li><strong>Account information</strong> — name, email address, phone number, and company name, when you create a client portal account or submit a contact/request form.</li>
+                    <li><strong>Project information</strong> — details you share about a project, service request, or inquiry.</li>
+                    <li><strong>Documents</strong> — reports, test results, and other files exchanged through the client portal in connection with work we do for you.</li>
+                </ul>
+                <p>We do not knowingly collect information from anyone under 18, and our services are directed at businesses and professionals, not the general public.</p>
+
+                <h2>How we use it</h2>
+                <ul>
+                    <li>To provide the engineering, geotechnical, and materials-testing services you request</li>
+                    <li>To communicate with you about your project, account, or inquiry</li>
+                    <li>To maintain your client portal account and the documents shared through it</li>
+                    <li>To meet our own legal, accounting, and record-keeping obligations</li>
+                </ul>
+                <p>We do not sell your information, and we do not use it for advertising or share it with third parties for their own marketing purposes.</p>
+
+                <h2>How we protect it</h2>
+                <p>Passwords are never stored in plain text — they're one-way hashed. Sensitive contact details are encrypted at rest in our database. Access to client accounts and documents is restricted to authorized staff on a need-to-know basis, scoped to the specific company (Jentech Consultants, Geotech Exploration, or Jets Laboratories) handling your work.</p>
+
+                <h2>How long we keep it</h2>
+                <p>We retain account and project information for as long as your account is active, and for a reasonable period afterward to meet professional, legal, and accounting record-keeping obligations typical for engineering services. You can request deletion of your account at any time — see "Your rights" below.</p>
+
+                <h2>Your rights</h2>
+                <p>Under Jamaica's Data Protection Act, you have the right to:</p>
+                <ul>
+                    <li>Ask us what personal information we hold about you</li>
+                    <li>Ask us to correct inaccurate information</li>
+                    <li>Ask us to delete your account and associated personal information, subject to our legal and record-keeping obligations</li>
+                    <li>Withdraw consent for us to process your information going forward</li>
+                    <li>Object to how your information is being used</li>
+                </ul>
+                <p>To exercise any of these rights, contact us using the details below.</p>
+
+                <h2>Cookies</h2>
+                <p>Our client portal and admin systems use a session cookie to keep you logged in. This is functionally necessary — without it, the site can't tell you're logged in between page loads. We don't use tracking or advertising cookies.</p>
+
+                <h2>Contact us</h2>
+                <p>For any question about this policy or your information, contact us at:</p>
+                <p>
+                    Jentech Consultants Ltd.<br>
+                    14a Hope Road, Kingston 10, Jamaica<br>
+                    Phone: +1 876 926 2201<br>
+                    Email: <a href="mailto:wreid@jentechconsultants.com" style="color:var(--gold);">wreid@jentechconsultants.com</a>
+                </p>
+
+                <div class="policy-notice">
+                    <strong>Note:</strong> This policy is a starting draft written to reflect the practices actually built into this site and the general principles of Jamaica's Data Protection Act. It has not been reviewed by a lawyer. Before relying on it — particularly around data retention periods, third-party processors, and any registration obligations with Jamaica's Office of the Information Commissioner — it should be reviewed by qualified legal counsel familiar with your specific obligations.
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div id="footerMount"></div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Privacy');
+        document.getElementById('footerMount').innerHTML = renderFooter();
+        document.getElementById('lastUpdatedDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    </script>
+</body>
+
+</html>

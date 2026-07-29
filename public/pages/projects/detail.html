@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Jentech Group</title>
+    <link rel="stylesheet" href="/css/pages.css">
+    <style>
+        .projects-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            grid-auto-rows: 400px;
+        }
+        
+        .project-card.featured-wide {
+            grid-column: span 2;
+        }
+        
+        .project-card.featured-tall {
+            grid-row: span 2;
+        }
+        
+        .project-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            display: block;
+            text-decoration: none;
+            background-color: #e2e8f0;
+        }
+        
+        .project-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 25, 47, 0.9) 0%, rgba(10, 25, 47, 0.4) 40%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem;
+            transition: background 0.4s ease;
+        }
+        
+        .project-card:hover .project-image {
+            transform: scale(1.05);
+        }
+        
+        .project-tag {
+            color: var(--gold);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-title {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .featured-wide .project-title,
+        .featured-tall .project-title {
+            font-size: 2.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+                grid-auto-rows: 350px;
+            }
+            .project-card.featured-wide,
+            .project-card.featured-tall {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1>Transforming the Caribbean</h1>
+        <p>Explore our portfolio of civil, structural, and geotechnical engineering projects.</p>
+    </section>
+
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="civil">Civil & Structural</button>
+        <button class="filter-btn" data-filter="geotech">Geotechnical</button>
+    </div>
+
+    <div class="projects-container">
+        <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Projects');
+
+        const projectsData = [{
+            id: 1,
+            title: "Norman Manley Highway Expansion",
+            category: "civil",
+            tag: "Civil",
+            image: "https://images.unsplash.com/photo-1541888086425-d81bb19240f5?auto=format&fit=crop&q=80&w=800",
+            featured: "featured-wide"
+        }, {
+            id: 2,
+            title: "Blue Mountain Deep Soil Drilling",
+            category: "geotech",
+            tag: "Geotech",
+            image: "https://images.unsplash.com/photo-1578593175651-409b85c16139?auto=format&fit=crop&q=80&w=800",
+            featured: ""
+        }, {
+            id: 3,
+            title: "Kingston Wharf Structural Audit",
+            category: "civil",
+            tag: "Consulting",
+            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&q=80&w=800",
+            featured: "featured-tall"
+        }];
+
+        const grid = document.getElementById('projectsGrid');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+
+        function renderProjects(filterCategory) {
+            grid.innerHTML = '';
+            const filteredData = filterCategory === 'all' ? projectsData : projectsData.filter(p => p.category === filterCategory);
+
+            filteredData.forEach(project => {
+                grid.innerHTML += `
+                    <a href="/pages/projects/${project.id}.html" class="project-card ${project.featured}">
+                        <img src="${project.image}" class="project-image" alt="${project.title}">
+                        <div class="project-overlay">
+                            <span class="project-tag">— ${project.tag}</span>
+                            <h3 class="project-title">${project.title}</h3>
+                        </div>
+                    </a>`;
+            });
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                renderProjects(e.target.getAttribute('data-filter'));
+            });
+        });
+
+        renderProjects('all');
+    </script>
+</body>
+
+</html>

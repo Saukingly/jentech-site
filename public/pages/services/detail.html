@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service | Jentech Consultants</title>
+    <link rel="stylesheet" href="/css/pages.css" />
+</head>
+
+<body>
+    <div id="navbarMount"></div>
+
+    <section class="page-header" id="pageHero">
+        <a href="/" class="back-home-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back to Home
+        </a>
+        <h1 id="heroTitle">Loading…</h1>
+        <p id="heroSubtitle"></p>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <a href="/pages/services/" class="back-link">← Back to services</a>
+
+            <div id="mainContent">
+                <div class="loading-wrap">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related services -->
+    <section class="related-section" id="relatedSection" style="display:none;">
+        <div class="container">
+            <div class="section-header">
+                <p class="eyebrow">Explore more</p>
+                <h2 class="heading-lg">Other services</h2>
+            </div>
+            <div class="cards-grid" id="relatedGrid" data-stagger></div>
+        </div>
+    </section>
+
+    <div id="footerMount"></div>
+
+    <script src="/js/shared.js"></script>
+    <script>
+        document.getElementById('navbarMount').innerHTML = renderNavbar('Services');
+        document.getElementById('footerMount').innerHTML = renderFooter();
+
+        async function loadService() {
+            const slug = getSlugFromURL();
+            const main = document.getElementById('mainContent');
+
+            try {
+                const s = await API.get(`/services/${slug}`);
+
+                // Update page meta
+                document.title = `${s.title} | Jentech Consultants`;
+                document.getElementById('heroTitle').textContent = s.title;
+                document.getElementById('heroSubtitle').textContent = s.short_desc || '';
+
+                main.innerHTML = `
+          <div class="detail-layout">
+            <div class="detail-main" data-reveal>
+              <div class="rich-content">
+                ${s.full_desc
+                  ? s.full_desc
+                  : `<p>${s.short_desc || 'Full service description coming soon.'}</p>
+                     <h2>Our approach</h2>
+                     <p>The Jentech team brings decades of experience and a commitment to quality to every ${s.title.toLowerCase()} engagement. We work closely with clients to understand their specific needs and deliver tailored solutions that meet international standards.</p>
+                     <h2>Why choose Jentech?</h2>
+                     <ul>
+                       <li>50+ years of regional experience</li>
+                       <li>Licensed and certified engineers</li>
+                       <li>Offices in Jamaica and the United States</li>
+                       <li>Full project lifecycle support</li>
+                       <li>Proven track record across the Caribbean</li>
+                     </ul>`
+                }
+              </div>
+              <div style="margin-top:40px;">
+                <a href="/pages/contact/index.html?service=${encodeURIComponent(s.title)}" class="btn btn-gold">Request this service</a>
+              </div>
+            </div>
+
+            <aside class="detail-sidebar" data-reveal>
+              <div class="sidebar-box">
+                <p class="sidebar-box-title">Service details</p>
+                <div class="sidebar-item">
+                  <span class="sidebar-label">Category</span>
+                  <span class="sidebar-value">${s.title}</span>
+                </div>
+                <div class="sidebar-item">
+                  <span class="sidebar-label">Provided by</span>
+                  <span class="sidebar-value">Jentech Consultants Limited</span>
+                </div>
+                <div class="sidebar-item">
+                  <span class="sidebar-label">Region</span>
+                  <span class="sidebar-value">Jamaica, Caribbean & USA</span>
+                </div>
+              </div>
+              <div class="sidebar-box">
+                <p class="sidebar-box-title">Get started</p>
+                <p style="font-size:14px;color:var(--gray-500);margin-bottom:20px;line-height:1.7;">Ready to discuss your ${s.title.toLowerCase()} needs? Our team is available in both Jamaica and the United States.</p>
+                <a href="/pages/contact/index.html?service=${encodeURIComponent(s.title)}" class="btn btn-gold" style="width:100%;justify-content:center;">Contact us now</a>
+              </div>
+            </aside>
+          </div>
+        `;
+
+        // Load related services
+        loadRelated(slug);
+        initReveal();
+
+      } catch (err) {
+        main.innerHTML = `
+          <div class="empty-state">
+            <h3>Service not found</h3>
+            <p>This service may have moved or been removed.</p>
+            <a href="/pages/services/" class="btn btn-gold" style="margin-top:24px;">View all services</a>
+          </div>`;
+      }
+    }
+
+    async function loadRelated(currentSlug) {
+      try {
+        const all = await API.get('/services');
+        const related = all.filter(s => s.slug !== currentSlug).slice(0, 3);
+        if (!related.length) return;
+
+        const section = document.getElementById('relatedSection');
+        const grid    = document.getElementById('relatedGrid');
+        section.style.display = 'block';
+        grid.innerHTML = related.map(s => `
+          <a href="/pages/services/${s.slug}" class="card">
+            <div class="card-body">
+              <p class="card-tag">Service</p>
+              <h3 class="card-title">${s.title}</h3>
+              <p class="card-desc">${s.short_desc || ''}</p>
+              <div class="card-arrow">→</div>
+            </div>
+          </a>
+        `).join('');
+        initReveal();
+      } catch (_) {}
+    }
+
+    loadService();
+    </script>
+</body>
+
+</html>
