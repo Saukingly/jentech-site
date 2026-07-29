@@ -24,19 +24,11 @@ async function run() {
             converted++;
         }
 
-<<<<<<< HEAD
         console.log(`✅ Done. Encrypted ${converted} phone number(s); ${rows.length - converted} were already encrypted.`);
-=======
-        console.log(`Done. Encrypted ${converted} phone number(s); ${rows.length - converted} were already encrypted.`);
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
     } catch (err) {
         console.error('Error encrypting existing phone numbers:', err.message);
     }
     process.exit();
 }
 
-<<<<<<< HEAD
 run();
-=======
-run();
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
