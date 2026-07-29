@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 -- Run this in MySQL to create your database and all tables
-=======
-
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 
 CREATE DATABASE IF NOT EXISTS jentech_db;
 USE jentech_db;
@@ -91,11 +87,7 @@ CREATE TABLE contact_submissions (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-<<<<<<< HEAD
 -- Seed: default admin account (password: Admin1234!)
-=======
--- Seed: default admin account 
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 INSERT INTO users (name, email, password, role)
 VALUES (
   'Jentech Admin',
