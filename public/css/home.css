@@ -1981,9 +1981,17 @@ body {
     margin-bottom: 8px
 }
 
+<<<<<<< HEAD
 /* ---- Core Companies: hover reveals the company logo instead of a plain
    highlight. Scoped to .services-grid only — the shared .card component
    is used across the whole site, and this behavior is homepage-specific. ---- */
+=======
+
+/* ---- Core Companies: hover reveals the company logo instead of a plain
+   highlight. Scoped to .services-grid only — the shared .card component
+   is used across the whole site, and this behavior is homepage-specific. ---- */
+
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 .services-grid .card {
     position: relative;
 }
@@ -2011,4 +2019,8 @@ body {
 .services-grid .card:hover .card-logo-reveal {
     opacity: 1;
     transform: scale(1);
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26

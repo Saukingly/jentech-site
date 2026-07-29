@@ -359,9 +359,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Inside your fetch() or load() function
+<<<<<<< HEAD
 const grid = document.getElementById('projectsGrid'); // Ensure your HTML has this ID
 
 fetch('/api/services') // Calls your server/routes/services.js
+=======
+const grid = document.getElementById('projectsGrid'); // Ensure HTML has this ID
+
+fetch('/api/services') // Calls server/routes/services.js
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
     .then(res => res.json())
     .then(data => {
         grid.innerHTML = data.map(item => createCard(item, 'services')).join('');

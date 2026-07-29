@@ -28,9 +28,25 @@ router.get('/', requireAdmin, async(req, res) => {
 // POST /api/clients — create a client account + project (admin only)
 router.post('/', requireAdmin, async(req, res) => {
     const {
+<<<<<<< HEAD
         name, email, password, company, phone,
         project_name, phase, completion_percent,
         next_milestone_label, next_milestone_date, status, sheet_ref, hero_image_url
+=======
+        name,
+        email,
+        password,
+        company,
+        phone,
+        project_name,
+        phase,
+        completion_percent,
+        next_milestone_label,
+        next_milestone_date,
+        status,
+        sheet_ref,
+        hero_image_url
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
     } = req.body;
 
     if (!name || !email || !password)
@@ -63,9 +79,25 @@ router.post('/', requireAdmin, async(req, res) => {
 // PUT /api/clients/:id — update client account + project (admin only)
 router.put('/:id', requireAdmin, async(req, res) => {
     const {
+<<<<<<< HEAD
         name, email, password, company, phone,
         project_name, phase, completion_percent,
         next_milestone_label, next_milestone_date, status, sheet_ref, hero_image_url
+=======
+        name,
+        email,
+        password,
+        company,
+        phone,
+        project_name,
+        phase,
+        completion_percent,
+        next_milestone_label,
+        next_milestone_date,
+        status,
+        sheet_ref,
+        hero_image_url
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
     } = req.body;
 
     try {
@@ -124,4 +156,8 @@ router.delete('/:id', requireAdmin, async(req, res) => {
     }
 });
 
+<<<<<<< HEAD
 module.exports = router;
+=======
+module.exports = router;
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26

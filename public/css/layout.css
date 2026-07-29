@@ -7,7 +7,11 @@
 /* ============ NAVBAR ============ */
 
 
+<<<<<<< HEAD
 /* Navbar, logo, nav-links, and nav-contact are now styled entirely by
+=======
+/* Navbar, logo, nav-links, and nav-contact are styled entirely by
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
    pages.css (loaded on every page) so the navbar is pixel-identical on
    the homepage and all inner pages. */
 

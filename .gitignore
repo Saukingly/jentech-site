@@ -9,6 +9,10 @@ node_modules/
 # Uploaded files (contains client documents — don't commit real client data)
 server/uploads/*
 !server/uploads/.gitkeep
+<<<<<<< HEAD
+=======
+server/node_modules/*
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 
 # OS/editor junk
 .DS_Store

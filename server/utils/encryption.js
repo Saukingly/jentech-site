@@ -43,4 +43,8 @@ function decrypt(payload) {
     }
 }
 
+<<<<<<< HEAD
 module.exports = { encrypt, decrypt };
+=======
+module.exports = { encrypt, decrypt };
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26

@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 -- Run this in MySQL AFTER schema.sql has already been run once.
 -- Adds the client portal accounts + their project data.
 USE jentech_db;
 
 -- Client (customer-facing) accounts — kept separate from the staff `users` table
 -- since clients need different fields (company, phone) and different permissions.
+=======
+
+USE jentech_db;
+
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 CREATE TABLE IF NOT EXISTS clients (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
@@ -14,9 +20,12 @@ CREATE TABLE IF NOT EXISTS clients (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+<<<<<<< HEAD
 -- One project record per client for now (client_id is UNIQUE below).
 -- Structure allows multiple projects per client later if needed —
 -- just drop the UNIQUE constraint and adjust the queries in clientPortal.js.
+=======
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 CREATE TABLE IF NOT EXISTS client_projects (
   id INT AUTO_INCREMENT PRIMARY KEY,
   client_id INT NOT NULL UNIQUE,
@@ -30,4 +39,8 @@ CREATE TABLE IF NOT EXISTS client_projects (
   hero_image_url VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26

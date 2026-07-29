@@ -333,7 +333,14 @@
             const match = Array.from(select.options).find(opt => opt.value === service);
             if (match) {
                 select.value = service;
+<<<<<<< HEAD
                 select.scrollIntoView({ behavior: 'smooth', block: 'center' });
+=======
+                select.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
                 select.style.borderColor = 'var(--gold)';
             }
         })();

@@ -6,4 +6,8 @@ function validatePassword(password) {
     return null;
 }
 
+<<<<<<< HEAD
 module.exports = { validatePassword };
+=======
+module.exports = { validatePassword };
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26

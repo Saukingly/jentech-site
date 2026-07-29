@@ -134,4 +134,8 @@ router.delete('/staff/:id', requireAdmin, async(req, res) => {
     }
 });
 
+<<<<<<< HEAD
 module.exports = router;
+=======
+module.exports = router;
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26

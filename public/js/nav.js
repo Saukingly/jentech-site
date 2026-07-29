@@ -56,7 +56,11 @@
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
+<<<<<<< HEAD
     onScroll(); // run once on load
+=======
+    onScroll();
+>>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 
     /* ---------- Mobile toggle ---------- */
     if (toggle && navMenu) {
