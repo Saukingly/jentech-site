@@ -1,13 +1,9 @@
-<<<<<<< HEAD
 -- Run this after all previous migrations.
 -- Replaces the old placeholder services (which didn't match the contact
 -- form's actual request categories) with the real 5 services Jentech
 -- offers, aligned exactly to the "What service do you need?" dropdown
 -- on the contact page and client portal — so a click-through from a
 -- service page to "Request this service" pre-fills the right option.
-=======
-
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
 USE jentech_db;
 
 DELETE FROM services;
@@ -96,8 +92,4 @@ INSERT INTO services (title, slug, short_desc, full_desc, icon, display_order, p
   </ul>
   <h2>Why it matters</h2>
   <p>A thorough investigation upfront is what makes an accurate feasibility study possible — catching site constraints early, before they become expensive problems mid-project.</p>',
-<<<<<<< HEAD
  'compass', 5, true);
-=======
- 'compass', 5, true);
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
