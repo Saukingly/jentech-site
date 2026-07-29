@@ -51,8 +51,6 @@ async function sendVerificationEmail(to, name, verifyUrl) {
     }
 }
 
-<<<<<<< HEAD
+
 module.exports = { sendVerificationEmail };
-=======
-module.exports = { sendVerificationEmail };
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
+
