@@ -7,8 +7,4 @@ server/.env
 server/uploads
 *.log
 .DS_Store
-<<<<<<< HEAD
 Thumbs.db
-=======
-Thumbs.db
->>>>>>> 65689711e64d3c199835421fb6806fb0f1d51d26
