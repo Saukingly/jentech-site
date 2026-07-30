@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
+         :root {
             --font-display: 'Space Grotesk', sans-serif;
             --font-body: 'IBM Plex Sans', sans-serif;
             --font-mono: 'IBM Plex Mono', monospace;
@@ -23,7 +23,11 @@
             --gold-tint-soft: #FEF4EB;
             --navy: #FBF9F5;
         }
-        * { box-sizing: border-box; }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
         .spinner {
             width: 22px;
             height: 22px;
@@ -32,9 +36,13 @@
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
+        
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
+        
         .btn {
             display: inline-flex;
             align-items: center;
@@ -49,13 +57,16 @@
             cursor: pointer;
             transition: background 0.2s, color 0.2s;
         }
+        
         .btn-gold {
             background: var(--gold);
             color: var(--white);
         }
+        
         .btn-gold:hover {
             background: var(--gold-dark);
         }
+        
         body {
             background: var(--paper);
             color: var(--ink);
@@ -717,8 +728,8 @@
             line-height: 1.6;
             max-width: 400px;
         }
-
         /* ---- Toast notifications (used by showToast() from shared.js) ---- */
+        
         .toast {
             position: fixed;
             bottom: 28px;
@@ -737,16 +748,16 @@
             z-index: 9999;
             max-width: 90vw;
         }
-
+        
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-
+        
         .toast.error {
             background: #c0392b;
         }
-
+        
         .toast.success {
             background: #1e7e42;
         }
@@ -880,7 +891,7 @@
                         <div class="stat-card-label">Unread messages</div>
                     </div>
                 </div>
-                <h2 style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--white);margin-bottom:16px;">Recent submissions</h2>
+                <h2 style="font-family:var(--font-display);font-size:22px;font-weight:700;color:var(--black);margin-bottom:16px;">Recent submissions</h2>
                 <div id="recentSubmissions" class="admin-table-wrap"></div>
             </div>
 
