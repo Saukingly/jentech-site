@@ -115,7 +115,7 @@ app.get('/pages/projects/:slug', (req, res) => {
 
 // ---- Catch-all: serve index.html for any unmatched route ----
 // prettier-ignore
-app.get('*', (req, res) => {
+app.get(/(.*)/, (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
